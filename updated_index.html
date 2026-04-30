@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html dir="rtl" lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IDPs Fire Tracker - Darfur Region</title>
+<title>خوارزميات الحريق IDPs Fire Tracker</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans','Segoe UI',Tahoma,sans-serif;background:#060d1a;color:#e2e8f0;font-size:14px;direction:ltr}
+body{font-family:'Cairo',Tahoma,Arial,sans-serif;background:#060d1a;color:#e2e8f0;font-size:14px;direction:rtl}
+body.en-mode{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
 :root{--red:#f87171;--orange:#fb923c;--yellow:#fbbf24;--blue:#60a5fa;--green:#4ade80;--purple:#a78bfa;--dark:#0f172a;--card:#1e293b;--border:#1e3a5f;--accent:#dc2626}
+@media print {
+  body { background: white !important; color: black !important; }
+  .tabs, .filters, .refresh-row, .btn-row, .header-right, .tab-export { display: none !important; }
+  .panel { display: block !important; opacity: 1 !important; position: static !important; }
+  .card { border: 1px solid #ccc !important; break-inside: avoid; }
+  th { background: #eee !important; color: black !important; }
+  .app { max-width: 100% !important; padding: 0 !important; }
+}
 .app{max-width:1440px;margin:0 auto;padding:14px}
 
 /* HEADER */
 .header{padding:18px 0 14px;border-bottom:2px solid var(--accent);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.header-left h1{font-size:24px;font-weight:900;color:var(--red);letter-spacing:-0.5px;font-family:'Syne','DM Sans',sans-serif}
+.header-left h1{font-size:24px;font-weight:900;color:var(--red);letter-spacing:-0.5px}
 .header-left h1 span{color:#fb923c}
 .header-left p{font-size:11px;color:#64748b;margin-top:2px}
 .header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -76,13 +85,13 @@ body{font-family:'DM Sans','Segoe UI',Tahoma,sans-serif;background:#060d1a;color
 .filters{background:var(--card);border-radius:10px;padding:12px 14px;margin-bottom:12px;border:1px solid #334155}
 .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
 .filter-row:last-child{margin-bottom:0}
-input,select{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:7px 10px;color:#e2e8f0;font-size:12px;font-family:inherit;direction:ltr}
+input,select{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:7px 10px;color:#e2e8f0;font-size:12px;font-family:inherit;direction:rtl}
 input{flex:1;min-width:140px}
 select{min-width:130px}
 input:focus,select:focus{outline:none;border-color:#3b82f6}
 
 /* BUTTONS */
-.btn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;display:inline-flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap}
+.btn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;display:inline-flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;min-width:100px;justify-content:center}
 .btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
 .btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
 .btn-red{background:#dc2626;color:#fff}.btn-red:hover{background:#b91c1c}
@@ -103,10 +112,18 @@ input:focus,select:focus{outline:none;border-color:#3b82f6}
 
 /* TABLE */
 .card{background:var(--card);border-radius:10px;border:1px solid #334155;margin-bottom:12px;overflow:hidden}
+@media (max-width: 768px) {
+  #incidents-table thead { display: none; }
+  #incidents-table tr { display: block; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: var(--card); }
+  #incidents-table td { display: flex; justify-content: space-between; padding: 5px; border: none; max-width: none; white-space: normal; }
+  #incidents-table td::before { content: attr(data-label); font-weight: bold; color: var(--blue); }
+}
 .card-header{padding:10px 16px;border-bottom:1px solid #334155;font-size:12px;font-weight:700;color:#94a3b8;display:flex;align-items:center;justify-content:space-between}
 table{width:100%;border-collapse:collapse;font-size:11px}
 th{background:#0f172a;padding:9px 8px;text-align:right;color:#64748b;font-weight:700;border-bottom:1px solid #334155;white-space:nowrap}
-td{padding:8px 8px;border-bottom:1px solid #1e293b;vertical-align:middle}
+body.en-mode th{text-align:left}
+td{padding:8px 8px;border-bottom:1px solid #1e293b;vertical-align:middle;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td:hover{white-space:normal;overflow:visible;position:relative;z-index:10;background:#1e293b}
 tr:hover td{background:#243555}
 .badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
 .badge-camp{background:#1e3a5f;color:#60a5fa}
@@ -233,31 +250,6 @@ tr:hover td{background:#243555}
 body.en-mode{direction:ltr;font-family:'Segoe UI','Inter',Tahoma,Arial,sans-serif}
 body.en-mode input,body.en-mode select{direction:ltr}
 body.en-mode th{text-align:left}
-
-/* TABLES */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-}
-table th, table td {
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 1px solid #334155;
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-table th {
-    font-family: 'Syne', 'DM Sans', sans-serif;
-    font-weight: 700;
-    background: #1e3a5f;
-}
-table td[title]:hover {
-    cursor: help;
-}
-
 </style>
 </head>
 <body>
@@ -790,6 +782,11 @@ const DB=[
 {id:48,date:"2026-03-26",location:"بلدة اللعيت — شرق دارفور",region:"شرق دارفور",city:"اللعيت",state:"شرق دارفور",losses:"تشريد 20 أسرة",shelters:20,deaths:0,injuries:0,women:8,men:6,children:6,source:"غرفة طوارئ اللعيت",org:"دارفور24",quality:"ميداني",links:[{l:"دارفور24",u:"https://www.darfur24.com/2026/03/26/%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D9%85%D8%AA%D9%83%D8%B1%D8%B1%D8%A9-%D8%AA%D9%81%D8%A7%D9%82%D9%85-%D9%85%D8%A3%D8%B3%D8%A7%D8%A9-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A-%D8%B7%D9%88%D9%8A%D9%84%D8%A9-%D9%88/",platform:"news"}],note:"تشريد 20 أسرة جراء الحريق",type:"قرية",timing:"غير محدد",lat:12.30,lng:26.50,isNew:true},
 {id:49,date:"2026-03-25",location:"معسكرات طويلة جنوب: العمدة + حلة نعمة + دالي + دبة نايرة + الرينة + المجاهرة",region:"شمال دارفور",city:"طويلة",state:"شمال دارفور",losses:"مئات المآوي في 6 معسكرات",shelters:300,deaths:0,injuries:0,women:110,men:90,children:100,source:"آدم رجال — الناطق الرسمي للمنسقية العامة لمعسكرات النازحين واللاجئين في دارفور",org:"المنسقية العامة للنازحين",quality:"ميداني",links:[{l:"فيسبوك آدم رجال",u:"https://www.facebook.com/Rojaladam/posts/1594322826028965",platform:"social"}],note:"تقرير شامل رصد 14 حريقاً في فبراير ومارس بمعسكرات طويلة جنوب — شمل: معسكر العمدة (الأكثر تضرراً)، حلة نعمة، مخيم دالي، دبة نايرة، الرينة، المجاهرة. الأسر المشردة اضطرت للنزوح إلى مخيم دبة نايرة الجديد. آدم رجال هو الناطق الرسمي للمنسقية العامة لمعسكرات النازحين، يُوثّق الحوادث بشكل ميداني مباشر من داخل المعسكرات.",type:"مخيم",timing:"غير محدد",lat:15.40,lng:24.35,isNew:true},
 {id:50,date:"2026-04-15",location:"مخيم روكيرو — دارفور",region:"شمال دارفور",city:"روكيرو",state:"شمال دارفور",losses:"مئات الملاجئ + إمدادات غذائية",shelters:400,deaths:3,injuries:76,women:1,men:0,children:2,source:"ادم رجال — الناطق باسم المنسقية العامة لمعسكرات النازحين واللاجئين",org:"المنسقية العامة لمعسكرات النازحين واللاجئين",quality:"موثوق",links:[{l:"السودانية نيوز",u:"https://alsudania.news/%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%AF%D9%85%D9%91%D8%B1-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D8%B1%D9%88%D9%83%D9%8A%D8%B1%D9%88-%D8%A8%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1-%D9%8A%D9%88%D8%AF%D9%8A/",platform:"news"}],note:"وفاة طفلين وامرأة حامل. 76 مصاباً بجروح متفاوتة بينهم حالات حرجة نُقلت للمستشفيات. التهمت النيران مئات الملاجئ والممتلكات والإمدادات الغذائية. مئات الأسر باتت بلا مأوى أو غذاء. المنسقية ناشدت OCHA والمفوضية السامية وWFP وأطباء بلا حدود للتدخل العاجل.",type:"مخيم",timing:"غير محدد",lat:13.85,lng:25.10,isNew:true},
+
+{id:51,date:"2026-04-15",location:"مركز إيواء روكرو — جبل مرة",region:"وسط دارفور",city:"روكرو",state:"وسط دارفور",losses:"عشرات المنازل — 1400+ نازح في العراء",shelters:50,deaths:5,injuries:10,women:2,men:1,children:2,source:"المنسقية العامة للنازحين واللاجئين",org:"سودان تربيون",quality:"موثوق",links:[{l:"سودان تربيون",u:"https://sudantribune.net/article/312823",platform:"news"}],note:"5 وفيات على الأقل وتشريد أكثر من 1400 نازح. المركز يضم نازحين فروا من الفاشر عقب سيطرة الدعم السريع أكتوبر 2025. مبانٍ من مواد محلية سريعة الاشتعال.",type:"مركز إيواء",timing:"غير محدد",lat:12.50,lng:23.20,isNew:true},
+{id:52,date:"2026-04-17",location:"مخيم روكيرو — جبل مرة",region:"شمال دارفور",city:"روكيرو",state:"شمال دارفور",losses:"مئات الملاجئ + إمدادات غذائية",shelters:300,deaths:3,injuries:76,women:1,men:0,children:2,source:"آدم رجال — الناطق باسم المنسقية العامة للنازحين واللاجئين",org:"سودان تربيون + دارفور24",quality:"موثوق",links:[{l:"سودان تربيون",u:"https://sudantribune.net/article/312892",platform:"news"},{l:"دارفور24",u:"https://www.darfur24.com/2026/04/15/%D9%88%D9%81%D8%A7%D8%A9-%D8%A7%D9%85%D8%B1%D8%A3%D8%A9-%D8%AD%D8%A7%D9%85%D9%84-%D9%88%D8%B7%D9%81%D9%84%D9%8A%D9%87%D8%A7-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86/",platform:"news"}],note:"وفاة امرأة حامل وطفليها. 76 مصاباً بجروح متفاوتة — بعضهم في حالة حرجة نُقلوا لمستشفى أطباء بلا حدود الإسبانية. التهمت النيران مئات الملاجئ والإمدادات الغذائية. الحريق اندلع من مجمع نازحين داخل مدرسة الزهراء شمال شرق سوق روكرو.",type:"مخيم",timing:"غير محدد",lat:12.48,lng:23.22,isNew:true},
+{id:53,date:"2026-04-27",location:"معسكر زنك الخضار — قولو، جبل مرة",region:"وسط دارفور",city:"قولو",state:"وسط دارفور",losses:"900 منزل كلياً + 600 جزئياً",shelters:900,deaths:7,injuries:12,women:2,men:0,children:5,source:"مجلس تنسيق غرف طوارئ طويلة - جبل مرة + المنسقية العامة للنازحين",org:"سودان تربيون + Ultra Sudan + وكالة العُمانية + دبأ",quality:"موثوق",links:[{l:"سودان تربيون",u:"https://sudantribune.net/article/313241",platform:"news"},{l:"Ultra Sudan",u:"https://ultrasudan.ultrasawt.com/%D9%85%D9%86%D8%B8%D9%85%D8%A9-%D8%AD%D8%B1%D9%8A%D9%82-%D9%81%D9%8A-%D9%85%D8%AF%D9%8A%D9%86%D8%A9-%D9%82%D9%88%D9%84%D9%88-%D9%8A%D8%AE%D9%84%D9%91%D9%81-%D9%82%D8%AA%D9%84%D9%89-%D9%88%D9%8A%D8%B4%D8%B1%D9%91%D8%AF-%D9%85%D8%A6%D8%A7%D8%AA-%D8%A7%D9%84%D8%A3%D8%B3%D8%B1-%D8%A8%D9%88%D8%B3%D8%B7-%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1/%D8%AA%D8%B3%D9%86%D9%8A%D9%85-%D8%AE%D9%88%D8%AC%D9%84%D9%8A/%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1",platform:"news"}],note:"أضخم حادثة في أبريل 2026 — 7 وفيات (5 أطفال وامرأتان)، 12 مصاباً، 900 منزل احترق بالكامل و600 تضرر جزئياً. اندلع الحريق عصر الاثنين. المعسكر سبق أن شهد عدة حرائق. النازحون يعانون شُحّاً في الغذاء والإيواء.",type:"مخيم",timing:"عصر",lat:12.22,lng:23.44,isNew:true}
+{id:54,date:"2026-04-29",location:"مركز زنك الخضار — قولو (الحريق الثاني)",region:"وسط دارفور",city:"قولو",state:"وسط دارفور",losses:"حريق للمرة الثانية — حجم الأضرار قيد التقييم",shelters:200,deaths:0,injuries:0,women:0,men:0,children:0,source:"جمعية متطوعون بلا حدود الخيرية",org:"متطوعون بلا حدود + فيسبوك ميداني",quality:"ميداني",links:[{l:"فيسبوك",u:"https://www.facebook.com/share/p/1GjWV2w6zT/",platform:"social"}],note:"حريق للمرة الثانية في نفس المركز خلال يومين. بيان رسمي من جمعية متطوعون بلا حدود الخيرية يصف الوضع بـ'كارثة إنسانية بحاجة للمساعدة الفورية'. المركز يأوي نازحي الفاشر. الحريق الأول كان 27 أبريل (id:53) وأتى على 900 منزل.",type:"مركز إيواء",timing:"غير محدد",lat:12.22,lng:23.44,isNew:true},
 ];
 
 const HATE_DATA=[
@@ -1012,16 +1009,16 @@ function renderTable(){
   const satLabel=currentLang==='en'?'Verified':'موثوق';
   const satTitle=currentLang==='en'?'Satellite confirmation upgrades trust level':'تأكيد الأقمار الصناعية يرفع التصنيف إلى موثوق';
   tbody.innerHTML=filtered.map(r=>`<tr${r.outsideDarfur?' style="background:rgba(232,121,249,0.07);border-right:3px solid #e879f9"':''}>
-    <td style="white-space:nowrap;font-size:11px">${r.date}</td>
-    <td>${r.isNew?`<span class="new-badge">${newLabel}</span>`:''}${r.outsideDarfur?'<span style="margin-left:4px;font-size:10px;background:#2d1a3d;color:#e879f9;padding:1px 6px;border-radius:10px;font-weight:700">🏕️ خارج دارفور</span> ':''} ${r.location}${r.satellite?'<span style="margin-right:3px;margin-left:3px;font-size:10px;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:4px">🛰️</span>':''}</td>
-    <td style="font-size:11px">${regionDisplay(r)}</td>
-    <td><span class="badge ${badgeType(r.type)}">${typeDisplay(r)}</span></td>
-    <td style="color:#fb923c;font-weight:700">${r.shelters}</td>
-    <td>${r.deaths>0?`<span class="death-count">${r.deaths}</span>`:'-'}</td>
-    <td>${r.injuries>0?`<span style="color:#fbbf24;font-weight:700">${r.injuries}</span>`:'-'}</td>
-    <td style="font-size:11px">${timingLabel(r.timing)}</td>
-    <td>${r.links.length>0?r.links.map(k=>`<a class="link-btn" href="${k.u}" target="_blank">🔗 ${k.l}</a>`).join(''):'<span style="color:#475569">—</span>'}</td>
-    <td>${r.satellite?`<span class="badge badge-quality-science" title="${satTitle}">🛰️ ${satLabel}</span>`:`<span class="badge ${badgeQuality(r.quality)}">${qualityDisplay(r)}</span>`}</td>
+    <td data-label="${T.thDate}" style="white-space:nowrap;font-size:11px">${r.date}</td>
+    <td data-label="${T.thLocation}">${r.isNew?`<span class="new-badge">${newLabel}</span>`:''}${r.outsideDarfur?'<span style="margin-left:4px;font-size:10px;background:#2d1a3d;color:#e879f9;padding:1px 6px;border-radius:10px;font-weight:700">🏕️ خارج دارفور</span> ':''} ${r.location}${r.satellite?'<span style="margin-right:3px;margin-left:3px;font-size:10px;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:4px">🛰️</span>':''}</td>
+    <td data-label="${T.thRegion}">${regionDisplay(r)}</td>
+    <td data-label="${T.thScope}"><span class="badge ${badgeType(r.type)}">${typeDisplay(r)}</span></td>
+    <td data-label="${T.thShelters}" style="color:#fb923c;font-weight:700">${r.shelters}</td>
+    <td data-label="${T.thDeaths}">${r.deaths>0?`<span class="death-count">${r.deaths}</span>`:'-'}</td>
+    <td data-label="${T.thInjuries}">${r.injuries>0?`<span style="color:#fbbf24;font-weight:700">${r.injuries}</span>`:'-'}</td>
+    <td data-label="${T.thTiming}" style="font-size:11px">${timingLabel(r.timing)}</td>
+    <td data-label="${T.thSources}">${r.links.length>0?r.links.map(k=>`<a class="link-btn" href="${k.u}" target="_blank">🔗 ${k.l}</a>`).join(''):'<span style="color:#475569">—</span>'}</td>
+    <td data-label="${T.thQuality}">${r.satellite?`<span class="badge badge-quality-science" title="${satTitle}">🛰️ ${satLabel}</span>`:`<span class="badge ${badgeQuality(r.quality)}">${qualityDisplay(r)}</span>`}</td>
   </tr>`).join('');
   updateStats();
 }
@@ -1395,7 +1392,7 @@ function generateFullReport(){
 
   const html=`<!DOCTYPE html><html dir="${currentLang==='en'?'ltr':'rtl'}" lang="${currentLang==='en'?'en':'ar'}"><head><meta charset="UTF-8"><title>${currentLang==='en'?'Darfur Fire Tracker Report — 2026':'تقرير خوارزميات الحريق — دارفور 2026'}</title>
 <style>
-body{font-family:'Segoe UI',Arial,sans-serif;max-width:900px;margin:30px auto;padding:20px;color:#1e293b;direction:${currentLang==='en'?'ltr':'rtl'};line-height:1.6}
+body{font-family:${currentLang==='en'?"'Inter',-apple-system,sans-serif":"'Segoe UI',Arial,sans-serif"};max-width:900px;margin:30px auto;padding:20px;color:#1e293b;direction:${currentLang==='en'?'ltr':'rtl'};line-height:1.6}
 h1{color:#dc2626;border-bottom:3px solid #dc2626;padding-bottom:10px;font-size:22px}
 h2{color:#1e3a5f;margin-top:30px;font-size:16px;border-bottom:1px solid #e2e8f0;padding-bottom:6px}
 h3{color:#475569;font-size:13px;margin-top:16px}
@@ -1423,31 +1420,6 @@ tr:nth-child(even)td{background:#f8fafc}
 .visual-desc{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:#1e40af;line-height:1.7}
 .visual-desc strong{color:#1d4ed8}
 .nasa-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;margin:10px 0;font-size:11px;color:#166534;line-height:1.7}
-
-/* TABLES */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-}
-table th, table td {
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 1px solid #334155;
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-table th {
-    font-family: 'Syne', 'DM Sans', sans-serif;
-    font-weight: 700;
-    background: #1e3a5f;
-}
-table td[title]:hover {
-    cursor: help;
-}
-
 </style></head><body>
 ${currentLang==='en'?'<h1>🔥 Darfur Fire Tracker Report — 2026</h1>':'<h1>🔥 تقرير خوارزميات الحريق — دارفور 2026</h1>'}
 <p style="font-size:12px;color:#64748b"><strong>${currentLang==='en'?'Report Date:':'تاريخ التقرير:'}</strong> ${new Date().toLocaleDateString('en-GB')} | <strong>${currentLang==='en'?'Version:':'الإصدار:'}</strong> 3.0</p>
@@ -1593,9 +1565,18 @@ ${currentLang==='en'?'<h2>📐 Report Methodology</h2>':'<h2>📐 المنهجي
     <span>🔗 مصادر مُوثَّقة: ${SOURCES_DATA.length}</span>
     <span>📝 إصدار التقرير: 3.0</span>
   </div>
+
+  <div style="margin-top:20px;padding:15px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;gap:15px;justify-content:center">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACeElEQVR4nO2aS4rjMBRFz2sbMpR3pOys6Z3ZS6kFBOxhgc3twZMcV/UnXeCYuHkaCCc6gwvi/WXiK2v49iUcgg8++OCDDz74P/FWVotdWcw3sxaY6tn1QD3B78xnSdIIDHaRb1kzQCNJ0kf+2XqC35mfioVK42LkcTGGbjEAiiUfqif4p/GN1NNI/dT+E/9sPcHvyJt1d9Ntfi2OX11/8L/nk6Qe8Ki7bnYFJI/ER+oJfld+MDOzDmC6yK6+tYBn0mbH6gl+J95D7Ac/vFjdQJ/OXk5/8A9WLX5KVrX5yqtXLu5aUv9q+oP/+6opcrqZsha7n2jobuXrQD3BP4efWt8kvRtZ78U/94CZXaK/cU7e/bP6JJEllUw6zZBHkMaKKPzzCfkSf/NYQi+kGfDrnpHG2p+M+HtGfs2v2KRR5Wq1NeK431Py1fmOa68qlet2J+3pdAr7PSlf4+/qmnO1Wt9I2q6435Py6d1gugimi/SjgxKE31oYOrDroXqC34cv9W8eEbCYmO6HSyumxcS01sWvpj/4B2s7vN/8N1MyaVhzrvDP5+PX4nb2hKqWwyV/9klwxN/T8u6fjXTD8ttFMHVAKsfmk4Z0a3WMnuD35bfNqXunI6/+OdfpQ/jnE/P395Ne9Q7Wot7T6ZbNJOlF9Qf/gM/e5Kjvc/II9n1czI146I7WE/zO/Pp+svf6t7Y7Bn+6scT7jf+F96qovt/wSdJbzAdPyn9+AmtgKGtpGayRkRpZ2O9p+TofvA8ZNvPfxtNp9WsTOvLnk/HFfge3zwa8F+lWC5BmjASW+yP0BL8v//n95Iev2X9qc/Bq+oMPPvjggw/+jPxP0pTIGFlbKhkAAAAASUVORK5CYII=" width="100" height="100" style="border:1px solid #cbd5e1;border-radius:5px">
+    <div style="text-align:right">
+      <div style="font-size:14px;font-weight:bold;color:#1e3a5f;margin-bottom:4px">للانتقال إلى الموقع الرئيسي</div>
+      <div style="font-size:12px;color:#dc2626;font-weight:bold">متتبع حرائق معسكرات النازحين</div>
+      <div style="font-size:11px;color:#64748b;margin-top:2px">امسح في الأداة المرفقة</div>
+    </div>
+  </div>
 </div>
 
-<div class="footer">${currentLang==='en'?'📊 خوارزميات الحريق IDPs Fire Tracker | All data from verified sources':'📊 خوارزميات الحريق IDPs Fire Tracker | جميع البيانات من مصادر موثقة'} | ${new Date().toLocaleDateString('en-GB')}<br>NASA FIRMS: https://firms.modaps.eosdis.nasa.gov | IOM DTM: https://dtm.iom.int | OCHA: https://www.unocha.org/sudan</div>
+<div class="footer">${currentLang==='en'?'📊 Darfur Fire Tracker | All data from verified sources':'📊 خوارزميات الحريق IDPs Fire Tracker | جميع البيانات من مصادر موثقة'} | ${new Date().toLocaleDateString('en-GB')}<br>NASA FIRMS: https://firms.modaps.eosdis.nasa.gov | IOM DTM: https://dtm.iom.int | OCHA: https://www.unocha.org/sudan</div>
 </body></html>`;
 
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
@@ -1776,9 +1757,9 @@ function downloadPresentation(){
 <meta charset="UTF-8">
 <title>${isENc?'Darfur Fire Tracker — Presentation 2026':'خوارزميات الحريق — عرض تقديمي 2026'}</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans','Segoe UI',Tahoma,sans-serif;background:#f0f4f8;direction:${dir};color:#1e293b}
+body{font-family:'Cairo',Tahoma,Arial,sans-serif;background:#f0f4f8;direction:${dir};color:#1e293b}
 .slide{width:100%;min-height:100vh;page-break-after:always;display:flex;flex-direction:column;background:#0f172a;color:#e2e8f0;padding:0;position:relative;border-bottom:4px solid #dc2626}
 .slide-header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:36px 50px 28px;border-bottom:2px solid #334155;display:flex;align-items:center;gap:18px}
 .slide-num{width:52px;height:52px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;flex-shrink:0}
@@ -1835,31 +1816,6 @@ body{font-family:'DM Sans','Segoe UI',Tahoma,sans-serif;background:#f0f4f8;direc
   .slide{page-break-after:always;min-height:100vh}
   @page{size:A4 landscape;margin:0}
 }
-
-/* TABLES */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-}
-table th, table td {
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 1px solid #334155;
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-table th {
-    font-family: 'Syne', 'DM Sans', sans-serif;
-    font-weight: 700;
-    background: #1e3a5f;
-}
-table td[title]:hover {
-    cursor: help;
-}
-
 </style>
 </head>
 <body>
@@ -2083,8 +2039,8 @@ const TRANSLATIONS={
     tabExport:'📤 Export',
     // Stats
     statTotal:'Total Incidents',
-    statShelters:'Shelters Destroyed',
-    statDeaths:'Deaths',
+    statShelters:'Shelters Razing',
+    statDeaths:'Fatalities',
     statInjuries:'Injuries',
     statWomen:'Women Affected',
     statChildren:'Children Affected',
@@ -2100,8 +2056,8 @@ const TRANSLATIONS={
     sortNewest:'Newest First',
     sortOldest:'Oldest First',
     regionN:'North Darfur',regionS:'South Darfur',regionC:'Central Darfur',regionE:'East Darfur',regionW:'West Darfur',
-    typecamp:'Camp',typevillage:'Village',typeshelter:'Shelter Center',typeneighborhood:'Residential Area',typepublic:'Public Facility',
-    qualityOfficial:'Official/UN Documentation',qualityTrusted:'Trusted Documentation',qualityField:'Field Documentation',qualityScience:'Scientific Documentation',qualityUnverified:'Unverified Documentation',
+    typecamp:'IDP Camp',typevillage:'Village',typeshelter:'Gathering Site',typeneighborhood:'Residential Neighborhood',typepublic:'Public Facility',
+    qualityOfficial:'Internationally Verified',qualityTrusted:'Trusted Documentation',qualityField:'Field Documentation',qualityScience:'Scientific Documentation',qualityUnverified:'Unverified Documentation',
     // Buttons
     btnExcel:'📥 Excel',
     btnExportReport:'📄 Export Report',
@@ -2120,8 +2076,8 @@ const TRANSLATIONS={
     timingHeaderTitle:'🕐 Fire Timing Patterns — When Do Fires Break Out?',
     timingMidnight:'After Midnight',timingMorning:'Morning',timingNoon:'Midday',timingAfternoon:'Afternoon',timingEvening:'Evening',
     // Sections
-    hateSectionTitle:'⚠️ Hate Speech Scoring Index',
-    accountsSectionTitle:'👤 Repeat Accounts Spreading Hate Speech',
+    hateSectionTitle:'⚠️ Hate Speech Index / Incitement Meter',
+    accountsSectionTitle:'👤 Repeat Accounts Spreading Incitement',
     sourcesSectionTitle:'🔗 Source References',
     exportSectionTitle:'📤 Data Export Options',
     // Export panel
@@ -2157,9 +2113,9 @@ const TRANSLATIONS={
     legendLow:'🟡 Minor losses (1–29)',
     legendDeaths:'⚫ Confirmed fatalities',
     // Satellite panel
-    satSectionTitle:'🛰️ Satellite Cross-Verification of Fire Incidents',
+    satSectionTitle:'🛰️ Satellite Cross-Verification & Due Diligence',
     satWhatLabel:'About this section:',
-    satWhatDesc:'This section cross-references documented field incidents with NASA FIRMS thermal anomaly data. A match between field reports and satellite detections at the same location and time independently confirms incident occurrence.',
+    satWhatDesc:'This section cross-references documented field incidents with NASA FIRMS thermal anomaly data. A match between field reports and satellite detections at the same location and time independently confirms incident occurrence through rigorous due diligence.',
     nasaToggleTitle:'🛰️ Show NASA FIRMS Comparison Analysis',
     nasaToggleSub:'Click to view detailed analysis of the comparison methodology and scientific documentation',
     nasaAnalysisTitle:'📋 Why Compare with NASA FIRMS Maps?',
@@ -2189,10 +2145,10 @@ const TRANSLATIONS={
     autoRefreshNextMin:'min',
     autoRefreshRunning:'Refreshing...',
     // Satellite comparison labels
-    satMatchLabel:'✅ Confirmed match with satellite detection',
-    satPartialLabel:'🟡 Documented by international body — likely match',
-    satNoneLabel:'⬜ No satellite data available',
-    satVerifiedBadge:'Scientifically verified',
+    satMatchLabel:'✅ Confirmed Satellite Correlation',
+    satPartialLabel:'🟡 Internationally Verified — Likely Match',
+    satNoneLabel:'⬜ No Satellite Data Available',
+    satVerifiedBadge:'Scientifically Verified',
     // Presentation slides
     slideOf:'of',
     // Map description panel
@@ -2222,9 +2178,9 @@ const TRANSLATIONS={
 };
 
 // Quality label map for English
-const QUALITY_EN={'رسمي دولي':'Official/UN Documentation','موثوق':'Trusted Documentation','ميداني':'Field Documentation','علمي':'Scientific Documentation','غير موثق':'Unverified Documentation'};
+const QUALITY_EN={'رسمي دولي':'Internationally Verified','موثوق':'Trusted Documentation','ميداني':'Field Documentation','علمي':'Scientific Documentation','غير موثق':'Unverified Documentation'};
 // Type badge map for English
-const TYPE_EN={مخيم:'Camp',قرية:'Village','مركز إيواء':'Shelter Center','حي سكني':'Residential','مرفق عام':'Public Facility'};
+const TYPE_EN={مخيم:'IDP Camp',قرية:'Village','مركز إيواء':'Gathering Site','حي سكني':'Residential Neighborhood','مرفق عام':'Public Facility'};
 // Region map for English
 const REGION_EN={'شمال دارفور':'North Darfur','جنوب دارفور':'South Darfur','وسط دارفور':'Central Darfur','شرق دارفور':'East Darfur','غرب دارفور':'West Darfur','خارج دارفور':'Outside Darfur (Darfuri Residents)'};
 
