@@ -242,6 +242,58 @@ tr:hover td{background:#243555}
   .header{flex-direction:column;align-items:flex-start}
 }
 
+/* ── INCIDENT DETAIL MODAL ── */
+.incident-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:3000;align-items:center;justify-content:center;padding:16px}
+.incident-modal-overlay.open{display:flex}
+.incident-modal{background:#1e293b;border-radius:14px;border:1px solid #334155;max-width:640px;width:100%;max-height:92vh;overflow-y:auto;animation:slideUp .2s ease}
+@keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.im-header{padding:16px 18px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.im-title{font-size:15px;font-weight:700;color:#e2e8f0;line-height:1.4}
+.im-body{padding:16px 18px}
+.im-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.im-meta{background:#0f172a;border-radius:8px;padding:10px 12px}
+.im-meta-label{font-size:10px;color:#64748b;margin-bottom:3px}
+.im-meta-value{font-size:13px;font-weight:700;color:#e2e8f0}
+.im-note{background:#0f172a;border-right:3px solid #3b82f6;border-radius:8px;padding:12px;font-size:12px;color:#94a3b8;line-height:1.7;margin-bottom:12px}
+.im-sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.im-share-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.share-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;transition:all .2s;text-decoration:none}
+.share-wa{background:#16a34a;color:#fff}.share-wa:hover{background:#15803d}
+.share-tg{background:#0088cc;color:#fff}.share-tg:hover{background:#0077b3}
+.share-tw{background:#000;color:#fff}.share-tw:hover{background:#111}
+/* ── DATE RANGE FILTER ── */
+.date-filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.date-filter-row label{font-size:11px;color:#64748b;white-space:nowrap}
+.date-filter-row input[type="date"]{min-width:130px;direction:ltr}
+/* ── TOAST NOTIFICATION ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#16a34a;color:#fff;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+/* ── HEATMAP TOGGLE BUTTON ── */
+.btn-indigo{background:#4338ca;color:#fff}.btn-indigo:hover{background:#3730a3}
+/* ── LIGHT MODE ── */
+body.light-mode{background:#f1f5f9;color:#1e293b}
+body.light-mode .app *{--card:#ffffff;--dark:#f1f5f9;--border:#cbd5e1}
+body.light-mode .header{border-bottom-color:#dc2626}
+body.light-mode .tab{background:#e2e8f0;color:#475569;border-color:#cbd5e1}
+body.light-mode .tab.active{background:#dbeafe;color:#1d4ed8;border-color:#3b82f6}
+body.light-mode .stat-card{background:#fff;border-color:#e2e8f0}
+body.light-mode .card{background:#fff;border-color:#e2e8f0}
+body.light-mode th{background:#e2e8f0;color:#374151}
+body.light-mode td{border-bottom-color:#e2e8f0}
+body.light-mode tr:hover td{background:#f0f9ff}
+body.light-mode .filters{background:#fff;border-color:#e2e8f0}
+body.light-mode input,body.light-mode select{background:#f8fafc;border-color:#cbd5e1;color:#1e293b}
+body.light-mode .refresh-row{background:#f8fafc;border-color:#e2e8f0}
+body.light-mode .update-status{background:#f8fafc;border-color:#e2e8f0}
+body.light-mode .link-btn{background:#dbeafe;color:#1d4ed8}
+body.light-mode .hate-card,.light-mode .account-card,.light-mode .source-card{background:#fff;border-color:#e2e8f0}
+body.light-mode .chart-desc-btn{background:#dbeafe;color:#1d4ed8;border-color:#3b82f6}
+body.light-mode .export-option{background:#f8fafc;border-color:#e2e8f0}
+body.light-mode .modal,.light-mode .incident-modal{background:#fff;border-color:#e2e8f0}
+body.light-mode .modal-header,.light-mode .im-header,.light-mode .modal-footer{border-color:#e2e8f0}
+body.light-mode .im-meta,.light-mode .im-note,.light-mode .pattern-card,.light-mode .slide-preview{background:#f8fafc}
+/* ── WEEKLY TREND ── */
+.weekly-chart-wrap{position:relative;width:100%;height:220px}
 /* LANGUAGE TOGGLE */
 .lang-toggle{display:flex;align-items:center;gap:0;border-radius:8px;overflow:hidden;border:1px solid #334155;flex-shrink:0}
 .lang-btn{padding:6px 12px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:11px;font-weight:700;border:none;transition:all .2s;font-family:inherit;letter-spacing:.5px}
@@ -292,13 +344,13 @@ body.en-mode th{text-align:left}
 
 <!-- STATS BAR -->
 <div class="stat-grid">
-  <div class="stat-card red"><div class="label">إجمالي الحوادث</div><div class="value" id="s-total">49</div></div>
-  <div class="stat-card orange"><div class="label">المآوي المدمرة</div><div class="value" id="s-shelters">4,724</div></div>
-  <div class="stat-card yellow"><div class="label">الوفيات</div><div class="value" id="s-deaths">15</div></div>
-  <div class="stat-card pink"><div class="label">الإصابات</div><div class="value" id="s-injuries">29</div></div>
+  <div class="stat-card red"><div class="label">إجمالي الحوادث</div><div class="value" id="s-total">57</div></div>
+  <div class="stat-card orange"><div class="label">المآوي المدمرة</div><div class="value" id="s-shelters">7,627</div></div>
+  <div class="stat-card yellow"><div class="label">الوفيات</div><div class="value" id="s-deaths">30</div></div>
+  <div class="stat-card pink"><div class="label">الإصابات</div><div class="value" id="s-injuries">118</div></div>
   <div class="stat-card blue"><div class="label">النساء المتضررات</div><div class="value" id="s-women">—</div></div>
   <div class="stat-card yellow"><div class="label">الأطفال المتضررون</div><div class="value" id="s-children">—</div></div>
-  <div class="stat-card green"><div class="label">مناطق الرصد</div><div class="value" id="s-gathering">6</div></div>
+  <div class="stat-card green"><div class="label">مناطق الرصد</div><div class="value" id="s-gathering">7</div></div>
 </div>
 
 <!-- AUTO/MANUAL REFRESH ROW -->
@@ -319,7 +371,7 @@ body.en-mode th{text-align:left}
 <div class="panel active" id="panel-incidents">
 <div class="filters">
   <div class="filter-row">
-    <input type="text" id="search" placeholder="ابحث عن موقع أو جهة..." oninput="applyFilters()">
+    <input type="text" id="search" placeholder="ابحث عن موقع، جهة، ملاحظة، تاريخ..." oninput="applyFilters()">
     <select id="f-region" onchange="applyFilters()">
       <option value="all">جميع المناطق</option>
       <option value="شمال دارفور">شمال دارفور</option>
@@ -350,12 +402,22 @@ body.en-mode th{text-align:left}
       <option value="oldest">الأقدم أولاً</option>
     </select>
   </div>
+  <div class="date-filter-row">
+    <label>📅 من:</label>
+    <input type="date" id="f-date-from" onchange="applyFilters()">
+    <label>إلى:</label>
+    <input type="date" id="f-date-to" onchange="applyFilters()">
+    <button class="btn btn-gray" onclick="clearDateFilter()" style="font-size:11px;padding:5px 10px;min-width:auto">✕ مسح التواريخ</button>
+  </div>
 </div>
 <div class="btn-row">
   <button class="btn btn-green" onclick="exportExcel()">📥 Excel</button>
-  <button class="btn btn-blue" onclick="openExportModal()">📄 تصدير التقرير</button>
+  <button class="btn btn-blue" onclick="openExportModal()">📄 تصدير HTML</button>
   <button class="btn btn-purple" onclick="generateFullReport()">📊 تقرير متكامل</button>
+  <button class="btn btn-red" onclick="exportPDF()">🖨️ تصدير PDF</button>
+  <button class="btn btn-indigo" onclick="toggleHeatmap()" id="heatmap-btn">🌡️ خريطة حرارية</button>
   <button class="btn btn-gray" onclick="copyLink()">🔗 نسخ الرابط</button>
+  <button class="btn btn-gray" onclick="toggleLightMode()" id="theme-btn" style="font-size:16px;min-width:auto;padding:7px 10px" title="تبديل الوضع">☀️</button>
 </div>
 <div class="card">
   <div class="card-header">
@@ -371,6 +433,31 @@ body.en-mode th{text-align:left}
   </div>
 </div>
 </div>
+
+<!-- ===== INCIDENT DETAIL MODAL ===== -->
+<div class="incident-modal-overlay" id="incident-modal-overlay" onclick="closeIncidentModal(event)">
+  <div class="incident-modal" id="incident-modal">
+    <div class="im-header">
+      <div>
+        <div class="im-title" id="im-title">—</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px" id="im-date-region">—</div>
+      </div>
+      <button class="close-btn" onclick="closeIncidentModalDirect()">✕</button>
+    </div>
+    <div class="im-body">
+      <div class="im-meta-grid" id="im-meta-grid"></div>
+      <div class="im-note" id="im-note" style="display:none"></div>
+      <div id="im-sources-section">
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px;font-weight:700">🔗 المصادر</div>
+        <div class="im-sources" id="im-sources"></div>
+      </div>
+      <div class="im-share-row" id="im-share-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast"></div>
 
 <!-- ===== PANEL: VICTIMS & TIMING ===== -->
 <div class="panel" id="panel-victims">
@@ -522,10 +609,14 @@ body.en-mode th{text-align:left}
       <div class="chart-desc-tooltip" id="ctt-timing"><span id="ctt-timing-text">مخطط قطبي يُوزع الحوادث على فترات اليوم الخمس (فجر، صباح، ظهر، عصر، مساء). اتساع كل قطاع يتناسب مع عدد الحوادث الموثقة في تلك الفترة.</span></div>
       <div style="padding:12px"><div class="chart-wrap"><canvas id="chart-timing"></canvas></div></div>
     </div>
+    <div class="card chart-desc-wrap">
+      <div class="card-header"><span>الاتجاه الأسبوعي للحوادث</span></div>
+      <button class="chart-desc-btn" onclick="this.closest('.chart-desc-wrap').classList.toggle('show-desc')">ℹ️ وصف الشكل</button>
+      <div class="chart-desc-tooltip"><strong>الاتجاه الأسبوعي:</strong> يُظهر توزيع الحوادث أسبوعاً بأسبوع، ويكشف التسارع أو الهدوء في وتيرة الحرائق بدقة أعلى من المخطط الشهري.</div>
+      <div style="padding:12px"><div class="weekly-chart-wrap"><canvas id="chart-weekly"></canvas></div></div>
+    </div>
   </div>
 </div>
-
-<!-- ===== PANEL: MAP ===== -->
 <div class="panel" id="panel-map">
   <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">
     <span id="map-panel-title" style="font-size:13px;color:#94a3b8;font-weight:700">🗺️ خريطة نقاط الحريق التفاعلية</span>
@@ -540,6 +631,7 @@ body.en-mode th{text-align:left}
       <option value="خارج دارفور">🏕️ خارج دارفور — سكانها من دارفور</option>
     </select>
     <button class="btn btn-teal" onclick="toggleSatelliteLayer()" id="sat-layer-btn" style="font-size:11px">🛰️ طبقة الأقمار الصناعية</button>
+    <button class="btn btn-indigo" onclick="toggleHeatmap()" id="map-heatmap-btn" style="font-size:11px">🌡️ خريطة حرارية</button>
     <button class="btn btn-gray" onclick="resetMapView()" id="map-reset-btn" style="font-size:11px">🎯 إعادة التمركز</button>
   </div>
   <div class="map-desc-panel" id="map-desc-panel"><span id="map-desc-text">تعرض هذه الخريطة التفاعلية مواقع الحوادث الموثقة في دارفور خلال الفترة يناير–أبريل 2026. حجم النقطة يتناسب مع عدد المآوي المدمرة، واللون يشير إلى حجم الخسائر. اضغط على أي نقطة لعرض تفاصيل الحادثة.</span></div>
@@ -781,7 +873,14 @@ const DB=[
 {id:47,date:"2026-03-15",location:"مدينة كورما — شمال دارفور",region:"شمال دارفور",city:"كورما",state:"شمال دارفور",losses:"19 منزلاً بالكامل",shelters:19,deaths:0,injuries:0,women:7,men:6,children:6,source:"غرفة طوارئ كورما",org:"دبنقا + غرف الطوارئ",quality:"ميداني",links:[{l:"دبنقا",u:"https://www.dabangasudan.org/ar/all-news/article/%D8%B3%D9%84%D8%B3%D9%84%D8%A9-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%AA%D8%AA%D8%B3%D8%A8%D8%A8-%D9%81%D9%8A-%D8%AE%D8%B3%D8%A7%D8%A6%D8%B1-%D8%A8%D9%83%D9%88%D8%B1%D9%85%D8%A7-%D9%88%D9%82%D8%B1%D9%8A",platform:"news"}],note:"حريق دمر 19 منزلاً بالكامل دون خسائر بشرية",type:"قرية",timing:"غير محدد",lat:13.99,lng:24.65,isNew:true},
 {id:48,date:"2026-03-26",location:"بلدة اللعيت — شرق دارفور",region:"شرق دارفور",city:"اللعيت",state:"شرق دارفور",losses:"تشريد 20 أسرة",shelters:20,deaths:0,injuries:0,women:8,men:6,children:6,source:"غرفة طوارئ اللعيت",org:"دارفور24",quality:"ميداني",links:[{l:"دارفور24",u:"https://www.darfur24.com/2026/03/26/%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D9%85%D8%AA%D9%83%D8%B1%D8%B1%D8%A9-%D8%AA%D9%81%D8%A7%D9%82%D9%85-%D9%85%D8%A3%D8%B3%D8%A7%D8%A9-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A-%D8%B7%D9%88%D9%8A%D9%84%D8%A9-%D9%88/",platform:"news"}],note:"تشريد 20 أسرة جراء الحريق",type:"قرية",timing:"غير محدد",lat:12.30,lng:26.50,isNew:true},
 {id:49,date:"2026-03-25",location:"معسكرات طويلة جنوب: العمدة + حلة نعمة + دالي + دبة نايرة + الرينة + المجاهرة",region:"شمال دارفور",city:"طويلة",state:"شمال دارفور",losses:"مئات المآوي في 6 معسكرات",shelters:300,deaths:0,injuries:0,women:110,men:90,children:100,source:"آدم رجال — الناطق الرسمي للمنسقية العامة لمعسكرات النازحين واللاجئين في دارفور",org:"المنسقية العامة للنازحين",quality:"ميداني",links:[{l:"فيسبوك آدم رجال",u:"https://www.facebook.com/Rojaladam/posts/1594322826028965",platform:"social"}],note:"تقرير شامل رصد 14 حريقاً في فبراير ومارس بمعسكرات طويلة جنوب — شمل: معسكر العمدة (الأكثر تضرراً)، حلة نعمة، مخيم دالي، دبة نايرة، الرينة، المجاهرة. الأسر المشردة اضطرت للنزوح إلى مخيم دبة نايرة الجديد. آدم رجال هو الناطق الرسمي للمنسقية العامة لمعسكرات النازحين، يُوثّق الحوادث بشكل ميداني مباشر من داخل المعسكرات.",type:"مخيم",timing:"غير محدد",lat:15.40,lng:24.35,isNew:true},
-{id:50,date:"2026-04-15",location:"مخيم روكيرو — دارفور",region:"شمال دارفور",city:"روكيرو",state:"شمال دارفور",losses:"مئات الملاجئ + إمدادات غذائية",shelters:400,deaths:3,injuries:76,women:1,men:0,children:2,source:"ادم رجال — الناطق باسم المنسقية العامة لمعسكرات النازحين واللاجئين",org:"المنسقية العامة لمعسكرات النازحين واللاجئين",quality:"موثوق",links:[{l:"السودانية نيوز",u:"https://alsudania.news/%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%AF%D9%85%D9%91%D8%B1-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D8%B1%D9%88%D9%83%D9%8A%D8%B1%D9%88-%D8%A8%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1-%D9%8A%D9%88%D8%AF%D9%8A/",platform:"news"}],note:"وفاة طفلين وامرأة حامل. 76 مصاباً بجروح متفاوتة بينهم حالات حرجة نُقلت للمستشفيات. التهمت النيران مئات الملاجئ والممتلكات والإمدادات الغذائية. مئات الأسر باتت بلا مأوى أو غذاء. المنسقية ناشدت OCHA والمفوضية السامية وWFP وأطباء بلا حدود للتدخل العاجل.",type:"مخيم",timing:"غير محدد",lat:13.85,lng:25.10,isNew:true},
+{id:50,date:"2026-04-15",location:"مخيم روكيرو — جبل مرة",region:"وسط دارفور",city:"روكيرو",state:"وسط دارفور",losses:"مئات الملاجئ + إمدادات غذائية",shelters:400,deaths:3,injuries:76,women:1,men:0,children:2,source:"آدم رجال — الناطق الرسمي للمنسقية العامة لمعسكرات النازحين واللاجئين في دارفور",org:"المنسقية العامة لمعسكرات النازحين واللاجئين",quality:"موثوق",links:[{l:"السودانية نيوز",u:"https://alsudania.news/%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%AF%D9%85%D9%91%D8%B1-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D8%B1%D9%88%D9%83%D9%8A%D8%B1%D9%88-%D8%A8%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1-%D9%8A%D9%88%D8%AF%D9%8A/",platform:"news"},{l:"سودان تريبيون",u:"https://sudantribune.net/article/312892",platform:"news"},{l:"فيسبوك [1]",u:"https://www.facebook.com/share/p/1CSKvZtseX/",platform:"social"},{l:"فيسبوك [2]",u:"https://www.facebook.com/share/p/1GjWV2w6zT/",platform:"social"},{l:"سوداني نت",u:"https://www.sudaninet.net/73770",platform:"news"}],note:"وفاة طفلين وامرأة حامل. 76 مصاباً بجروح متفاوتة بينهم حالات حرجة نُقلت للمستشفيات. التهمت النيران مئات الملاجئ والممتلكات والإمدادات الغذائية. مئات الأسر باتت بلا مأوى أو غذاء. المنسقية ناشدت OCHA والمفوضية السامية وWFP وأطباء بلا حدود للتدخل العاجل. مخيم روكيرو يقع في منطقة جبل مرة بوسط دارفور.",type:"مخيم",timing:"غير محدد",lat:12.65,lng:24.22,isNew:true},
+{id:51,date:"2026-04-30",location:"مخيم علاشا — أدري",region:"خارج دارفور",city:"أبشي",state:"شرق تشاد",losses:"200 منزل",shelters:200,deaths:0,injuries:0,women:0,men:0,children:0,source:"عبد السلام إسحق الخير — غرفة طوارئ معسكر سربا",org:"الترا سودان",quality:"ميداني",links:[{l:"فيسبوك",u:"https://www.facebook.com/share/p/1GjWV2w6zT/",platform:"social"},{l:"الترا سودان",u:"https://ultrasudan.ultrasawt.com",platform:"news"}],note:"حريق متعمد 'بفعل فاعل' التهم 200 منزل جنوبي مدينة أبشي بشرق تشاد — على بعد 80 كم من أدري. البيوت مشيدة من مواد بدائية (قش وخشب وألواح زنك) مما أدى لانتشار النيران بسرعة هائلة. المخيم يؤوي لاجئين سودانيين فروا من دارفور. تاريخ النشر: 30 أبريل 2026.",type:"مخيم",timing:"غير محدد",lat:13.46,lng:20.83,isNew:true,outsideDarfur:true},
+{id:52,date:"2026-04-29",location:"مخيم زنك الخضار — قولو",region:"وسط دارفور",city:"قولو",state:"وسط دارفور",losses:"أكثر من 400 مأوى ومنزل",shelters:400,deaths:7,injuries:12,women:2,men:0,children:5,source:"المنسقية العامة للنازحين واللاجئين بالسودان",org:"المنسقية العامة للنازحين واللاجئين",quality:"موثوق",links:[{l:"سودان تريبيون",u:"https://sudantribune.net/article/313241",platform:"news"},{l:"غد نيوز",u:"https://www.ghadnews.net/2026/04/29/%D9%85%D8%B5%D8%B1%D8%B9-7-%D8%A8%D9%8A%D9%86%D9%87%D9%85-%D8%A3%D8%B7%D9%81%D8%A7%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%B1%D9%88%D9%91%D8%B9-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86/",platform:"news"},{l:"سودان برافدا",u:"https://sudan.news-pravda.com/sudan/2026/04/29/22392.html",platform:"news"}],note:"حريق هائل اندلع عصر الاثنين 28 أبريل 2026 في مخيم زنك الخضار بمنطقة قولو في جبل مرة بوسط دارفور. أسفر عن مصرع 5 أطفال وامرأتين (7 وفيات إجمالاً)، وإصابة 12 نازحاً بعضهم في حالة حرجة. دُمّر أكثر من 400 مأوى ومنزل مما أفقد آلاف الأسر مأواها. أرجعت المنسقية سرعة انتشار النيران إلى الاكتظاظ الشديد وهشاشة الملاجئ المصنوعة من القش والقصب.",type:"مخيم",timing:"عصر",lat:13.02,lng:24.18,isNew:true},
+{id:53,date:"2026-04-21",location:"مخيم العمدة — طويلة",region:"شمال دارفور",city:"طويلة",state:"شمال دارفور",losses:"105 مآوٍ كلياً + 37 جزئياً (142 أسرة)",shelters:142,deaths:0,injuries:0,women:0,men:0,children:0,source:"منظمة الهجرة الدولية IOM",org:"المنظمة الدولية للهجرة",quality:"رسمي دولي",links:[{l:"الجزيرة نت",u:"https://www.aljazeera.net/news/2026/4/21/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%B4%D9%85%D8%A7%D9%84",platform:"news"},{l:"سودانايل",u:"https://sudanile.com/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%A8%D9%84%D8%AF%D8%A9-%D8%B7%D9%88%D9%8A%D9%84%D8%A9/",platform:"news"}],note:"أعلنت منظمة الهجرة الدولية اندلاع حريق في مخيم العمدة للنازحين ببلدة طويلة، دمّر 105 مآوٍ كلياً وأضرّ بـ37 جزئياً وأجبر 142 أسرة على النزوح مجدداً إلى العراء. الحادثة هي الخامسة في مخيم العمدة وحده منذ فبراير 2026. تُراقب فرق رصد النزوح التابعة للمنظمة الوضع عن قرب. أشارت الجزيرة نت إلى تصاعد الادعاءات بأن بعض الحرائق مفتعلة بهدف إجبار النازحين على العودة للفاشر.",type:"مخيم",timing:"غير محدد",lat:15.35,lng:24.28,isNew:true},
+{id:54,date:"2026-04-14",location:"مخيم أم بلولة — قريضة",region:"جنوب دارفور",city:"قريضة",state:"جنوب دارفور",losses:"أكثر من 1700 منزل (1000 كلياً + 700 جزئياً)",shelters:1700,deaths:0,injuries:0,women:0,men:0,children:0,source:"سيف الدين إبراهيم — عضو لجنة حصر الخسائر / منظمة الهجرة الدولية",org:"المنظمة الدولية للهجرة",quality:"رسمي دولي",links:[{l:"الجزيرة نت",u:"https://www.aljazeera.net/news/2026/4/21/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%B4%D9%85%D8%A7%D9%84",platform:"news"},{l:"دارفور24",u:"https://www.darfur24.com/2026/04/13/%D9%85%D8%B5%D8%B1%D8%B9-%D8%B7%D9%81%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%A7%D9%84%D8%AA%D9%87%D9%85%D8%AA-%D8%A7%D9%83%D8%AB%D8%B1-%D9%85%D9%86-1700-%D9%85%D9%86%D8%B2%D9%84-%D8%A8/",platform:"news"}],note:"حريق ضخم التهم مخيم أم بلولة للنازحين ببلدة قريضة جنوب دارفور (90 كم جنوب نيالا). دمّر أكثر من 1000 منزل كلياً و700 جزئياً وأتى على جميع المحاصيل الزراعية والمدخرات والممتلكات. المخيم يؤوي آلاف النازحين. سبق أن رصدت IOM حريقاً في مخيم بابنوسة بقريضة أجبر 141 أسرة على النزوح.",type:"مخيم",timing:"غير محدد",lat:11.23,lng:24.89,isNew:true},
+{id:55,date:"2026-04-13",location:"بلدة التومات — دمسو",region:"جنوب دارفور",city:"التومات",state:"جنوب دارفور",losses:"24 منزلاً + محاصيل وممتلكات",shelters:24,deaths:1,injuries:0,women:0,men:0,children:1,source:"تاج الدين آدم علي — شاهد عيان / دارفور24",org:"دارفور24",quality:"ميداني",links:[{l:"دارفور24",u:"https://www.darfur24.com/2026/04/13/%D9%85%D8%B5%D8%B1%D8%B9-%D8%B7%D9%81%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%A7%D9%84%D8%AA%D9%87%D9%85%D8%AA-%D8%A7%D9%83%D8%AB%D8%B1-%D9%85%D9%86-1700-%D9%85%D9%86%D8%B2%D9%84-%D8%A8/",platform:"news"}],note:"حريق اندلع في الحي الشمالي من سوق بلدة التومات بمحلية دمسو (150 كم جنوب غرب نيالا) يوم السبت 13 أبريل 2026. أودى بحياة طفل حرقاً داخل النيران، ودمّر 24 منزلاً بالكامل مع فقدان المحاصيل المخزنة والأثاث والمدخرات.",type:"قرية",timing:"غير محدد",lat:10.55,lng:23.47,isNew:true},
+{id:56,date:"2026-05-04",location:"مخيم دبة نايرة الجديدة — طويلة",region:"شمال دارفور",city:"طويلة",state:"شمال دارفور",losses:"23 منزلاً كلياً + 9 جزئياً",shelters:32,deaths:1,injuries:1,women:1,men:0,children:0,source:"إبراهيم محمد أحمد يعقوب — شاهد عيان / دارفور24",org:"دارفور24",quality:"ميداني",links:[{l:"دارفور24",u:"https://darfur24.com/2026/05/03/%D9%88%D9%81%D8%A7%D8%A9-%D8%A7%D9%85%D8%B1%D8%A3%D8%A9-%D9%85%D8%B3%D9%86%D9%91%D8%A9-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8/",platform:"news"}],note:"حريق اندلع في حي سلبلابة بمخيم دبة نايرة الجديدة بمحلية طويلة يوم الأحد 4 مايو 2026. أودى بحياة كلتوم يعقوب عمر (65 عاماً)، وأصيبت شابة نُقلت للمركز الطبي بعد 24 ساعة فقط من زفافها. دُمّر 23 منزلاً كلياً وتضررت 9 جزئياً. المنطقة تستضيف نازحين فرّوا من الفاشر وتفتقر تماماً لسيارات الإطفاء.",type:"مخيم",timing:"غير محدد",lat:15.42,lng:24.31,isNew:true},
+{id:57,date:"2026-03-03",location:"مخيم أبوذر — أم دخن",region:"شمال دارفور",city:"أم دخن",state:"شمال دارفور",losses:"5 منازل + ممتلكات",shelters:5,deaths:3,injuries:0,women:0,men:0,children:3,source:"مجلس تنسيق غرف طوارئ أم دخن",org:"مجلس تنسيق غرف طوارئ أم دخن",quality:"ميداني",links:[{l:"دارفور24",u:"https://www.darfur24.com/2026/03/03/%D9%85%D8%B5%D8%B1%D8%B9-3-%D8%A3%D8%B7%D9%81%D8%A7%D9%84-%D8%A5%D8%AB%D8%B1-%D8%AD%D8%B1%D9%8A%D9%82-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%AF%D8%A7/",platform:"news"}],note:"حريق اندلع فجر الثلاثاء 3 مارس 2026 في الجهة الجنوبية من مخيم أبوذر للنازحين ببلدة أم دخن الحدودية مع تشاد. التهمت النيران 5 منازل وأودت بحياة 3 أطفال: طفل عمره 13 عاماً، آخر 7 سنوات، ورضيع 9 أشهر — من 3 أسر مختلفة. أعرب مجلس تنسيق غرف الطوارئ عن قلقه الشديد من تكرار الحرائق في المنطقة.",type:"مخيم",timing:"فجر",lat:15.05,lng:22.49,isNew:true},
 ];
 
 const HATE_DATA=[
@@ -891,7 +990,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('offline',()=>setOnlineStatus(false));
 });
 
-function checkOnlineStatus(){setOnlineStatus(navigator.onLine);}
+function checkOnlineStatus(){
+  // Static site: always treat as online so auto-refresh label shows correctly
+  setOnlineStatus(true);
+}
 function setOnlineStatus(online){
   if(!online){
     document.getElementById('offline-badge').classList.add('show');
@@ -900,7 +1002,7 @@ function setOnlineStatus(online){
   } else if(!offlineMode){
     document.getElementById('offline-badge').classList.remove('show');
     document.getElementById('pulse-dot').classList.remove('offline');
-    document.getElementById('update-label').textContent='تحديث تلقائي';
+    document.getElementById('update-label').textContent=autoRefreshOn?'تحديث تلقائي كل 5 دقائق ✅':'تحديث يدوي';
   }
 }
 
@@ -974,7 +1076,7 @@ function switchTab(t,el){
   document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('panel-'+t).classList.add('active');
-  if(t==='charts')setTimeout(renderCharts,80);
+  if(t==='charts')setTimeout(()=>{renderCharts();renderWeeklyChart();},80);
   if(t==='hate')renderHate();
   if(t==='accounts')renderAccounts();
   if(t==='sources')renderSources();
@@ -1003,7 +1105,7 @@ function renderTable(){
   const newLabel=currentLang==='en'?'NEW':'جديد';
   const satLabel=currentLang==='en'?'Verified':'موثوق';
   const satTitle=currentLang==='en'?'Satellite confirmation upgrades trust level':'تأكيد الأقمار الصناعية يرفع التصنيف إلى موثوق';
-  tbody.innerHTML=filtered.map(r=>`<tr${r.outsideDarfur?' style="background:rgba(232,121,249,0.07);border-right:3px solid #e879f9"':''}>
+  tbody.innerHTML=filtered.map(r=>`<tr${r.outsideDarfur?' style="background:rgba(232,121,249,0.07);border-right:3px solid #e879f9"':''} onclick="openIncidentModal(${r.id})" style="${r.outsideDarfur?'background:rgba(232,121,249,0.07);border-right:3px solid #e879f9;':''}cursor:pointer" title="اضغط لعرض التفاصيل الكاملة">
     <td data-label="${T.thDate}" style="white-space:nowrap;font-size:11px">${r.date}</td>
     <td data-label="${T.thLocation}">${r.isNew?`<span class="new-badge">${newLabel}</span>`:''}${r.outsideDarfur?'<span style="margin-left:4px;font-size:10px;background:#2d1a3d;color:#e879f9;padding:1px 6px;border-radius:10px;font-weight:700">🏕️ خارج دارفور</span> ':''} ${r.location}${r.satellite?'<span style="margin-right:3px;margin-left:3px;font-size:10px;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:4px">🛰️</span>':''}</td>
     <td data-label="${T.thRegion}">${regionDisplay(r)}</td>
@@ -1032,20 +1134,33 @@ function applyFilters(){
   const r=document.getElementById('f-region').value;
   const tp=document.getElementById('f-type').value;
   const q=document.getElementById('f-quality').value;
-  const sort = document.getElementById('f-sort').value;
-  
+  const sort=document.getElementById('f-sort').value;
+  const dateFrom=document.getElementById('f-date-from').value;
+  const dateTo=document.getElementById('f-date-to').value;
+
   filtered=DB.filter(x=>{
-    return(!s||x.location.includes(s)||x.org.includes(s))&&
-    (r==='all'||x.region===r)&&(tp==='all'||x.type===tp)&&(q==='all'||x.quality===q);
+    const matchText=!s||(x.location+' '+(x.org||'')+' '+(x.note||'')+' '+(x.city||'')+' '+x.date).toLowerCase().includes(s);
+    const matchRegion=r==='all'||x.region===r;
+    const matchType=tp==='all'||x.type===tp;
+    const matchQuality=q==='all'||x.quality===q;
+    const matchFrom=!dateFrom||x.date>=dateFrom;
+    const matchTo=!dateTo||x.date<=dateTo;
+    return matchText&&matchRegion&&matchType&&matchQuality&&matchFrom&&matchTo;
   });
 
-  if(sort === 'newest') {
-    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+  if(sort==='newest'){
+    filtered.sort((a,b)=>new Date(b.date)-new Date(a.date));
   } else {
-    filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+    filtered.sort((a,b)=>new Date(a.date)-new Date(b.date));
   }
-  
   renderTable();
+}
+
+function clearDateFilter(){
+  document.getElementById('f-date-from').value='';
+  document.getElementById('f-date-to').value='';
+  applyFilters();
+  showToast('تم مسح فلتر التاريخ ✓');
 }
 
 // ============ VICTIMS & TIMING ============
@@ -1562,7 +1677,7 @@ ${currentLang==='en'?'<h2>📐 Report Methodology</h2>':'<h2>📐 المنهجي
   </div>
 
   <div style="margin-top:20px;padding:15px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;gap:15px;justify-content:center">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACeElEQVR4nO2aS4rjMBRFz2sbMpR3pOys6Z3ZS6kFBOxhgc3twZMcV/UnXeCYuHkaCCc6gwvi/WXiK2v49iUcgg8++OCDDz74P/FWVotdWcw3sxaY6tn1QD3B78xnSdIIDHaRb1kzQCNJ0kf+2XqC35mfioVK42LkcTGGbjEAiiUfqif4p/GN1NNI/dT+E/9sPcHvyJt1d9Ntfi2OX11/8L/nk6Qe8Ki7bnYFJI/ER+oJfld+MDOzDmC6yK6+tYBn0mbH6gl+J95D7Ac/vFjdQJ/OXk5/8A9WLX5KVrX5yqtXLu5aUv9q+oP/+6opcrqZsha7n2jobuXrQD3BP4efWt8kvRtZ78U/94CZXaK/cU7e/bP6JJEllUw6zZBHkMaKKPzzCfkSf/NYQi+kGfDrnpHG2p+M+HtGfs2v2KRR5Wq1NeK431Py1fmOa68qlet2J+3pdAr7PSlf4+/qmnO1Wt9I2q6435Py6d1gugimi/SjgxKE31oYOrDroXqC34cv9W8eEbCYmO6HSyumxcS01sWvpj/4B2s7vN/8N1MyaVhzrvDP5+PX4nb2hKqWwyV/9klwxN/T8u6fjXTD8ttFMHVAKsfmk4Z0a3WMnuD35bfNqXunI6/+OdfpQ/jnE/P395Ne9Q7Wot7T6ZbNJOlF9Qf/gM/e5Kjvc/II9n1czI146I7WE/zO/Pp+svf6t7Y7Bn+6scT7jf+F96qovt/wSdJbzAdPyn9+AmtgKGtpGayRkRpZ2O9p+TofvA8ZNvPfxtNp9WsTOvLnk/HFfge3zwa8F+lWC5BmjASW+yP0BL8v//n95Iev2X9qc/Bq+oMPPvjggw/+jPxP0pTIGFlbKhkAAAAASUVORK5CYII=" width="100" height="100" style="border:1px solid #cbd5e1;border-radius:5px">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACiUlEQVR4nO2aTWrkMBBGX40NWdqQA/RR1DcLOdLcwDpKHyBgLxtkvllIcjvNhEyI42lDaSVbb/FBUao/mfjKir++hIPzzjvvvPPOO/8Rb2W1eUe0FphaYKpn5x31OL8xHyRJI0hK2IsSdmY2O9NIkvSe/2k9zm/MT9VDYw967WfTUBkza/fW4/w2fHv/I1xajA6MTsC0rx7nd+GnJ2lgtkfR4/w3+U7KF3I8pRKEzzSyMyUm76zH+U35aGZmPdjL5Ul2ntp8UwNzTp/31eP8RnyOv6smZTxdTfF0NcHVyEF4Pz3Ob8tTip8uQRgbacg70NBJ0ljroyBJw6Ppd/6TVYw3ws20BCVyOXwzt9y+B+Sr3bpi5OzJwOLOUt65fY/Is7p8pbT+HCB7MnR+Px+Ur/EXssPWf+V+vl3Nbt9D8u/z54SYeohnMGgSTLDucjyafuf/iY/9bDCZEU/LLKG7GrFvdHPsh9Xv/EdLyyLkSmmJxOO6SPL7+ZB8te8IQKNb/py7kkGpGtnte0CeO9ctbtqt/dfr3+PyS/7cVCfuUulqAJQhsNdHR+Xr/Ld7W3rNc57/Cua2pM5Tm7SPHud/iG9EuJgRe8roKPZL1nybBD+sfuf/ulb1r0BYGGcEqYWpTYQBjG7cS4/z2/LZvtU7m6RY9xY0G0zPac0/mn7nP1nr/vPYrGrdMjPMp2Xn+dVR+fp+0ux0NWC2EoStxuR99Tj/Q3y4tOi1p+RXyyT4f+lx/lv8/ftYxZMgjDPQvZli/4aF3/1eepzfll/q3/LW2cIIFn4/15QaIPZNsn30OL8tv57/5iJ4hNzEkm75lfefD8rfv59U/cg9y7vTx9PvvPPOO++880fk/wBh69c57Dm1nAAAAABJRU5ErkJggg==" width="100" height="100" style="border:1px solid #cbd5e1;border-radius:5px">
     <div style="text-align:right">
       <div style="font-size:14px;font-weight:bold;color:#1e3a5f;margin-bottom:4px">للانتقال إلى الموقع الرئيسي</div>
       <div style="font-size:12px;color:#dc2626;font-weight:bold">متتبع حرائق معسكرات النازحين</div>
@@ -2355,6 +2470,159 @@ function setLang(lang){
   const locale='en-GB';
   document.getElementById('last-update').textContent=`${T.subtitle} ${now.toLocaleString(locale)} | ${DB.length} ${T.incidentsSuffix}`;
 }
+
+// ============ TOAST NOTIFICATION ============
+function showToast(msg,duration=2800){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),duration);
+}
+
+// ============ LIGHT / DARK MODE TOGGLE ============
+function toggleLightMode(){
+  const isLight=document.body.classList.toggle('light-mode');
+  document.getElementById('theme-btn').textContent=isLight?'🌙':'☀️';
+  localStorage.setItem('idpt_theme',isLight?'light':'dark');
+  showToast(isLight?'وضع فاتح ☀️':'وضع داكن 🌙');
+}
+
+// ============ INCIDENT DETAIL MODAL ============
+function openIncidentModal(id){
+  const r=DB.find(x=>x.id===id);
+  if(!r)return;
+  document.getElementById('im-title').textContent=r.location+(r.outsideDarfur?' 🏕️':'');
+  document.getElementById('im-date-region').textContent=`📅 ${r.date}  •  📍 ${r.region}  •  ${r.city||''}  •  ${r.state||''}`;
+  const metaItems=[
+    {label:'🏠 المآوي المدمرة',val:r.shelters.toLocaleString('ar'),cls:r.shelters>=100?'color:#fb923c':''},
+    {label:'💀 الوفيات',val:r.deaths>0?r.deaths:'—',cls:r.deaths>0?'color:#f87171;font-weight:900':''},
+    {label:'🤕 الإصابات',val:r.injuries>0?r.injuries:'—',cls:r.injuries>0?'color:#fbbf24':''},
+    {label:'🏕️ النطاق',val:r.type,cls:''},
+    {label:'⏰ التوقيت',val:timingLabel(r.timing),cls:''},
+    {label:'⭐ الجودة',val:r.quality,cls:''},
+    {label:'👩 وفيات النساء',val:r.women>0?r.women:'—',cls:''},
+    {label:'👧 وفيات الأطفال',val:r.children>0?r.children:'—',cls:''},
+  ];
+  document.getElementById('im-meta-grid').innerHTML=metaItems.map(m=>
+    `<div class="im-meta"><div class="im-meta-label">${m.label}</div><div class="im-meta-value" style="${m.cls}">${m.val}</div></div>`
+  ).join('');
+  const noteEl=document.getElementById('im-note');
+  if(r.note){noteEl.style.display='block';noteEl.textContent=r.note;}
+  else noteEl.style.display='none';
+  document.getElementById('im-sources').innerHTML=r.links.length>0
+    ?r.links.map(k=>`<a class="link-btn" href="${k.u}" target="_blank">🔗 ${k.l}</a>`).join('')
+    :'<span style="color:#475569;font-size:12px">لا توجد روابط موثقة</span>';
+  const shareText=encodeURIComponent(`🔥 ${r.location} — ${r.date}\n🏠 ${r.shelters} مأوى مدمر${r.deaths>0?` | 💀 ${r.deaths} وفاة`:''}${r.injuries>0?` | 🤕 ${r.injuries} إصابة`:''}\n📍 ${r.region}\n#دارفور #حرائق_المخيمات\nhttp://idpstracker.salaamedia.org`);
+  document.getElementById('im-share-row').innerHTML=`
+    <a class="share-btn share-wa" href="https://wa.me/?text=${shareText}" target="_blank">📱 واتساب</a>
+    <a class="share-btn share-tg" href="https://t.me/share/url?url=http://idpstracker.salaamedia.org&text=${shareText}" target="_blank">✈️ تيليغرام</a>
+    <a class="share-btn share-tw" href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank">✖ تويتر/X</a>
+  `;
+  document.getElementById('incident-modal-overlay').classList.add('open');
+}
+function closeIncidentModal(e){
+  if(e.target===document.getElementById('incident-modal-overlay'))closeIncidentModalDirect();
+}
+function closeIncidentModalDirect(){
+  document.getElementById('incident-modal-overlay').classList.remove('open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeIncidentModalDirect();});
+
+// ============ DATE FILTER CLEAR ============
+function clearDateFilter(){
+  document.getElementById('f-date-from').value='';
+  document.getElementById('f-date-to').value='';
+  applyFilters();
+  showToast('تم مسح فلتر التاريخ ✓');
+}
+
+// ============ HEATMAP TOGGLE ============
+let heatLayer=null,heatmapOn=false;
+function toggleHeatmap(){
+  if(!mapInstance){showToast('افتح تبويب الخريطة أولاً 🗺️');return;}
+  if(!window.L.heatLayer){
+    const s=document.createElement('script');
+    s.src='https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js';
+    s.onload=()=>_applyHeatmap();
+    document.head.appendChild(s);
+  } else {_applyHeatmap();}
+}
+function _applyHeatmap(){
+  if(heatmapOn&&heatLayer){
+    mapInstance.removeLayer(heatLayer);heatLayer=null;heatmapOn=false;
+    ['heatmap-btn','map-heatmap-btn'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent='🌡️ خريطة حرارية';});
+    showToast('تم إيقاف الخريطة الحرارية');return;
+  }
+  const points=DB.map(r=>[r.lat,r.lng,Math.min(r.shelters/100,1.0)]);
+  heatLayer=L.heatLayer(points,{radius:35,blur:20,maxZoom:10,gradient:{0.2:'#3b82f6',0.5:'#fbbf24',0.8:'#f97316',1.0:'#dc2626'}}).addTo(mapInstance);
+  heatmapOn=true;
+  ['heatmap-btn','map-heatmap-btn'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent='🌡️ إيقاف الحرارية';});
+  showToast('الخريطة الحرارية مُفعَّلة 🌡️');
+}
+
+// ============ WEEKLY TREND CHART ============
+function renderWeeklyChart(){
+  if(charts['chart-weekly']){charts['chart-weekly'].destroy();delete charts['chart-weekly'];}
+  const weeks={};
+  DB.forEach(x=>{
+    const d=new Date(x.date);
+    const jan1=new Date(d.getFullYear(),0,1);
+    const wk=Math.ceil(((d-jan1)/86400000+jan1.getDay()+1)/7);
+    const key=`${d.getFullYear()}-W${String(wk).padStart(2,'0')}`;
+    if(!weeks[key])weeks[key]={count:0,deaths:0,shelters:0};
+    weeks[key].count++;weeks[key].deaths+=x.deaths;weeks[key].shelters+=x.shelters;
+  });
+  const wLabels=Object.keys(weeks).sort();
+  const ctx=document.getElementById('chart-weekly');if(!ctx)return;
+  charts['chart-weekly']=new Chart(ctx,{
+    type:'bar',
+    data:{labels:wLabels,datasets:[
+      {label:'الحوادث',data:wLabels.map(k=>weeks[k].count),backgroundColor:'rgba(251,146,60,0.75)',borderRadius:4,order:2},
+      {label:'المآوي (÷10)',data:wLabels.map(k=>Math.round(weeks[k].shelters/10)),type:'line',borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,0.12)',fill:true,tension:0.4,pointRadius:4,order:1}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{size:10}}}},scales:{x:{ticks:{color:'#64748b',maxRotation:45,font:{size:9}},grid:{color:'rgba(100,116,139,0.15)'}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(100,116,139,0.15)'}}}}
+  });
+}
+
+// ============ PDF EXPORT ============
+function exportPDF(){
+  showToast('جاري تحضير PDF... 🖨️',4000);
+  function _doPDF(){
+    const{jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+    doc.setFontSize(16);doc.setTextColor(220,50,50);
+    doc.text('IDPs Fire Tracker — Darfur Fire Incidents Report',148,15,{align:'center'});
+    doc.setFontSize(10);doc.setTextColor(100,100,100);
+    doc.text(`Generated: ${new Date().toLocaleDateString('en-GB')} | Incidents shown: ${filtered.length}`,148,22,{align:'center'});
+    const totalDeaths=filtered.reduce((s,x)=>s+x.deaths,0);
+    const totalShelters=filtered.reduce((s,x)=>s+x.shelters,0);
+    const totalInjuries=filtered.reduce((s,x)=>s+x.injuries,0);
+    doc.setFontSize(11);doc.setTextColor(30,30,30);
+    doc.text(`Shelters Destroyed: ${totalShelters.toLocaleString()}   |   Deaths: ${totalDeaths}   |   Injuries: ${totalInjuries}`,148,30,{align:'center'});
+    const headers=[['Date','Location','Region','Type','Shelters','Deaths','Injuries','Timing','Quality']];
+    const rows=filtered.map(r=>[r.date,r.location,r.region,r.type,r.shelters,r.deaths||'—',r.injuries||'—',r.timing,r.quality]);
+    doc.autoTable({head:headers,body:rows,startY:35,styles:{fontSize:8,cellPadding:2,overflow:'linebreak'},headStyles:{fillColor:[220,38,38],textColor:[255,255,255],fontStyle:'bold'},alternateRowStyles:{fillColor:[245,247,250]},columnStyles:{0:{cellWidth:22},1:{cellWidth:50},2:{cellWidth:28},3:{cellWidth:22},4:{cellWidth:18},5:{cellWidth:14},6:{cellWidth:14},7:{cellWidth:20},8:{cellWidth:18}},margin:{left:8,right:8},didDrawPage:(d)=>{doc.setFontSize(8);doc.setTextColor(150,150,150);doc.text(`IDPs Fire Tracker | salaamedia.org | Page ${d.pageNumber}`,148,doc.internal.pageSize.height-5,{align:'center'});}});
+    doc.save(`darfur-fire-tracker-${new Date().toISOString().split('T')[0]}.pdf`);
+    showToast('تم تحميل PDF بنجاح ✅');
+  }
+  if(window.jspdf&&window.jspdf.jsPDF&&document.querySelector('script[src*="autotable"]')){_doPDF();}
+  else{
+    const s1=document.createElement('script');
+    s1.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload=()=>{
+      const s2=document.createElement('script');
+      s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload=_doPDF;document.head.appendChild(s2);
+    };document.head.appendChild(s1);
+  }
+}
+
+// ============ INIT EXTRAS ============
+document.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('idpt_theme')==='light'){
+    document.body.classList.add('light-mode');
+    const tb=document.getElementById('theme-btn');if(tb)tb.textContent='🌙';
+  }
+});
 
 </script>
 </body>
