@@ -1335,32 +1335,46 @@ let nextRefreshTime=null;
 
 // ============ INIT ============
 document.addEventListener('DOMContentLoaded',async()=>{
-  // Show loading state
   const label=document.getElementById('last-update');
-  if(label)label.textContent='⏳ جاري تحميل البيانات...';
 
-  // Try to load from external data.json (GitHub)
-  const loaded=await loadData(false);
+  // ── STEP 1: Load embedded data immediately (no waiting) ──
+  DB=FALLBACK_DB.slice();
+  filtered=[...DB];
 
-  // Render everything
+  // Render everything right away with embedded data
   renderTable();
   renderVictimsStats();
   renderTimingStats();
   updateStats();
-
-  const T0=TRANSLATIONS[currentLang];
-  if(!loaded){
-    // Using fallback
-    if(label)label.textContent=`${T0.subtitle} ${new Date().toLocaleString('en-GB')} | ${DB.length} ${T0.incidentsSuffix} (بيانات مخزنة محلياً)`;
-  }
   document.getElementById('s-women').textContent=DB.reduce((s,x)=>s+x.women,0);
   document.getElementById('s-children').textContent=DB.reduce((s,x)=>s+x.children,0);
 
-  // Start auto-refresh (fetches data.json every 5 min)
+  const T0=TRANSLATIONS[currentLang];
+  if(label)label.textContent=`${T0.subtitle} ${new Date().toLocaleString('en-GB')} | ${DB.length} ${T0.incidentsSuffix}`;
+  _dataLoaded=true;
+
+  // ── STEP 2: Silently try to fetch newer data.json in background ──
+  (async()=>{
+    try{
+      const res=await fetch(DATA_URL+'?t='+Date.now(),{signal:AbortSignal.timeout(8000)});
+      if(res.ok){
+        const json=await res.json();
+        const remote=json.incidents||[];
+        if(remote.length>=DB.length){
+          DB=remote; filtered=[...DB];
+          renderTable(); renderVictimsStats(); renderTimingStats(); updateStats();
+          updateMetaFromJson(json.meta||{});
+          document.getElementById('s-women').textContent=DB.reduce((s,x)=>s+x.women,0);
+          document.getElementById('s-children').textContent=DB.reduce((s,x)=>s+x.children,0);
+          if(label)label.textContent=`${T0.subtitle} ${new Date().toLocaleString('en-GB')} | ${DB.length} ${T0.incidentsSuffix}`;
+        }
+      }
+    }catch(e){ /* silent — embedded data already shown */ }
+  })();
+
+  // ── STEP 3: Start services ──
   startAutoRefresh();
   checkOnlineStatus();
-
-  // Request notification permission
   if('Notification' in window && Notification.permission==='default'){
     setTimeout(()=>Notification.requestPermission(),3000);
   }
@@ -1458,6 +1472,10 @@ function renderTable(){
   const newLabel=currentLang==='en'?'NEW':'جديد';
   const satLabel=currentLang==='en'?'Verified':'موثوق';
   const satTitle=currentLang==='en'?'Satellite confirmation upgrades trust level':'تأكيد الأقمار الصناعية يرفع التصنيف إلى موثوق';
+  if(!filtered.length){
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:2.5rem;color:#94a3b8;font-size:1rem">${currentLang==='en'?'⚠️ No incidents match your filters.':'⚠️ لا توجد حوادث تطابق معايير البحث.'}</td></tr>`;
+    updateStats();return;
+  }
   tbody.innerHTML=filtered.map(r=>`<tr${r.outsideDarfur?' style="background:rgba(232,121,249,0.07);border-right:3px solid #e879f9"':''} onclick="openIncidentModal(${r.id})" style="${r.outsideDarfur?'background:rgba(232,121,249,0.07);border-right:3px solid #e879f9;':''}cursor:pointer" title="اضغط لعرض التفاصيل الكاملة">
     <td data-label="${T.thDate}" style="white-space:nowrap;font-size:11px">${r.date}</td>
     <td data-label="${T.thLocation}">${r.isNew?`<span class="new-badge">${newLabel}</span>`:''}${r.outsideDarfur?`<span style="margin-left:4px;font-size:10px;background:#2d1a3d;color:#e879f9;padding:1px 6px;border-radius:10px;font-weight:700">🏕️ ${currentLang==='en'?'Outside Darfur':'خارج دارفور'}</span> `:''} ${locationDisplay(r)}${r.satellite?'<span style="margin-right:3px;margin-left:3px;font-size:10px;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:4px">🛰️</span>':''}</td>

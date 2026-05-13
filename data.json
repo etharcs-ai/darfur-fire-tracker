@@ -1,0 +1,1832 @@
+{
+  "meta": {
+    "lastUpdated": "2026-05-13",
+    "totalIncidents": 57,
+    "source": "IDPs Fire Tracker"
+  },
+  "incidents": [
+    {
+      "id": 1,
+      "date": "2026-01-14",
+      "location": "بليل — سنتر صفر",
+      "region": "شمال دارفور",
+      "city": "بليل",
+      "state": "شمال دارفور",
+      "losses": "6-8 منازل",
+      "shelters": 7,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 3,
+      "men": 2,
+      "children": 2,
+      "source": "مراسل ميداني",
+      "org": "راديو دبنقا",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/ar/all-news/article/حريق-يلتهم-عشرات-المنازل-بمحلية-بليل",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق فجري — 4:00 AM",
+      "type": "مخيم",
+      "timing": "فجر",
+      "lat": 15.15,
+      "lng": 25.08
+    },
+    {
+      "id": 2,
+      "date": "2026-01-31",
+      "location": "طويلة — معسكر العمدة (ح1)",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "250 مأوى",
+      "shelters": 250,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 120,
+      "men": 80,
+      "children": 100,
+      "source": "IOM DTM",
+      "org": "IOM DTM + الأناضول",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "IOM DTM",
+          "u": "https://dtm.iom.int",
+          "platform": "org"
+        },
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com",
+          "platform": "news"
+        }
+      ],
+      "note": "طويلة تأوي 655 ألف نازح",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.4,
+      "lng": 24.35
+    },
+    {
+      "id": 3,
+      "date": "2026-02-05",
+      "location": "قرية كولقي",
+      "region": "شمال دارفور",
+      "city": "كولقي",
+      "state": "شمال دارفور",
+      "losses": "مآوي متعددة",
+      "shelters": 30,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 10,
+      "men": 8,
+      "children": 12,
+      "source": "—",
+      "org": "غير موثق",
+      "quality": "غير موثق",
+      "links": [],
+      "note": "لا مصدر رسمي",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 15.9,
+      "lng": 24.8
+    },
+    {
+      "id": 4,
+      "date": "2026-02-08",
+      "location": "طويلة — حلة نعمة (ح2)",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "عشرات المنازل + قتيلان",
+      "shelters": 50,
+      "deaths": 2,
+      "injuries": 3,
+      "women": 2,
+      "men": 1,
+      "children": 2,
+      "source": "غرفة طوارئ طويلة",
+      "org": "دارفور24 + سودان تربيون",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/10/حريق-واسع-يدمّر-المئات-من-مساكن-النازحين/",
+          "platform": "news"
+        },
+        {
+          "l": "سودان تربيون",
+          "u": "https://sudantribune.net/article282115/",
+          "platform": "news"
+        }
+      ],
+      "note": "طفل 12 سنة من بين القتلى. 3:30 AM",
+      "type": "قرية",
+      "timing": "فجر",
+      "lat": 15.38,
+      "lng": 24.33
+    },
+    {
+      "id": 5,
+      "date": "2026-02-11",
+      "location": "النسيم — دار السلام",
+      "region": "جنوب دارفور",
+      "city": "النسيم",
+      "state": "جنوب دارفور",
+      "losses": "حريق جزئي كبير",
+      "shelters": 60,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 20,
+      "men": 15,
+      "children": 25,
+      "source": "مراسل ميداني",
+      "org": "سودان ناو",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "سودان ناو",
+          "u": "https://www.sudannow.net/%D8%AD%D8%B1%D9%8A%D9%82-%D9%82%D8%B6%D9%89-%D8%B9%D9%84%D9%89-15-%D9%85%D9%86%D8%B2%D9%84%D8%A7/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق بمحلية دار السلام — تضرر 15 منزلاً كلياً",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 11.2,
+      "lng": 24.9
+    },
+    {
+      "id": 6,
+      "date": "2026-02-11",
+      "location": "شرق دارفور — مخيم لاجئين",
+      "region": "شرق دارفور",
+      "city": "أد ضعين",
+      "state": "شرق دارفور",
+      "losses": "4 قتلى + 4 جرحى",
+      "shelters": 30,
+      "deaths": 4,
+      "injuries": 4,
+      "women": 2,
+      "men": 1,
+      "children": 1,
+      "source": "دارفور24",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/11/مصرع-4-لاجئين-في-حريق-متعمد-بشرق-دارفور/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق متعمد بين لاجئين جنوب سودانيين",
+      "type": "مخيم",
+      "timing": "صباح",
+      "lat": 11.84,
+      "lng": 26.12
+    },
+    {
+      "id": 7,
+      "date": "2026-02-12",
+      "location": "قرية شقرة",
+      "region": "شمال دارفور",
+      "city": "شقرة",
+      "state": "شمال دارفور",
+      "losses": "مسح كامل للقرية",
+      "shelters": 200,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 80,
+      "men": 60,
+      "children": 60,
+      "source": "رصد حراري",
+      "org": "NASA FIRMS",
+      "quality": "علمي",
+      "links": [
+        {
+          "l": "NASA FIRMS",
+          "u": "https://firms.modaps.eosdis.nasa.gov/map/",
+          "platform": "org"
+        }
+      ],
+      "note": "2:45 AM — رُصد بالأقمار",
+      "type": "قرية",
+      "timing": "فجر",
+      "lat": 15.7,
+      "lng": 25.1,
+      "satellite": true
+    },
+    {
+      "id": 8,
+      "date": "2026-02-16",
+      "location": "طويلة — معسكر العمدة (ح3)",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "50 مأوى + 237 أسرة",
+      "shelters": 79,
+      "deaths": 1,
+      "injuries": 1,
+      "women": 1,
+      "men": 0,
+      "children": 0,
+      "source": "IOM DTM",
+      "org": "IOM DTM + Ultra Sudan",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "Ultra Sudan",
+          "u": "https://ultrasudan.ultrasawt.com/",
+          "platform": "news"
+        },
+        {
+          "l": "سودانس بوست",
+          "u": "https://arabic.sudanspost.com/article/11839",
+          "platform": "news"
+        }
+      ],
+      "note": "158 مأوى كلياً + 79 جزئياً. وفاة طفل",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.42,
+      "lng": 24.36
+    },
+    {
+      "id": 9,
+      "date": "2026-02-19",
+      "location": "مخيم فوريكا صافية — قريضة",
+      "region": "جنوب دارفور",
+      "city": "قريضة",
+      "state": "جنوب دارفور",
+      "losses": "30+ منزل كلياً + 10 جزئياً",
+      "shelters": 40,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 15,
+      "men": 10,
+      "children": 15,
+      "source": "شاهد عيان",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/19/خسائر-مادية-جراء-حرائق-في-قريضة-وكتيلا/",
+          "platform": "news"
+        }
+      ],
+      "note": "الأسر في العراء",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 10.6,
+      "lng": 24.8
+    },
+    {
+      "id": 10,
+      "date": "2026-02-19",
+      "location": "حي التضامن — كتيلا",
+      "region": "وسط دارفور",
+      "city": "كتيلا",
+      "state": "وسط دارفور",
+      "losses": "5 منازل كلياً",
+      "shelters": 5,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 2,
+      "men": 2,
+      "children": 1,
+      "source": "شاهد عيان",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/19/خسائر-مادية-جراء-حرائق-في-قريضة-وكتيلا/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "حي سكني",
+      "timing": "غير محدد",
+      "lat": 12.7,
+      "lng": 24.5
+    },
+    {
+      "id": 11,
+      "date": "2026-02-20",
+      "location": "ترانقا — زالنجي",
+      "region": "وسط دارفور",
+      "city": "زالنجي",
+      "state": "وسط دارفور",
+      "losses": "33 منزلاً + محاصيل",
+      "shelters": 33,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 12,
+      "men": 10,
+      "children": 11,
+      "source": "شهود عيان",
+      "org": "راديو دبنقا",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/ar/all-news/article/%D8%AD%D8%B1%D9%8A%D9%82-%D9%87%D8%A7%D8%A6%D9%84-%D9%8A%D9%82%D8%B6%D9%89-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%85%D9%86%D8%A7%D8%B2%D9%84-%D9%8والماحاصيل",
+          "platform": "news"
+        }
+      ],
+      "note": "تدمير 33 منزلاً ومحاصيل زراعية",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 12.91,
+      "lng": 23.47
+    },
+    {
+      "id": 12,
+      "date": "2026-02-22",
+      "location": "مخيم عطاش — بنيالا",
+      "region": "جنوب دارفور",
+      "city": "نيالا",
+      "state": "جنوب دارفور",
+      "losses": "15 مأوى + 8 جزئياً",
+      "shelters": 23,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 9,
+      "men": 7,
+      "children": 7,
+      "source": "شاهد عيان",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/22/حريق-بمخيم-عطاش-ببنيالا/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 12.05,
+      "lng": 24.88
+    },
+    {
+      "id": 13,
+      "date": "2026-02-18",
+      "location": "سوق الملم — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "5 محلات + خسائر اقتصادية",
+      "shelters": 0,
+      "deaths": 0,
+      "injuries": 2,
+      "women": 0,
+      "men": 2,
+      "children": 0,
+      "source": "تجار وشهود",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/18/حريق-بسوق-الملم/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مرفق عام",
+      "timing": "ظهر",
+      "lat": 13.63,
+      "lng": 25.35
+    },
+    {
+      "id": 14,
+      "date": "2026-02-18",
+      "location": "منطقة أم دخن — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "12 منزل كلياً",
+      "shelters": 12,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 5,
+      "men": 4,
+      "children": 3,
+      "source": "سكان محليون",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/18/حريق-بمنطقة-أم-دخن-السكنية/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "حي سكني",
+      "timing": "عصر",
+      "lat": 13.65,
+      "lng": 25.37
+    },
+    {
+      "id": 15,
+      "date": "2026-03-05",
+      "location": "طويلة — معسكر العمدة (ح4)",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "25 مأوى",
+      "shelters": 25,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 10,
+      "men": 8,
+      "children": 7,
+      "source": "IOM DTM",
+      "org": "IOM DTM",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "IOM DTM",
+          "u": "https://dtm.iom.int/reports/sudan-dtm-tawila-march-2026",
+          "platform": "org"
+        }
+      ],
+      "note": "الحريق الرابع في طويلة",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.41,
+      "lng": 24.34
+    },
+    {
+      "id": 16,
+      "date": "2026-03-08",
+      "location": "مخيم أبو شوك — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "40 مأوى جزئياً",
+      "shelters": 40,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 15,
+      "men": 12,
+      "children": 13,
+      "source": "مراقبون أمميون",
+      "org": "OCHA",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "OCHA",
+          "u": "https://www.unocha.org/sudan",
+          "platform": "org"
+        }
+      ],
+      "note": "50 ألف نازح في المخيم",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.67,
+      "lng": 25.32
+    },
+    {
+      "id": 17,
+      "date": "2026-03-10",
+      "location": "مخيم زمزم — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "60 مأوى كلياً",
+      "shelters": 60,
+      "deaths": 1,
+      "injuries": 3,
+      "women": 2,
+      "men": 1,
+      "children": 1,
+      "source": "دارفور24 / IOM",
+      "org": "دارفور24 + IOM",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/10/حريق-بمخيم-زمزم-يودي-بحياة-طفل/",
+          "platform": "news"
+        },
+        {
+          "l": "IOM",
+          "u": "https://iom.int/news/fire-zamzam-camp",
+          "platform": "org"
+        }
+      ],
+      "note": "وفاة طفل وإصابة 3",
+      "type": "مخيم",
+      "timing": "مساء",
+      "lat": 13.72,
+      "lng": 25.3
+    },
+    {
+      "id": 18,
+      "date": "2026-03-12",
+      "location": "مخيم الرينة — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "35 مأوى",
+      "shelters": 35,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 14,
+      "men": 11,
+      "children": 10,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "دبنقا",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/en/all-news/article/homes-burn-across-darfur-as-more-dry-season-fires-flare",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.69,
+      "lng": 25.33
+    },
+    {
+      "id": 19,
+      "date": "2026-03-15",
+      "location": "مركز إيواء كورما — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "8 خيام + 20 أسرة",
+      "shelters": 28,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 10,
+      "men": 6,
+      "children": 12,
+      "source": "سكان محليون",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/15/حريق-بمركز-إيواء-كورما/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مركز إيواء",
+      "timing": "صباح",
+      "lat": 13.74,
+      "lng": 25.28
+    },
+    {
+      "id": 20,
+      "date": "2026-03-18",
+      "location": "مخيم المجاهرة — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "45 مأوى كلياً + 15 جزئياً",
+      "shelters": 60,
+      "deaths": 0,
+      "injuries": 1,
+      "women": 22,
+      "men": 18,
+      "children": 21,
+      "source": "مراسلون ميدانيون",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/18/حريق-بمخيم-المجاهرة/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "عصر",
+      "lat": 13.61,
+      "lng": 25.34
+    },
+    {
+      "id": 21,
+      "date": "2026-03-21",
+      "location": "معسكرات طويلة: العمدة + دبة نايرة + حلة نعمة + دالي",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "1500 منزل + 971 أسرة",
+      "shelters": 1500,
+      "deaths": 3,
+      "injuries": 8,
+      "women": 450,
+      "men": 300,
+      "children": 421,
+      "source": "IOM DTM",
+      "org": "IOM DTM + دارفور24",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "IOM DTM",
+          "u": "https://dtm.iom.int",
+          "platform": "org"
+        },
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com",
+          "platform": "news"
+        }
+      ],
+      "note": "أكبر حادثة موثقة — شملت معسكر العمدة (الأكبر) + دبة نايرة + حلة نعمة + دالي جنوب طويلة. 971 أسرة متضررة",
+      "type": "مخيم",
+      "timing": "صباح",
+      "lat": 15.43,
+      "lng": 24.37,
+      "isNew": true,
+      "satellite": true
+    },
+    {
+      "id": 22,
+      "date": "2026-03-25",
+      "location": "مخيم الجنينة",
+      "region": "غرب دارفور",
+      "city": "الجنينة",
+      "state": "غرب دارفور",
+      "losses": "80 مأوى",
+      "shelters": 80,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 32,
+      "men": 25,
+      "children": 23,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.45,
+      "lng": 22.45
+    },
+    {
+      "id": 23,
+      "date": "2026-04-01",
+      "location": "مخيم طويلة — النازحون",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "200 مأوى",
+      "shelters": 200,
+      "deaths": 0,
+      "injuries": 2,
+      "women": 80,
+      "men": 60,
+      "children": 62,
+      "source": "يوم سبعة / IOM DTM",
+      "org": "يوم سبعة + IOM",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "يوم سبعة",
+          "u": "https://www.youm7.com/7361252",
+          "platform": "news"
+        },
+        {
+          "l": "سودان أخبار",
+          "u": "https://www.sudanakhbar.com",
+          "platform": "news"
+        }
+      ],
+      "note": "الحريق الثالث في أسبوعين",
+      "type": "مخيم",
+      "timing": "مساء",
+      "lat": 15.44,
+      "lng": 24.38,
+      "isNew": true
+    },
+    {
+      "id": 24,
+      "date": "2026-02-28",
+      "location": "مخيم الهجرة — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "22 مأوى",
+      "shelters": 22,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 8,
+      "men": 7,
+      "children": 7,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.66,
+      "lng": 25.36
+    },
+    {
+      "id": 25,
+      "date": "2026-03-02",
+      "location": "قرية الخور — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "15 منزل",
+      "shelters": 15,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 6,
+      "men": 5,
+      "children": 4,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 13.75,
+      "lng": 25.4
+    },
+    {
+      "id": 26,
+      "date": "2026-03-07",
+      "location": "مخيم الرينة — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "18 مأوى جزئياً",
+      "shelters": 18,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 7,
+      "men": 5,
+      "children": 6,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.68,
+      "lng": 25.33
+    },
+    {
+      "id": 27,
+      "date": "2026-02-25",
+      "location": "سوق الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "3 محلات",
+      "shelters": 0,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "تجار",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/02/25/حريق-بسوق-الفاشر/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مرفق عام",
+      "timing": "ظهر",
+      "lat": 13.62,
+      "lng": 25.35
+    },
+    {
+      "id": 28,
+      "date": "2026-03-03",
+      "location": "مدرسة الفاشر الابتدائية",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "جزء من المبنى",
+      "shelters": 0,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "إدارة المدرسة",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/03/حريق-بمدرسة-الفاشر/",
+          "platform": "news"
+        }
+      ],
+      "note": "",
+      "type": "مرفق عام",
+      "timing": "صباح",
+      "lat": 13.64,
+      "lng": 25.36
+    },
+    {
+      "id": 29,
+      "date": "2026-02-14",
+      "location": "مخيم الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "28 مأوى",
+      "shelters": 28,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 11,
+      "men": 9,
+      "children": 8,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.6,
+      "lng": 25.38
+    },
+    {
+      "id": 30,
+      "date": "2026-03-14",
+      "location": "مخيم الدعيس — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "35 مأوى",
+      "shelters": 35,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 13,
+      "men": 11,
+      "children": 11,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.71,
+      "lng": 25.31
+    },
+    {
+      "id": 31,
+      "date": "2026-02-27",
+      "location": "مخيم الشرقية — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "19 مأوى جزئياً",
+      "shelters": 19,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 7,
+      "men": 6,
+      "children": 6,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.73,
+      "lng": 25.29
+    },
+    {
+      "id": 32,
+      "date": "2026-03-20",
+      "location": "مخيم الشرقية — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "42 مأوى",
+      "shelters": 42,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 16,
+      "men": 13,
+      "children": 13,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.735,
+      "lng": 25.295
+    },
+    {
+      "id": 33,
+      "date": "2026-02-23",
+      "location": "مخيم الحصاحيصا — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "16 مأوى",
+      "shelters": 16,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 6,
+      "men": 5,
+      "children": 5,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.76,
+      "lng": 25.27
+    },
+    {
+      "id": 34,
+      "date": "2026-03-11",
+      "location": "مخيم الحصاحيصا — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "31 مأوى",
+      "shelters": 31,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 12,
+      "men": 10,
+      "children": 9,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.762,
+      "lng": 25.271
+    },
+    {
+      "id": 35,
+      "date": "2026-03-24",
+      "location": "مخيم الشرقية — الفاشر",
+      "region": "شمال دارفور",
+      "city": "الفاشر",
+      "state": "شمال دارفور",
+      "losses": "27 مأوى",
+      "shelters": 27,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 10,
+      "men": 9,
+      "children": 8,
+      "source": "غرفة طوارئ الفاشر",
+      "org": "مجلس غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "غرف الطوارئ",
+          "u": "https://www.facebook.com/61575960293347",
+          "platform": "social"
+        }
+      ],
+      "note": "",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.74,
+      "lng": 25.294,
+      "isNew": true
+    },
+    {
+      "id": 36,
+      "date": "2026-03-01",
+      "location": "معسكر كلمة — نيالا (سنتر 1)",
+      "region": "جنوب دارفور",
+      "city": "نيالا",
+      "state": "جنوب دارفور",
+      "losses": "600–1000 مأوى",
+      "shelters": 800,
+      "deaths": 0,
+      "injuries": 1,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "المنسقية العامة للنازحين",
+      "org": "دارفور24 + دبنقا + سودانس بوست",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/en/2026/03/02/fire-destroys-around-1000-shelters-in-kalma-camp-thousands-affected/",
+          "platform": "news"
+        },
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/en/all-news/article/north-darfur-thousands-left-homeless-as-fire-consumes-kalma-camp-neighbourhoods",
+          "platform": "news"
+        }
+      ],
+      "note": "أكبر حريق في كلمة منذ 2023 — امرأة ذوي احتياجات خاصة بحالة حرجة. بدأ 10:00 صباحاً واستمر 3 ساعات",
+      "type": "مخيم",
+      "timing": "صباح",
+      "lat": 12.03,
+      "lng": 24.87,
+      "isNew": true
+    },
+    {
+      "id": 37,
+      "date": "2026-03-03",
+      "location": "مخيم أبوذر — أم دخن",
+      "region": "وسط دارفور",
+      "city": "أم دخن",
+      "state": "وسط دارفور",
+      "losses": "5 منازل",
+      "shelters": 5,
+      "deaths": 3,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 3,
+      "source": "مجلس تنسيق غرف طوارئ أم دخن",
+      "org": "دارفور24",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/03/%D9%85%D8%B5%D8%B1%D8%B9-3-%D8%A3%D8%B7%D9%81%D8%A7%D9%84-%D8%A5%D8%AB%D8%B1-%D8%AD%D8%B1%D9%8A%D9%82-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%AF%D8%A7/",
+          "platform": "news"
+        }
+      ],
+      "note": "3 أطفال لقوا حتفهم: 13 سنة، 7 سنوات، رضيع 9 أشهر. فجر — الجهة الجنوبية من المخيم",
+      "type": "مخيم",
+      "timing": "فجر",
+      "lat": 10.45,
+      "lng": 22.68,
+      "isNew": true
+    },
+    {
+      "id": 38,
+      "date": "2026-03-14",
+      "location": "مخيم دالي — جنوب طويلة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "عشرات المنازل",
+      "shelters": 40,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 15,
+      "men": 12,
+      "children": 13,
+      "source": "شهود عيان",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/14/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D8%AF%D9%85%D8%B1-%D9%85%D9%86%D8%A7%D8%B2%D9%84-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D9%81%D9%8A-%D8%B4%D9%85%D8%A7%D9%84-%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1/",
+          "platform": "news"
+        }
+      ],
+      "note": "اندلع بسبب عاصفة ترابية — تمكن الأهالي من إخماده بجهود ذاتية",
+      "type": "مخيم",
+      "timing": "ظهر",
+      "lat": 15.3,
+      "lng": 24.32,
+      "isNew": true
+    },
+    {
+      "id": 39,
+      "date": "2026-03-15",
+      "location": "مخيم خور عمر — شمال دارفور",
+      "region": "شمال دارفور",
+      "city": "خور عمر",
+      "state": "شمال دارفور",
+      "losses": "19 منزلاً",
+      "shelters": 19,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 7,
+      "men": 6,
+      "children": 6,
+      "source": "غرفة طوارئ خور عمر",
+      "org": "دبنقا",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/en/all-news/article/homes-burn-across-darfur-as-more-dry-season-fires-flare",
+          "platform": "news"
+        }
+      ],
+      "note": "أسر نازحة وأسر من المجتمع المضيف",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.8,
+      "lng": 25.2,
+      "isNew": true
+    },
+    {
+      "id": 40,
+      "date": "2026-03-15",
+      "location": "مخيم بابنوسة — قريضة",
+      "region": "جنوب دارفور",
+      "city": "قريضة",
+      "state": "جنوب دارفور",
+      "losses": "30 منزلاً",
+      "shelters": 30,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 11,
+      "men": 9,
+      "children": 10,
+      "source": "شهود عيان",
+      "org": "دبنقا",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/en/all-news/article/homes-burn-across-darfur-as-more-dry-season-fires-flare",
+          "platform": "news"
+        }
+      ],
+      "note": "غرب سوق أبوجا — شرق مسجد الشيخ علي",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 10.58,
+      "lng": 24.82,
+      "isNew": true
+    },
+    {
+      "id": 41,
+      "date": "2026-03-31",
+      "location": "مخيم طويلة العمدة — الحريق الثالث",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "عشرات المنازل + 880 أسرة متضررة",
+      "shelters": 120,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 45,
+      "men": 35,
+      "children": 40,
+      "source": "محمد آدم موسى — قيادي أهلي",
+      "org": "دارفور24 + سوداني نت",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/31/%D8%AD%D8%B1%D9%8A%D9%82-%D8%AC%D8%AF%D9%8A%D8%AF-%D9%8A%D9%84%D8%AA%D9%87%D9%85-%D9%85%D9%86%D8%A7%D8%B2%D9%84-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D8%B7%D9%88%D9%8A/",
+          "platform": "news"
+        }
+      ],
+      "note": "الحريق الثالث في أسبوعين — 14 حادثة حريق في فبراير ومارس بطويلة",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.45,
+      "lng": 24.39,
+      "isNew": true
+    },
+    {
+      "id": 42,
+      "date": "2026-04-06",
+      "location": "معسكر النيم — الضعين",
+      "region": "شرق دارفور",
+      "city": "الضعين",
+      "state": "شرق دارفور",
+      "losses": "70+ أسرة مشردة",
+      "shelters": 70,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 26,
+      "men": 21,
+      "children": 23,
+      "source": "شهود عيان",
+      "org": "سودانس بوست",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "سودانس بوست",
+          "u": "https://arabic.sudanspost.com/article/12169",
+          "platform": "news"
+        }
+      ],
+      "note": "اندلع بشكل مفاجئ وانتشر بسرعة — غياب معدات إطفاء",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 11.4,
+      "lng": 26.34,
+      "isNew": true
+    },
+    {
+      "id": 43,
+      "date": "2026-04-10",
+      "location": "حي شرقي — مكجر",
+      "region": "وسط دارفور",
+      "city": "مكجر",
+      "state": "وسط دارفور",
+      "losses": "13 منزلاً + محاصيل",
+      "shelters": 13,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 5,
+      "men": 4,
+      "children": 4,
+      "source": "غرفة طوارئ مكجر",
+      "org": "دارفور24",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/en/2026/04/10/fires-devastate-darfur-towns-displace-hundreds-and-destroy-homes/",
+          "platform": "news"
+        }
+      ],
+      "note": "أسر في العراء — خسائر في المحاصيل والمدخرات",
+      "type": "حي سكني",
+      "timing": "غير محدد",
+      "lat": 12.36,
+      "lng": 23.45,
+      "isNew": true
+    },
+    {
+      "id": 44,
+      "date": "2026-04-10",
+      "location": "معسكر بابنوسة — قريضة",
+      "region": "جنوب دارفور",
+      "city": "قريضة",
+      "state": "جنوب دارفور",
+      "losses": "87 مأوى كلياً + 54 جزئياً",
+      "shelters": 141,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 52,
+      "men": 42,
+      "children": 47,
+      "source": "IOM DTM",
+      "org": "IOM DTM + دارفور24",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/en/2026/04/10/fires-devastate-darfur-towns-displace-hundreds-and-destroy-homes/",
+          "platform": "news"
+        }
+      ],
+      "note": "141 أسرة نازحة حسب IOM DTM — أسر فرّت للعراء داخل المحلية",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 10.57,
+      "lng": 24.83,
+      "isNew": true
+    },
+    {
+      "id": 45,
+      "date": "2026-04-10",
+      "location": "مدينة أم دفوق — جنوب دارفور",
+      "region": "جنوب دارفور",
+      "city": "أم دفوق",
+      "state": "جنوب دارفور",
+      "losses": "32 منزلاً + ماشية",
+      "shelters": 32,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 12,
+      "men": 10,
+      "children": 10,
+      "source": "سكان محليون",
+      "org": "دارفور24",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/en/2026/04/10/fires-devastate-darfur-towns-displace-hundreds-and-destroy-homes/",
+          "platform": "news"
+        }
+      ],
+      "note": "الرياح القوية تسببت في سرعة الانتشار — نفوق عدد من الماشية",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 10.52,
+      "lng": 24.12,
+      "isNew": true
+    },
+    {
+      "id": 46,
+      "date": "2026-03-23",
+      "location": "معسكر أزهري المبارك — العفاض، الدبة",
+      "region": "خارج دارفور",
+      "city": "الدبة",
+      "state": "الولاية الشمالية",
+      "losses": "عدد من الخيام",
+      "shelters": 15,
+      "deaths": 1,
+      "injuries": 4,
+      "women": 4,
+      "men": 0,
+      "children": 1,
+      "source": "رامي عبد الرحيم — لجنة الطوارئ محلية الدبة",
+      "org": "دارفور24 + Ultra Sudan + سوداني نت",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/23/%D9%85%D8%B5%D8%B1%D8%B9-%D8%B7%D9%81%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%B2%D9%88%D8%AD-%D8%B4%D9%85%D8%A7%D9%84-%D8%A7%D9%84%D8%B3%D9%88%D8%AF%D8%A7/",
+          "platform": "news"
+        },
+        {
+          "l": "Ultra Sudan",
+          "u": "https://ultrasudan.ultrasawt.com/%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%81%D9%8A-%D9%85%D8%AF%D9%8A%D9%86%D8%A9-%D8%A7%D9%84%D8%AF%D8%A8%D8%A9",
+          "platform": "news"
+        },
+        {
+          "l": "سوداني نت",
+          "u": "https://www.sudaninet.net/71787",
+          "platform": "news"
+        }
+      ],
+      "note": "وفاة طفل 3 سنوات. حالات اختناق وصدمات نفسية وسط النساء. المخيم يضم نازحين من الفاشر وشمال دارفور وكردفان — أُسس أواخر 2025 عقب سيطرة الدعم السريع على الفاشر. يبعد 15 كم من مدينة الدبة.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 18.55,
+      "lng": 30.82,
+      "isNew": true,
+      "outsideDarfur": true
+    },
+    {
+      "id": 47,
+      "date": "2026-03-15",
+      "location": "مدينة كورما — شمال دارفور",
+      "region": "شمال دارفور",
+      "city": "كورما",
+      "state": "شمال دارفور",
+      "losses": "19 منزلاً بالكامل",
+      "shelters": 19,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 7,
+      "men": 6,
+      "children": 6,
+      "source": "غرفة طوارئ كورما",
+      "org": "دبنقا + غرف الطوارئ",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دبنقا",
+          "u": "https://www.dabangasudan.org/ar/all-news/article/%D8%B3%D9%84%D8%B3%D9%84%D8%A9-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%AA%D8%AA%D8%B3%D8%A8%D8%A8-%D9%81%D9%8A-%D8%AE%D8%B3%D8%A7%D8%A6%D8%B1-%D8%A8%D9%83%D9%88%D8%B1%D9%85%D8%A7-%D9%88%D9%82%D8%B1%D9%8A",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق دمر 19 منزلاً بالكامل دون خسائر بشرية",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 13.99,
+      "lng": 24.65,
+      "isNew": true
+    },
+    {
+      "id": 48,
+      "date": "2026-03-26",
+      "location": "بلدة اللعيت — شرق دارفور",
+      "region": "شرق دارفور",
+      "city": "اللعيت",
+      "state": "شرق دارفور",
+      "losses": "تشريد 20 أسرة",
+      "shelters": 20,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 8,
+      "men": 6,
+      "children": 6,
+      "source": "غرفة طوارئ اللعيت",
+      "org": "دارفور24",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/26/%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D9%85%D8%AA%D9%83%D8%B1%D8%B1%D8%A9-%D8%AA%D9%81%D8%A7%D9%82%D9%85-%D9%85%D8%A3%D8%B3%D8%A7%D8%A9-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A-%D8%B7%D9%88%D9%8A%D9%84%D8%A9-%D9%88/",
+          "platform": "news"
+        }
+      ],
+      "note": "تشريد 20 أسرة جراء الحريق",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 12.3,
+      "lng": 26.5,
+      "isNew": true
+    },
+    {
+      "id": 49,
+      "date": "2026-03-25",
+      "location": "معسكرات طويلة جنوب: العمدة + حلة نعمة + دالي + دبة نايرة + الرينة + المجاهرة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "مئات المآوي في 6 معسكرات",
+      "shelters": 300,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 110,
+      "men": 90,
+      "children": 100,
+      "source": "آدم رجال — الناطق الرسمي للمنسقية العامة لمعسكرات النازحين واللاجئين في دارفور",
+      "org": "المنسقية العامة للنازحين",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "فيسبوك آدم رجال",
+          "u": "https://www.facebook.com/Rojaladam/posts/1594322826028965",
+          "platform": "social"
+        }
+      ],
+      "note": "تقرير شامل رصد 14 حريقاً في فبراير ومارس بمعسكرات طويلة جنوب — شمل: معسكر العمدة (الأكثر تضرراً)، حلة نعمة، مخيم دالي، دبة نايرة، الرينة، المجاهرة. الأسر المشردة اضطرت للنزوح إلى مخيم دبة نايرة الجديد. آدم رجال هو الناطق الرسمي للمنسقية العامة لمعسكرات النازحين، يُوثّق الحوادث بشكل ميداني مباشر من داخل المعسكرات.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.4,
+      "lng": 24.35,
+      "isNew": true
+    },
+    {
+      "id": 50,
+      "date": "2026-04-15",
+      "location": "مخيم روكيرو — جبل مرة",
+      "region": "وسط دارفور",
+      "city": "روكيرو",
+      "state": "وسط دارفور",
+      "losses": "مئات الملاجئ + إمدادات غذائية",
+      "shelters": 400,
+      "deaths": 3,
+      "injuries": 76,
+      "women": 1,
+      "men": 0,
+      "children": 2,
+      "source": "آدم رجال — الناطق الرسمي للمنسقية العامة لمعسكرات النازحين واللاجئين في دارفور",
+      "org": "المنسقية العامة لمعسكرات النازحين واللاجئين",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "السودانية نيوز",
+          "u": "https://alsudania.news/%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%AF%D9%85%D9%91%D8%B1-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D8%B1%D9%88%D9%83%D9%8A%D8%B1%D9%88-%D8%A8%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1-%D9%8A%D9%88%D8%AF%D9%8A/",
+          "platform": "news"
+        },
+        {
+          "l": "سودان تريبيون",
+          "u": "https://sudantribune.net/article/312892",
+          "platform": "news"
+        },
+        {
+          "l": "فيسبوك [1]",
+          "u": "https://www.facebook.com/share/p/1CSKvZtseX/",
+          "platform": "social"
+        },
+        {
+          "l": "فيسبوك [2]",
+          "u": "https://www.facebook.com/share/p/1GjWV2w6zT/",
+          "platform": "social"
+        },
+        {
+          "l": "سوداني نت",
+          "u": "https://www.sudaninet.net/73770",
+          "platform": "news"
+        }
+      ],
+      "note": "وفاة طفلين وامرأة حامل. 76 مصاباً بجروح متفاوتة بينهم حالات حرجة نُقلت للمستشفيات. التهمت النيران مئات الملاجئ والممتلكات والإمدادات الغذائية. مئات الأسر باتت بلا مأوى أو غذاء. المنسقية ناشدت OCHA والمفوضية السامية وWFP وأطباء بلا حدود للتدخل العاجل. مخيم روكيرو يقع في منطقة جبل مرة بوسط دارفور.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 12.65,
+      "lng": 24.22,
+      "isNew": true
+    },
+    {
+      "id": 51,
+      "date": "2026-04-30",
+      "location": "مخيم علاشا — أدري",
+      "region": "خارج دارفور",
+      "city": "أبشي",
+      "state": "شرق تشاد",
+      "losses": "200 منزل",
+      "shelters": 200,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "عبد السلام إسحق الخير — غرفة طوارئ معسكر سربا",
+      "org": "الترا سودان",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "فيسبوك",
+          "u": "https://www.facebook.com/share/p/1GjWV2w6zT/",
+          "platform": "social"
+        },
+        {
+          "l": "الترا سودان",
+          "u": "https://ultrasudan.ultrasawt.com",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق متعمد 'بفعل فاعل' التهم 200 منزل جنوبي مدينة أبشي بشرق تشاد — على بعد 80 كم من أدري. البيوت مشيدة من مواد بدائية (قش وخشب وألواح زنك) مما أدى لانتشار النيران بسرعة هائلة. المخيم يؤوي لاجئين سودانيين فروا من دارفور. تاريخ النشر: 30 أبريل 2026.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 13.46,
+      "lng": 20.83,
+      "isNew": true,
+      "outsideDarfur": true
+    },
+    {
+      "id": 52,
+      "date": "2026-04-29",
+      "location": "مخيم زنك الخضار — قولو",
+      "region": "وسط دارفور",
+      "city": "قولو",
+      "state": "وسط دارفور",
+      "losses": "أكثر من 400 مأوى ومنزل",
+      "shelters": 400,
+      "deaths": 7,
+      "injuries": 12,
+      "women": 2,
+      "men": 0,
+      "children": 5,
+      "source": "المنسقية العامة للنازحين واللاجئين بالسودان",
+      "org": "المنسقية العامة للنازحين واللاجئين",
+      "quality": "موثوق",
+      "links": [
+        {
+          "l": "سودان تريبيون",
+          "u": "https://sudantribune.net/article/313241",
+          "platform": "news"
+        },
+        {
+          "l": "غد نيوز",
+          "u": "https://www.ghadnews.net/2026/04/29/%D9%85%D8%B5%D8%B1%D8%B9-7-%D8%A8%D9%8A%D9%86%D9%87%D9%85-%D8%A3%D8%B7%D9%81%D8%A7%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D9%85%D8%B1%D9%88%D9%91%D8%B9-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86/",
+          "platform": "news"
+        },
+        {
+          "l": "سودان برافدا",
+          "u": "https://sudan.news-pravda.com/sudan/2026/04/29/22392.html",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق هائل اندلع عصر الاثنين 28 أبريل 2026 في مخيم زنك الخضار بمنطقة قولو في جبل مرة بوسط دارفور. أسفر عن مصرع 5 أطفال وامرأتين (7 وفيات إجمالاً)، وإصابة 12 نازحاً بعضهم في حالة حرجة. دُمّر أكثر من 400 مأوى ومنزل مما أفقد آلاف الأسر مأواها. أرجعت المنسقية سرعة انتشار النيران إلى الاكتظاظ الشديد وهشاشة الملاجئ المصنوعة من القش والقصب.",
+      "type": "مخيم",
+      "timing": "عصر",
+      "lat": 13.02,
+      "lng": 24.18,
+      "isNew": true
+    },
+    {
+      "id": 53,
+      "date": "2026-04-21",
+      "location": "مخيم العمدة — طويلة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "105 مآوٍ كلياً + 37 جزئياً (142 أسرة)",
+      "shelters": 142,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "منظمة الهجرة الدولية IOM",
+      "org": "المنظمة الدولية للهجرة",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "الجزيرة نت",
+          "u": "https://www.aljazeera.net/news/2026/4/21/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%B4%D9%85%D8%A7%D9%84",
+          "platform": "news"
+        },
+        {
+          "l": "سودانايل",
+          "u": "https://sudanile.com/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%A8%D9%84%D8%AF%D8%A9-%D8%B7%D9%88%D9%8A%D9%84%D8%A9/",
+          "platform": "news"
+        }
+      ],
+      "note": "أعلنت منظمة الهجرة الدولية اندلاع حريق في مخيم العمدة للنازحين ببلدة طويلة، دمّر 105 مآوٍ كلياً وأضرّ بـ37 جزئياً وأجبر 142 أسرة على النزوح مجدداً إلى العراء. الحادثة هي الخامسة في مخيم العمدة وحده منذ فبراير 2026. تُراقب فرق رصد النزوح التابعة للمنظمة الوضع عن قرب. أشارت الجزيرة نت إلى تصاعد الادعاءات بأن بعض الحرائق مفتعلة بهدف إجبار النازحين على العودة للفاشر.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.35,
+      "lng": 24.28,
+      "isNew": true
+    },
+    {
+      "id": 54,
+      "date": "2026-04-14",
+      "location": "مخيم أم بلولة — قريضة",
+      "region": "جنوب دارفور",
+      "city": "قريضة",
+      "state": "جنوب دارفور",
+      "losses": "أكثر من 1700 منزل (1000 كلياً + 700 جزئياً)",
+      "shelters": 1700,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "سيف الدين إبراهيم — عضو لجنة حصر الخسائر / منظمة الهجرة الدولية",
+      "org": "المنظمة الدولية للهجرة",
+      "quality": "رسمي دولي",
+      "links": [
+        {
+          "l": "الجزيرة نت",
+          "u": "https://www.aljazeera.net/news/2026/4/21/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%84%D8%AA%D9%87%D9%85-142-%D9%85%D8%A3%D9%88%D9%89-%D9%84%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%B4%D9%85%D8%A7%D9%84",
+          "platform": "news"
+        },
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/04/13/%D9%85%D8%B5%D8%B1%D8%B9-%D8%B7%D9%81%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%A7%D9%84%D8%AA%D9%87%D9%85%D8%AA-%D8%A7%D9%83%D8%AB%D8%B1-%D9%85%D9%86-1700-%D9%85%D9%86%D8%B2%D9%84-%D8%A8/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق ضخم التهم مخيم أم بلولة للنازحين ببلدة قريضة جنوب دارفور (90 كم جنوب نيالا). دمّر أكثر من 1000 منزل كلياً و700 جزئياً وأتى على جميع المحاصيل الزراعية والمدخرات والممتلكات. المخيم يؤوي آلاف النازحين. سبق أن رصدت IOM حريقاً في مخيم بابنوسة بقريضة أجبر 141 أسرة على النزوح.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 11.23,
+      "lng": 24.89,
+      "isNew": true
+    },
+    {
+      "id": 55,
+      "date": "2026-04-13",
+      "location": "بلدة التومات — دمسو",
+      "region": "جنوب دارفور",
+      "city": "التومات",
+      "state": "جنوب دارفور",
+      "losses": "24 منزلاً + محاصيل وممتلكات",
+      "shelters": 24,
+      "deaths": 1,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 1,
+      "source": "تاج الدين آدم علي — شاهد عيان / دارفور24",
+      "org": "دارفور24",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/04/13/%D9%85%D8%B5%D8%B1%D8%B9-%D8%B7%D9%81%D9%84-%D9%81%D9%8A-%D8%AD%D8%B1%D8%A7%D8%A6%D9%82-%D8%A7%D9%84%D8%AA%D9%87%D9%85%D8%AA-%D8%A7%D9%83%D8%AB%D8%B1-%D9%85%D9%86-1700-%D9%85%D9%86%D8%B2%D9%84-%D8%A8/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق اندلع في الحي الشمالي من سوق بلدة التومات بمحلية دمسو (150 كم جنوب غرب نيالا) يوم السبت 13 أبريل 2026. أودى بحياة طفل حرقاً داخل النيران، ودمّر 24 منزلاً بالكامل مع فقدان المحاصيل المخزنة والأثاث والمدخرات.",
+      "type": "قرية",
+      "timing": "غير محدد",
+      "lat": 10.55,
+      "lng": 23.47,
+      "isNew": true
+    },
+    {
+      "id": 56,
+      "date": "2026-05-04",
+      "location": "مخيم دبة نايرة الجديدة — طويلة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "23 منزلاً كلياً + 9 جزئياً",
+      "shelters": 32,
+      "deaths": 1,
+      "injuries": 1,
+      "women": 1,
+      "men": 0,
+      "children": 0,
+      "source": "إبراهيم محمد أحمد يعقوب — شاهد عيان / دارفور24",
+      "org": "دارفور24",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://darfur24.com/2026/05/03/%D9%88%D9%81%D8%A7%D8%A9-%D8%A7%D9%85%D8%B1%D8%A3%D8%A9-%D9%85%D8%B3%D9%86%D9%91%D8%A9-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق اندلع في حي سلبلابة بمخيم دبة نايرة الجديدة بمحلية طويلة يوم الأحد 4 مايو 2026. أودى بحياة كلتوم يعقوب عمر (65 عاماً)، وأصيبت شابة نُقلت للمركز الطبي بعد 24 ساعة فقط من زفافها. دُمّر 23 منزلاً كلياً وتضررت 9 جزئياً. المنطقة تستضيف نازحين فرّوا من الفاشر وتفتقر تماماً لسيارات الإطفاء.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.42,
+      "lng": 24.31,
+      "isNew": true
+    },
+    {
+      "id": 57,
+      "date": "2026-03-03",
+      "location": "مخيم أبوذر — أم دخن",
+      "region": "شمال دارفور",
+      "city": "أم دخن",
+      "state": "شمال دارفور",
+      "losses": "5 منازل + ممتلكات",
+      "shelters": 5,
+      "deaths": 3,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 3,
+      "source": "مجلس تنسيق غرف طوارئ أم دخن",
+      "org": "مجلس تنسيق غرف طوارئ أم دخن",
+      "quality": "ميداني",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://www.darfur24.com/2026/03/03/%D9%85%D8%B5%D8%B1%D8%B9-3-%D8%A3%D8%B7%D9%81%D8%A7%D9%84-%D8%A5%D8%AB%D8%B1-%D8%AD%D8%B1%D9%8A%D9%82-%D9%81%D9%8A-%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8%D8%AF%D8%A7/",
+          "platform": "news"
+        }
+      ],
+      "note": "حريق اندلع فجر الثلاثاء 3 مارس 2026 في الجهة الجنوبية من مخيم أبوذر للنازحين ببلدة أم دخن الحدودية مع تشاد. التهمت النيران 5 منازل وأودت بحياة 3 أطفال: طفل عمره 13 عاماً، آخر 7 سنوات، ورضيع 9 أشهر — من 3 أسر مختلفة. أعرب مجلس تنسيق غرف الطوارئ عن قلقه الشديد من تكرار الحرائق في المنطقة.",
+      "type": "مخيم",
+      "timing": "فجر",
+      "lat": 15.05,
+      "lng": 22.49,
+      "isNew": true
+    }
+  ]
+}
