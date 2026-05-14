@@ -376,6 +376,8 @@ body.light-mode #gallery-search{background:#f8fafc;border-color:#e2e8f0;color:#1
   <button class="tab" onclick="switchTab('accounts',this)">👤 الحسابات</button>
   <button class="tab" onclick="switchTab('sources',this)">🔗 المصادر</button>
   <button class="tab" onclick="switchTab('export',this)">📤 تصدير</button>
+  
+  <button class="tab" id="tab-reports" data-t="tabReports" onclick="switchTab('reports',this)" style="border-color:#7c3aed;color:#a78bfa;font-weight:800">📑 التقارير التحليلية ✨</button>
   <button class="tab" onclick="switchTab('editor',this)" style="background:linear-gradient(135deg,#4c1d95,#1e3a5f);color:#a78bfa;font-weight:700" id="tab-editor">✏️ محرر البيانات</button>
 </div>
 
@@ -1063,7 +1065,44 @@ body.light-mode #gallery-search{background:#f8fafc;border-color:#e2e8f0;color:#1
   </div>
 </div>
 
+<!-- ===== PANEL: THEMATIC REPORTS (INJECTED) ===== -->
+<div class="panel" id="panel-reports">
+  <div id="reports-panel-inner"></div>
+</div>
+
+
 </div><!-- end .app -->
+
+<!-- ===== REPORT VIEWER MODAL (INJECTED) ===== -->
+<div id="report-viewer-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:5000;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;overflow-y:auto" onclick="closeReportViewer(event)">
+  <div id="report-viewer-box" style="background:#0f172a;border:1px solid #334155;border-radius:16px;width:100%;max-width:860px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.8);margin:auto">
+    <div id="rvm-header" style="background:linear-gradient(135deg,#1e293b,#0f172a);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0">
+        <div id="rvm-badge" style="width:12px;height:40px;border-radius:4px;flex-shrink:0"></div>
+        <div>
+          <div id="rvm-title" style="font-size:15px;font-weight:800;color:#e2e8f0"></div>
+          <div id="rvm-sub" style="font-size:11px;color:#64748b;margin-top:2px"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <button id="rvm-download-btn" style="padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;background:#16a34a;color:#fff;white-space:nowrap" onclick="downloadCurrentReport()">📥 تحميل PDF</button>
+        <button onclick="closeReportViewerDirect()" style="width:32px;height:32px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+    </div>
+    <div id="rvm-body" style="padding:24px;background:#060d1a;min-height:500px">
+      <div id="rvm-loading" style="text-align:center;padding:60px 20px;color:#64748b">
+        <div style="font-size:36px;margin-bottom:12px">⏳</div>
+        <div id="rvm-loading-text" style="font-size:14px">جاري بناء التقرير...</div>
+        <div style="margin:16px auto;width:200px;height:4px;background:#1e293b;border-radius:4px;overflow:hidden">
+          <div id="rvm-prog-bar" style="height:100%;background:linear-gradient(90deg,#7c3aed,#3b82f6);border-radius:4px;width:0%;transition:width .3s"></div>
+        </div>
+      </div>
+      <div id="rvm-content" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- ===== MODALS ===== -->
 <div class="modal-overlay" id="export-modal">
@@ -1447,6 +1486,7 @@ function switchTab(t,el){
   if(t==='sources')renderSources();
   if(t==='map')setTimeout(initMap,100);
   if(t==='satellite')renderSatelliteComparison();
+  if(t==='reports'){renderReportsPanel();updateReportStats();}
   if(t==='victims'){renderVictimsStats();renderTimingStats();}
   if(t==='editor')_initEditorTab();
 }
@@ -2546,6 +2586,27 @@ const TRANSLATIONS={
     flShaqra:'🛰️ قرية شقرة 12 فبراير',
     flZamzam:'🛰️ زمزم 10 مارس',
     flBelil:'🛰️ بليل 14 يناير',
+    // ===== REPORTS PANEL (INJECTED) =====
+    tabReports:'📑 التقارير التحليلية ✨',
+    rptPanelTitle:'📑 التقارير التحليلية المتخصصة',
+    rptPanelDesc:'ستة محاور تحليلية متكاملة لاختراق حاجز الزحام الرقمي وخدمة المناصرة الإنسانية. كل تقرير يُنتَج كملف PDF يحتوي على رسوم بيانية وخرائط وتحليل عميق.',
+    rptBadgeLive:'✅ بيانات حية',rptBadgeNasa:'🛰️ NASA FIRMS',rptBadgeKampala:'⚖️ كامبالا',rptBadgeDate:'📅 مايو 2026',
+    rptDownloadBtn:'📥 تحميل PDF',rptViewBtn:'👁️ عرض',
+    rptBundleTitle:'📦 حزمة التقارير الكاملة',rptBundleDesc:'تحميل جميع المحاور الستة كملفات PDF منفصلة',rptBundleBtn:'⬇️ تحميل كل التقارير (6 PDF)',
+    rptNote:'<strong style="color:#60a5fa">📌</strong> تُولَّد ملفات PDF في المتصفح باستخدام jsPDF + Chart.js. البيانات من قاعدة البيانات الحية.',
+    rptLoadingMsg:'جاري بناء التقرير...',rptViewerDownload:'📥 تحميل PDF',
+    ax1Title:'المحور الجغرافي',ax1Sub:'شمال دارفور كمركز ثقل الأزمة',ax1Stat:'من الحوادث في ولاية واحدة',
+    ax1P1:'📍 لماذا شمال دارفور؟ الكثافة السكانية والانكشاف الأمني',ax1P2:'📍 مواقع الذروة: طويلة، الفاشر، شقرة',ax1P3:'📍 خريطة توزيع المآوي المدمرة',ax1P4:'📍 مقارنة الحوادث والوفيات إقليمياً',
+    ax2Title:'المحور الزمني',ax2Sub:'ديناميكيات التصعيد يناير→مارس',ax2Stat:'معدل التصاعد من يناير إلى مارس',
+    ax2P1:'📅 القفزة الإحصائية: 5 → 22 حادثة في شهرين',ax2P2:'📅 موسم الجفاف والعنصر البشري',ax2P3:'📅 منحنى الاتجاه الشهري',ax2P4:'📅 تحليل الحوادث الكبرى (100+ مأوى)',
+    ax3Title:'بيئة اللجوء',ax3Sub:'المخيمات مقابل القرى',ax3Stat:'تدمير أعمق في حرائق المخيمات',
+    ax3P1:'🏕️ هشاشة المأوى: القش والبلاستيك',ax3P2:'🏕️ غياب أنظمة الإطفاء في المخيمات',ax3P3:'🏕️ مقارنة متوسط المآوي المدمرة',ax3P4:'🏕️ فشل نظام الحماية في مواقع النازحين',
+    ax4Title:'تكرار المواقع',ax4Sub:'دراسة حالة طويلة — الفشل المنظومي',ax4Stat:'حريقاً في طويلة',
+    ax4P1:'🔁 التسلسل الزمني لحرائق طويلة',ax4P2:'🔁 لماذا الحريق الأول لا يمنع الثاني؟',ax4P3:'🔁 تكرار المواقع — رسم بياني',ax4P4:'🔁 الآثار النفسية على الأسر المتضررة',
+    ax5Title:'الحريق الرقمي',ax5Sub:'تحليل خطاب الكراهية',ax5Stat:'أنماط خطاب رئيسية',
+    ax5P1:'💬 الإنكار، التخوين، نزع الإنسانية',ax5P2:'💬 أثر الخطاب على التمويل الإنساني',ax5P3:'💬 توزيع الأنماط عبر المنصات',ax5P4:'💬 معايير التصنيف التقني',
+    ax6Title:'المحور القانوني والمنهجي',ax6Sub:'قوة الأدلة والمساءلة الدولية',ax6Stat:'مستويات توثيق',
+    ax6P1:'⚖️ توثيق ثلاثي: NASA + IOM + ميداني',ax6P2:'⚖️ توزيع جودة التوثيق',ax6P3:'⚖️ اتفاقية كامبالا 2009',ax6P4:'⚖️ توصيات للمحكمة الجنائية الدولية',
   },
   en:{
     dir:'ltr',
@@ -2701,6 +2762,27 @@ const TRANSLATIONS={
     flShaqra:'🛰️ Village Shaqra 12 February',
     flZamzam:'🛰️ Zamzam 10 March',
     flBelil:'🛰️ Belil 14 January',
+    // ===== REPORTS PANEL (INJECTED) =====
+    tabReports:'📑 Analytical Reports ✨',
+    rptPanelTitle:'📑 Specialized Analytical Reports',
+    rptPanelDesc:'Six integrated thematic axes to break through the digital noise barrier and serve humanitarian advocacy. Each report is a professional PDF with charts, maps, and deep analysis.',
+    rptBadgeLive:'✅ Live Data',rptBadgeNasa:'🛰️ NASA FIRMS',rptBadgeKampala:'⚖️ Kampala',rptBadgeDate:'📅 May 2026',
+    rptDownloadBtn:'📥 Download PDF',rptViewBtn:'👁️ View',
+    rptBundleTitle:'📦 Complete Report Bundle',rptBundleDesc:'Download all six axes as separate PDF files in one go',rptBundleBtn:'⬇️ Download All Reports (6 PDF)',
+    rptNote:'<strong style="color:#60a5fa">📌</strong> PDFs generated in-browser using jsPDF + Chart.js. Data from the live database.',
+    rptLoadingMsg:'Building report...',rptViewerDownload:'📥 Download PDF',
+    ax1Title:'Geographic Axis',ax1Sub:'North Darfur as the Crisis Core',ax1Stat:'of all incidents in one state',
+    ax1P1:'📍 Why North Darfur? Density & security exposure',ax1P2:'📍 Peak sites: Tawila, Al-Fasher, Shaqra',ax1P3:'📍 Map of shelters destroyed by state',ax1P4:'📍 Incidents vs deaths by region',
+    ax2Title:'Temporal Axis',ax2Sub:'Escalation Dynamics Jan→Mar',ax2Stat:'surge from January to March',
+    ax2P1:'📅 Statistical jump: 5 → 22 incidents in two months',ax2P2:'📅 Dry season & human factor link',ax2P3:'📅 Monthly trend curve',ax2P4:'📅 Timeline of major incidents (100+ shelters)',
+    ax3Title:'Refuge Environment',ax3Sub:'Camps vs Villages',ax3Stat:'more destructive in IDP camp fires',
+    ax3P1:'🏕️ Shelter fragility: straw & plastic',ax3P2:'🏕️ Absence of fire suppression in camps',ax3P3:'🏕️ Avg shelters/incident comparison',ax3P4:'🏕️ Protection system failure in IDP sites',
+    ax4Title:'Site Recurrence',ax4Sub:'Case Study: Tawila — Systemic Failure',ax4Stat:'fires in Tawila alone',
+    ax4P1:'🔁 Full Tawila fire chronology',ax4P2:'🔁 Why fire #1 never prevents fire #2',ax4P3:'🔁 Site recurrence frequency chart',ax4P4:'🔁 Psychosocial impact on displaced families',
+    ax5Title:'The Digital Fire',ax5Sub:'Hate Speech Analysis',ax5Stat:'primary hate patterns',
+    ax5P1:'💬 Denial, treason accusations, dehumanization',ax5P2:'💬 Impact on humanitarian funding',ax5P3:'💬 Pattern distribution across platforms',ax5P4:'💬 Technical classification criteria',
+    ax6Title:'Legal & Methodological Axis',ax6Sub:'Evidence & International Accountability',ax6Stat:'documentation tiers',
+    ax6P1:'⚖️ Triple verification: NASA + IOM + field',ax6P2:'⚖️ Documentation quality distribution',ax6P3:'⚖️ Kampala Convention 2009',ax6P4:'⚖️ Recommendations for ICC & UN bodies',
   }
 };
 
@@ -2798,6 +2880,8 @@ function setLang(lang){
   // RTL/LTR
   body.setAttribute('dir',T.dir);
   if(lang==='en'){body.classList.add('en-mode');}else{body.classList.remove('en-mode');}
+  if(typeof renderReportsPanel==='function')renderReportsPanel();
+  var rvmDlBtn=document.getElementById('rvm-download-btn');if(rvmDlBtn)rvmDlBtn.textContent=(TRANSLATIONS[lang]||TRANSLATIONS.ar).rptViewerDownload||'📥 PDF';
   // Page title
   document.title=T.title;
   // Header
@@ -4015,7 +4099,31 @@ function exportHateScreenshots(){
     <title>${isEN?'Hate Speech Evidence Report':'تقرير أدلة خطاب الكراهية'}</title>
     <style>body{font-family:Cairo,Arial,sans-serif;background:#0a0f1a;color:#e2e8f0;padding:24px;margin:0}
     h1{color:#a78bfa;margin-bottom:4px}p{color:#64748b;font-size:12px;margin-bottom:20px}
-    @media print{body{background:#fff;color:#000}}</style>
+    @media print{body{background:#fff;color:#000}}
+/* ===== THEMATIC REPORTS (INJECTED) ===== */
+.report-axis-card{background:#1e293b;border-radius:14px;border:1px solid #334155;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}
+.report-axis-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.5);border-color:#475569}
+.axis-header{padding:16px 18px;display:flex;align-items:center;gap:12px}
+.axis-icon{font-size:30px;flex-shrink:0}
+.axis-title{font-size:15px;font-weight:900;color:#fff;line-height:1.2}
+.axis-sub{font-size:11px;color:rgba(255,255,255,.72);margin-top:3px}
+.axis-body{padding:16px 18px}
+.axis-stat{background:#0f172a;border-radius:8px;padding:10px 14px;font-size:12px;color:#94a3b8;margin-bottom:12px;text-align:center;line-height:1.6}
+.axis-stat span{font-size:22px;font-weight:900;color:#fbbf24;display:block}
+.axis-points{margin-bottom:14px}
+.ap{font-size:11px;color:#64748b;padding:5px 0;border-bottom:1px solid rgba(51,65,85,.6);line-height:1.7}
+.ap:last-child{border-bottom:none}
+.btn-gen-report{flex:1;padding:11px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.btn-gen-report:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.btn-gen-report:disabled{opacity:.55;cursor:wait;transform:none}
+.report-progress{margin-top:8px;font-size:11px;color:#64748b;text-align:center;min-height:20px}
+.tab#tab-reports.active{background:#2e1065;color:#c084fc;border-color:#7c3aed}
+/* Viewer */
+#report-viewer-overlay.open{display:flex!important}
+.rvm-section-title{font-size:13px;font-weight:800;padding:8px 14px;background:#0f172a;border-radius:8px;border-right:3px solid #3b82f6;color:#60a5fa;margin:16px 0 10px}
+body[dir="ltr"] .rvm-section-title{border-right:none;border-left:3px solid #3b82f6}
+
+</style>
   </head><body>
     <h1>🖼️ ${isEN?'Hate Speech Evidence — Darfur IDP Tracker':'أدلة خطاب الكراهية — رصد حرائق مخيمات دارفور'}</h1>
     <p>${isEN?'Generated':'تاريخ'}: ${new Date().toLocaleString()} · ${all.length} ${isEN?'screenshots':'لقطة'}</p>
@@ -4049,6 +4157,514 @@ async function initScreenshotEngine(){
   // poll extension bridge every 5 seconds
   setInterval(_syncFromExtension, 5000);
 }
+
+
+
+
+// ================================================================
+// THEMATIC REPORTS ENGINE + VIEWER — INJECTED MODULE
+// Bilingual (AR/EN) • jsPDF + Chart.js • No changes to original code
+// ================================================================
+
+// ── DATA ACCESS ─────────────────────────────────────────────────
+function getDB(){
+  if(typeof DB!=='undefined'&&Array.isArray(DB)&&DB.length>0)return DB;
+  if(typeof FALLBACK_DB!=='undefined'&&Array.isArray(FALLBACK_DB)&&FALLBACK_DB.length>0)return FALLBACK_DB;
+  return[];
+}
+
+// ── PROGRESS UI ─────────────────────────────────────────────────
+function setProgress(axis,pct,msg,col){
+  var el=document.getElementById('prog-'+axis);if(!el)return;
+  el.innerHTML='<div style="background:#0f172a;border-radius:4px;height:4px;overflow:hidden;margin-bottom:5px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#7c3aed,#3b82f6);transition:width .3s"></div></div><span style="font-size:11px;color:'+(col||'#64748b')+'">'+msg+'</span>';
+}
+function setProgressDone(axis,msg){setProgress(axis,100,msg,'#4ade80');}
+function setProgressErr(axis,msg){setProgress(axis,0,'❌ '+msg,'#f87171');}
+
+// ── CANVAS ROUNDRECT POLYFILL ───────────────────────────────────
+function ctxRR(ctx,x,y,w,h,r){
+  r=Math.min(r||4,w/2,h/2);
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+}
+
+// ── CHART → BASE64 (for PDF) ────────────────────────────────────
+function chartB64(type,data,xopts,w,h){
+  return new Promise(function(ok){
+    w=w||660;h=h||280;
+    var cv=document.createElement('canvas');cv.width=w;cv.height=h;
+    cv.style.cssText='position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;';
+    document.body.appendChild(cv);
+    var flat=(type==='doughnut'||type==='pie'||type==='polarArea');
+    var opts={responsive:false,animation:{duration:0},plugins:{legend:{labels:{color:'#94a3b8',font:{size:11,family:'Arial'}}}}};
+    if(!flat)opts.scales={x:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}},y:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}}};
+    if(xopts&&xopts.indexAxis)opts.indexAxis=xopts.indexAxis;
+    if(xopts&&xopts.plugins)Object.assign(opts.plugins,xopts.plugins);
+    var ch;try{ch=new Chart(cv,{type:type,data:data,options:opts});}catch(e){try{document.body.removeChild(cv);}catch(x){}ok(null);return;}
+    setTimeout(function(){var img=null;try{img=cv.toDataURL('image/png');}catch(e){}try{ch.destroy();}catch(e){}try{document.body.removeChild(cv);}catch(e){}ok(img);},600);
+  });
+}
+
+// ── DARFUR MAP → BASE64 (for PDF) ───────────────────────────────
+function mapB64(hl){
+  var db=getDB();
+  return new Promise(function(ok){
+    var cv=document.createElement('canvas');cv.width=720;cv.height=370;
+    cv.style.cssText='position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;';
+    document.body.appendChild(cv);
+    var ctx=cv.getContext('2d');
+    ctx.fillStyle='#0f172a';ctx.fillRect(0,0,720,370);
+    ctx.fillStyle='#1e293b';ctx.fillRect(0,0,720,32);
+    ctx.fillStyle='#f87171';ctx.font='bold 13px Arial';ctx.textAlign='center';
+    ctx.fillText('Darfur Fire Incidents Map — Jan-May 2026',360,22);
+    var R=[{e:'North Darfur',a:'شمال دارفور',x:258,y:48,w:228,h:148,r:220,g:38,b:38},{e:'South Darfur',a:'جنوب دارفور',x:236,y:224,w:200,h:106,r:251,g:146,b:60},{e:'Central Darfur',a:'وسط دارفور',x:118,y:168,w:142,h:98,r:251,g:191,b:36},{e:'East Darfur',a:'شرق دارفور',x:436,y:178,w:136,h:98,r:96,g:165,b:250},{e:'West Darfur',a:'غرب دارفور',x:34,y:124,w:110,h:108,r:74,g:222,b:128}];
+    R.forEach(function(r){
+      var isHL=(r.a===hl),a=isHL?0.75:0.43;
+      ctx.fillStyle='rgba('+r.r+','+r.g+','+r.b+','+a+')';ctx.strokeStyle=isHL?'rgba(248,113,113,.9)':'rgba(148,163,184,.35)';ctx.lineWidth=isHL?2.5:1;
+      ctxRR(ctx,r.x,r.y,r.w,r.h,8);ctx.fill();ctx.stroke();
+      var inc=db.filter(function(d){return d.region===r.a;});
+      var sh=inc.reduce(function(a,d){return a+(d.shelters||0);},0);
+      ctx.fillStyle='#e2e8f0';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.fillText(r.e,r.x+r.w/2,r.y+r.h/2-10);
+      ctx.fillStyle='#fbbf24';ctx.font='bold 17px Arial';ctx.fillText(inc.length+' incidents',r.x+r.w/2,r.y+r.h/2+8);
+      ctx.fillStyle='rgba(148,163,184,.85)';ctx.font='10px Arial';ctx.fillText(sh.toLocaleString()+' shelters',r.x+r.w/2,r.y+r.h/2+24);
+    });
+    ctx.fillStyle='rgba(239,68,68,.92)';ctxRR(ctx,322,90,54,20,10);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 10px Arial';ctx.textAlign='center';ctx.fillText('Tawila',349,103);
+    ctx.fillStyle='#475569';ctx.font='10px Arial';ctx.textAlign='left';ctx.fillText('Red = Tawila hotspot | Numbers = documented incidents',28,362);
+    try{document.body.removeChild(cv);}catch(e){}ok(cv.toDataURL('image/png'));
+  });
+}
+
+// ── jsPDF HELPERS ────────────────────────────────────────────────
+function mkPDF(){if(!window.jspdf)throw new Error('jsPDF not loaded');return new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});}
+function pt(doc,txt,x,y,align){try{doc.text(String(txt||''),x,y,align?{align:align}:{});}catch(e){try{doc.text(String(txt||''),x,y);}catch(x){}}}
+function pdfHdr(doc,title,sub,ac){
+  var W=210;
+  doc.setFillColor(6,13,26);doc.rect(0,0,W,297,'F');
+  doc.setFillColor(12,20,38);doc.rect(0,0,W,43,'F');
+  doc.setFillColor(ac[0],ac[1],ac[2]);doc.rect(0,42,W,2.5,'F');
+  doc.setFillColor(ac[0],ac[1],ac[2]);doc.roundedRect(10,48,190,15,3,3,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(11.5);doc.setFont('helvetica','bold');pt(doc,title,105,57.5,'center');
+  doc.setTextColor(195,210,230);doc.setFontSize(9);doc.setFont('helvetica','normal');pt(doc,sub,105,70,'center');
+  doc.setTextColor(248,113,113);doc.setFontSize(14);doc.setFont('helvetica','bold');pt(doc,'IDPs Fire Tracker',12,15);
+  doc.setTextColor(251,146,60);doc.setFontSize(8);doc.setFont('helvetica','normal');pt(doc,'salaamedia.org | Darfur Fire Documentation',12,22);
+  var db=getDB();doc.setTextColor(100,116,139);doc.setFontSize(7.5);
+  pt(doc,'Incidents: '+db.length+' | May 2026',W-10,13,'right');pt(doc,'IOM DTM + OCHA + NASA FIRMS + Field',W-10,20,'right');
+  doc.setDrawColor(30,41,59);doc.setLineWidth(0.3);doc.line(10,77,200,77);return 82;
+}
+function pdfSec(doc,y,txt,c){
+  c=c||[96,165,250];if(y>272){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
+  doc.setFillColor(13,21,37);doc.rect(10,y,190,8,'F');doc.setFillColor(c[0],c[1],c[2]);doc.rect(10,y,3,8,'F');
+  doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(10);doc.setFont('helvetica','bold');pt(doc,txt,16,y+5.6);return y+12;
+}
+function pdfPar(doc,y,txt,c){
+  c=c||[208,220,234];doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(9);doc.setFont('helvetica','normal');
+  var lines=doc.splitTextToSize(txt,183);
+  lines.forEach(function(ln){if(y>276){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}pt(doc,ln,13,y);y+=5.4;});
+  return y+2;
+}
+function pdfStats(doc,y,stats){
+  var bw=Math.floor((190-stats.length*3)/stats.length);
+  stats.forEach(function(s,i){var x=10+i*(bw+3);doc.setFillColor(13,21,37);doc.roundedRect(x,y,bw,18,2,2,'F');var c=s.c||[96,165,250];doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(13);doc.setFont('helvetica','bold');pt(doc,String(s.v),x+bw/2,y+10,'center');doc.setTextColor(100,116,139);doc.setFontSize(7);doc.setFont('helvetica','normal');pt(doc,s.l,x+bw/2,y+16,'center');});
+  return y+22;
+}
+function pdfImg(doc,img,y,w,h){
+  w=w||182;h=h||76;if(y+h>278){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
+  if(img&&img.length>200){try{doc.addImage(img,'PNG',14,y,w,h);}catch(e){doc.setFillColor(18,28,46);doc.rect(14,y,w,h,'F');}}else{doc.setFillColor(18,28,46);doc.rect(14,y,w,h,'F');}
+  return y+h+4;
+}
+function pdfTbl(doc,y,hdrs,rows,cw){
+  if(y>265){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
+  doc.setFillColor(9,17,33);doc.rect(10,y,190,7,'F');doc.setTextColor(96,165,250);doc.setFontSize(7.5);doc.setFont('helvetica','bold');
+  var x=10;hdrs.forEach(function(h,i){pt(doc,h,x+1.5,y+5);x+=cw[i];});y+=7;
+  rows.forEach(function(row,ri){
+    if(y>271){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
+    doc.setFillColor(ri%2===0?19:15,ri%2===0?30:22,ri%2===0?47:36);doc.rect(10,y,190,6,'F');
+    doc.setTextColor(212,226,240);doc.setFontSize(7);doc.setFont('helvetica','normal');
+    x=10;row.forEach(function(cell,j){var t=String(cell==null?'':cell),mx=Math.max(7,Math.floor(cw[j]/1.85));if(t.length>mx)t=t.slice(0,mx-1)+'..';pt(doc,t,x+1.5,y+4.3);x+=cw[j];});y+=6;
+  });return y+3;
+}
+function pdfBul(doc,y,items,c){
+  c=c||[208,220,234];
+  items.forEach(function(item){
+    if(y>271){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
+    var lines=doc.splitTextToSize(item,179),bh=Math.max(11,lines.length*5+4);
+    doc.setFillColor(13,21,37);doc.rect(10,y,190,bh,'F');doc.setFillColor(c[0],c[1],c[2]);doc.rect(10,y,3,bh,'F');
+    doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(8.5);doc.setFont('helvetica','normal');
+    lines.forEach(function(ln,li){pt(doc,ln,16,y+5.5+li*4.8);});y+=bh+3;
+  });return y;
+}
+function pdfFtr(doc,n){
+  var H=297,W=210;doc.setFillColor(7,15,29);doc.rect(0,H-11,W,11,'F');doc.setDrawColor(22,36,54);doc.line(0,H-11,W,H-11);
+  doc.setTextColor(60,76,96);doc.setFontSize(6.5);doc.setFont('helvetica','normal');
+  pt(doc,'IDPs Fire Tracker | salaamedia.org | IOM DTM | OCHA | NASA FIRMS | May 2026',W/2,H-5.5,'center');pt(doc,'Page '+(n||1),W-11,H-5.5,'right');
+}
+function isAR(){return(typeof currentLang!=='undefined'?currentLang:document.documentElement.getAttribute('dir')==='rtl'?'ar':'en')==='ar';}
+
+// ── SIX PDF REPORTS ──────────────────────────────────────────────
+async function rpt1(){
+  var db=getDB(),doc=mkPDF(),AC=[124,58,237];
+  var y=pdfHdr(doc,isAR()?'المحور الجغرافي: شمال دارفور كمركز ثقل الأزمة':'Axis 1 — Geographic: North Darfur as Crisis Core',isAR()?'تحليل: لماذا تتركز أكثر من 66% من الحوادث في ولاية واحدة؟':'Why 66%+ of documented incidents concentrate in one state',AC);
+  var nd=db.filter(function(d){return d.region==='شمال دارفور';}),ndS=nd.reduce(function(a,d){return a+(d.shelters||0);},0),pct=db.length?Math.round(nd.length/db.length*100):0;
+  y=pdfStats(doc,y,[{v:nd.length,l:'N.Darfur fires',c:[248,113,113]},{v:pct+'%',l:'of all incidents',c:[251,191,36]},{v:ndS.toLocaleString(),l:'shelters destroyed',c:[251,146,60]},{v:nd.reduce(function(a,d){return a+(d.deaths||0);},0),l:'deaths',c:[248,113,113]},{v:db.length,l:'total documented',c:[74,222,128]}]);
+  y=pdfSec(doc,y,isAR()?'خريطة: التوزيع الجغرافي لحرائق دارفور':'Map: Geographic Distribution — Darfur States',AC);
+  y=pdfImg(doc,await mapB64('شمال دارفور'),y,182,86);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: الحوادث والوفيات حسب الولاية':'Chart: Incidents & Deaths by Region',[251,191,36]);
+  var regs=['شمال دارفور','جنوب دارفور','وسط دارفور','شرق دارفور','غرب دارفور'];
+  y=pdfImg(doc,await chartB64('bar',{labels:isAR()?['شمال','جنوب','وسط','شرق','غرب']:['N.Darfur','S.Darfur','Central','E.Darfur','W.Darfur'],datasets:[{label:isAR()?'الحوادث':'Incidents',data:regs.map(function(r){return db.filter(function(d){return d.region===r;}).length;}),backgroundColor:'rgba(220,38,38,.8)',borderWidth:1},{label:isAR()?'الوفيات ×5':'Deaths x5',data:regs.map(function(r){return db.filter(function(d){return d.region===r;}).reduce(function(a,d){return a+(d.deaths||0);},0)*5;}),backgroundColor:'rgba(251,191,36,.7)',borderWidth:1}]}),y,182,70);
+  y=pdfSec(doc,y,isAR()?'لماذا يهيمن شمال دارفور؟ — تحليل':'Why North Darfur Dominates — Analysis',[74,222,128]);
+  y=pdfPar(doc,y,isAR()?'يضم شمال دارفور أكثر من 2 مليون نازح في مخيمات طويلة (655 ألف) والفاشر (زمزم، أبو شوك — 500 ألف+) وخور عمر. الكثافة الشديدة للمآوي ومواد البناء القابلة للاشتعال وغياب البنية التحتية لمكافحة الحرائق والنزاع المسلح المستمر تخلق كارثة هيكلية.':'North Darfur hosts over 2 million IDPs in camps around Tawila (655,000), Al-Fasher (Zamzam, Abu Shouk — 500,000+), and Khor Omar. Extreme density, flammable materials, zero fire infrastructure, and armed conflict create structural catastrophe.');
+  y=pdfSec(doc,y,isAR()?'بؤر الخطر — جدول تسلسلي':'Hot Spots — Risk Table',[248,113,113]);
+  var tw=db.filter(function(d){return d.city==='طويلة';}),fa=db.filter(function(d){return d.city==='الفاشر';});
+  y=pdfTbl(doc,y,isAR()?['الموقع','الحرائق','المآوي','الوفيات','ملاحظة']:['Location','Fires','Shelters','Deaths','Note'],[['Tawila',''+tw.length,''+tw.reduce(function(a,d){return a+(d.shelters||0);},0),''+tw.reduce(function(a,d){return a+(d.deaths||0);},0),isAR()?'متكرر — 14+ حريق':'Recurrent — 14+ fires'],['Al-Fasher',''+fa.length,''+fa.reduce(function(a,d){return a+(d.shelters||0);},0),''+fa.reduce(function(a,d){return a+(d.deaths||0);},0),isAR()?'زمزم + أبو شوك':'Zamzam + Abu Shouk'],['Shaqra','1','200','0',isAR()?'قرية كاملة 2:45 صباحاً':'Full village 2:45AM'],['Khor Omar','1','19','0',isAR()?'مجتمع مختلط':'Mixed community']],[32,24,30,24,80]);
+  y=pdfSec(doc,y,isAR()?'سجل حوادث شمال دارفور الكامل':'Full North Darfur Incident Log',[96,165,250]);
+  y=pdfTbl(doc,y,isAR()?['التاريخ','الموقع','المآوي','الوفيات','الجودة']:['Date','Location','Shelters','Deaths','Quality'],nd.slice().sort(function(a,b){return(b.shelters||0)-(a.shelters||0);}).slice(0,20).map(function(d){return[d.date,(d.city||d.location||'').slice(0,22),d.shelters||0,d.deaths||0,d.quality];}),[35,60,30,28,47]);
+  pdfFtr(doc,1);doc.save('report_1_geographic_darfur_2026.pdf');
+}
+
+async function rpt2(){
+  var db=getDB(),doc=mkPDF(),AC=[217,119,6];
+  var y=pdfHdr(doc,isAR()?'المحور الزمني: ديناميكيات التصعيد يناير–مارس 2026':'Axis 2 — Temporal: Escalation Dynamics Jan-Mar 2026',isAR()?'تفسير القفزة الإحصائية +340%: موسمية، منظومية، وبشرية':'Analyzing the 340% surge: seasonal, systemic and human factors',AC);
+  var m=function(n){return db.filter(function(d){return d.date&&d.date.startsWith('2026-0'+n);});};
+  var jan=m(1),feb=m(2),mar=m(3),apr=m(4);
+  y=pdfStats(doc,y,[{v:jan.length,l:isAR()?'يناير':'January',c:[96,165,250]},{v:feb.length,l:isAR()?'فبراير':'February',c:[251,191,36]},{v:mar.length,l:isAR()?'مارس ذروة':'March PEAK',c:[248,113,113]},{v:apr.length,l:isAR()?'أبريل':'April',c:[251,146,60]},{v:'+340%',l:isAR()?'معدل التصاعد':'Jan→Mar surge',c:[248,113,113]}]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: الاتجاه الشهري — الحوادث والمآوي والوفيات':'Chart: Monthly Trend — Incidents, Shelters & Deaths',AC);
+  var sh=function(a){return Math.round(a.reduce(function(x,d){return x+(d.shelters||0);},0)/20);};
+  var de=function(a){return a.reduce(function(x,d){return x+(d.deaths||0);},0)*8;};
+  y=pdfImg(doc,await chartB64('line',{labels:isAR()?['يناير','فبراير','مارس','أبريل']:['January','February','March','April'],datasets:[{label:isAR()?'الحوادث':'Incidents',data:[jan.length,feb.length,mar.length,apr.length],borderColor:'#f87171',backgroundColor:'rgba(248,113,113,.15)',tension:.4,fill:true,pointRadius:6,pointBackgroundColor:'#f87171'},{label:isAR()?'مآوي/20':'Shelters/20',data:[sh(jan),sh(feb),sh(mar),sh(apr)],borderColor:'#fbbf24',tension:.4,pointRadius:4},{label:isAR()?'وفيات ×8':'Deaths x8',data:[de(jan),de(feb),de(mar),de(apr)],borderColor:'#dc2626',tension:.4,pointRadius:4,borderDash:[5,3]}]}),y,182,76);
+  y=pdfSec(doc,y,isAR()?'تحليل: ثلاثة عوامل وراء ذروة مارس':'Analysis: Three Factors Behind the March Spike',[74,222,128]);
+  y=pdfBul(doc,y,isAR()?['الموسمي: مارس هو ذروة موسم الهبوب — انعدام الأمطار، رطوبة أقل من 15%، رياح تتجاوز 60 كم/ساعة. سرعة انتشار الحريق تتضاعف 3-5 أضعاف.','العنصر البشري: 8 من أصل 22 حريقاً في مارس وقعت في الساعات السابقة للفجر خلال نافذة أسبوعين — يتعارض إحصائياً مع الحوادث العرضية البحتة.','المنظومي: غياب سيارات الإطفاء والإنذار المبكر وفواصل الحماية — حتى الحرائق العرضية تتحول لكوارث.']:['SEASONAL: March is the Haboob peak — zero rainfall, humidity below 15%, winds over 60 km/h. Fire spread 3-5x faster.','HUMAN ELEMENT: 8 of 22 March fires in pre-dawn hours within a 2-week window — statistically inconsistent with pure accident.','SYSTEMIC: Zero fire brigades, no early warning, no firebreaks — accidental fires become mass disasters.'],[251,191,36]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: الوتيرة الأسبوعية يناير–أبريل 2026':'Chart: Weekly Fire Frequency Jan-Apr 2026',[96,165,250]);
+  var wm={};db.forEach(function(d){if(!d.date)return;var w='W'+Math.ceil(parseInt(d.date.slice(8,10))/7)+'-'+d.date.slice(5,7);wm[w]=(wm[w]||0)+1;});
+  var wk=Object.keys(wm).sort();
+  y=pdfImg(doc,await chartB64('bar',{labels:wk,datasets:[{label:isAR()?'حوادث/أسبوع':'Incidents/week',data:wk.map(function(k){return wm[k];}),backgroundColor:wk.map(function(k){return k.indexOf('-03')>-1?'rgba(220,38,38,.85)':'rgba(96,165,250,.7)';}),borderRadius:3}]}),y,182,66);
+  pdfFtr(doc,1);doc.save('report_2_temporal_dynamics_darfur_2026.pdf');
+}
+
+async function rpt3(){
+  var db=getDB(),doc=mkPDF(),AC=[5,150,105];
+  var y=pdfHdr(doc,isAR()?'بيئة اللجوء: المخيمات مقابل القرى':'Axis 3 — Refuge Environment: Camps vs Villages',isAR()?'لماذا تدمر حرائق المخيمات 4 أضعاف ما تدمره حرائق القرى؟':'Why camp fires destroy 4x more shelters per incident',AC);
+  var camps=db.filter(function(d){return d.type==='مخيم';}),vills=db.filter(function(d){return d.type==='قرية';});
+  var cA=camps.length?Math.round(camps.reduce(function(a,d){return a+(d.shelters||0);},0)/camps.length):0;
+  var vA=vills.length?Math.round(vills.reduce(function(a,d){return a+(d.shelters||0);},0)/vills.length):0;
+  y=pdfStats(doc,y,[{v:camps.length,l:isAR()?'حوادث مخيمات':'Camp incidents',c:[96,165,250]},{v:cA,l:isAR()?'متوسط مآوي/حريق':'Avg shelters/fire',c:[248,113,113]},{v:vills.length,l:isAR()?'حوادث قرى':'Village incidents',c:[74,222,128]},{v:vA,l:isAR()?'متوسط مآوي/قرية':'Avg shelters/village',c:[251,191,36]},{v:(vA>0?(cA/vA).toFixed(1):'N/A')+'x',l:isAR()?'نسبة التدمير':'Destruction ratio',c:[248,113,113]}]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: مقارنة المخيمات والقرى':'Chart: Camp vs Village Comparison',AC);
+  y=pdfImg(doc,await chartB64('bar',{labels:isAR()?['متوسط المآوي','الوفيات ×50','% حرائق ليلية']:['Avg Shelters','Deaths x50','% Night Fires'],datasets:[{label:isAR()?'مخيمات':'Camps',data:[cA,Math.round(camps.reduce(function(a,d){return a+(d.deaths||0);},0)/Math.max(camps.length,1)*50),Math.round(camps.filter(function(d){return d.timing==='فجر'||d.timing==='مساء';}).length/Math.max(camps.length,1)*100)],backgroundColor:'rgba(96,165,250,.8)'},{label:isAR()?'قرى':'Villages',data:[vA,Math.round(vills.reduce(function(a,d){return a+(d.deaths||0);},0)/Math.max(vills.length,1)*50),Math.round(vills.filter(function(d){return d.timing==='فجر'||d.timing==='مساء';}).length/Math.max(vills.length,1)*100)],backgroundColor:'rgba(74,222,128,.7)'}]}),y,182,70);
+  y=pdfSec(doc,y,isAR()?'ستة عوامل هيكلية للهشاشة في مخيمات النازحين':'Six Structural Vulnerability Factors',[248,113,113]);
+  y=pdfBul(doc,y,isAR()?['مواد البناء: قش وبلاستيك وأخشاب خفيفة — تشتعل في ثوانٍ.','الكثافة: أقل من 1.5 متر بين المآوي — لا منطقة عازلة.','المياه: شحيحة أو منعدمة — الإخماد مستحيل بدون سيارات خارجية.','الطرق: ضيقة وغير معبدة — سيارات الطوارئ لا تصل في الوقت المناسب.','الإنارة: منعدمة ليلاً — الحرائق الفجرية تُكتشف متأخراً.','سيارات الإطفاء: صفر وحدات في جميع المخيمات المرصودة.']:['Construction: Straw, plastic, lightweight wood — ignites within seconds.','Density: Under 1.5m between shelters — no buffer zone.','Water: Scarce or absent — suppression impossible without external trucks.','Roads: Narrow and unpaved — emergency vehicles cannot reach in time.','Lighting: Absent at night — fires discovered only when catastrophic.','Fire Brigades: Zero units deployed in any monitored camp.'],[251,146,60]);
+  pdfFtr(doc,1);doc.save('report_3_camp_vs_village_darfur_2026.pdf');
+}
+
+async function rpt4(){
+  var db=getDB(),doc=mkPDF(),AC=[185,28,28];
+  var y=pdfHdr(doc,isAR()?'تكرار المواقع: الفشل المنظومي — دراسة حالة طويلة':'Axis 4 — Site Recurrence: Systemic Failure',isAR()?'لماذا يشتعل نفس الموقع مراراً؟ طويلة نموذجاً':'Case Study: Tawila — why the same location burns repeatedly',AC);
+  var taw=db.filter(function(d){return d.city==='طويلة';}).sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
+  var tawS=taw.reduce(function(a,d){return a+(d.shelters||0);},0);
+  y=pdfStats(doc,y,[{v:taw.length,l:isAR()?'حرائق طويلة':'Tawila fires',c:[248,113,113]},{v:tawS.toLocaleString(),l:isAR()?'مأوى مدمر':'shelters destroyed',c:[251,146,60]},{v:taw.reduce(function(a,d){return a+(d.deaths||0);},0),l:isAR()?'وفيات':'deaths',c:[248,113,113]},{v:'< 3',l:isAR()?'أسابيع بين الحرائق':'wks between fires',c:[167,139,250]},{v:'655K',l:isAR()?'نازح في طويلة':'IDPs in Tawila',c:[96,165,250]}]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: تسلسل حرائق طويلة الزمني':'Chart: Tawila Fire Timeline',AC);
+  y=pdfImg(doc,await chartB64('bar',{labels:taw.map(function(d){return(d.date||'').slice(5);}),datasets:[{label:isAR()?'المآوي المدمرة':'Shelters Destroyed',data:taw.map(function(d){return d.shelters||0;}),backgroundColor:taw.map(function(d){return(d.shelters||0)>=100?'rgba(220,38,38,.9)':'rgba(251,146,60,.8)';}),borderRadius:3,borderWidth:0}]}),y,182,66);
+  y=pdfSec(doc,y,isAR()?'سجل حرائق طويلة الكامل':'Tawila Complete Fire Log',[248,113,113]);
+  y=pdfTbl(doc,y,isAR()?['التاريخ','الموقع','المآوي','الوفيات','الجودة']:['Date','Location','Shelters','Deaths','Quality'],taw.map(function(d){return[d.date,(d.location||'').slice(0,30),d.shelters||0,d.deaths||0,d.quality];}),[35,82,25,22,36]);
+  y=pdfSec(doc,y,isAR()?'ستة أسباب لعدم منع الحريق الأول للحريق الثاني':'Six Reasons Fire #1 Never Prevents Fire #2',[74,222,128]);
+  y=pdfBul(doc,y,isAR()?['لا تحقيق بعد الحريق — السبب لم يُحدَّد رسمياً أبداً.','إعادة البناء بنفس المواد في نفس الموقع — التكرار مضمون.','لا فواصل حماية — الحريق الثاني ينتشر بنفس السرعة.','لا أجهزة إنذار — الحرائق الفجرية تُكتشف متأخراً.','غياب سيارات الإطفاء — كل شيء يحترق قبل أي استجابة.','لا برنامج مأوى آمن ممول — لم تُطبَّق أي إعادة تصميم.']:['No post-fire investigation — cause never formally established.','Rebuild with same materials in same location — recurrence guaranteed.','No firebreaks installed — fire #2 spreads equally fast.','No alarms deployed — pre-dawn fires discovered too late.','Zero fire brigade presence — everything burns before response arrives.','No funded safe-shelter program — permanent redesign never implemented.'],[248,113,113]);
+  pdfFtr(doc,1);doc.save('report_4_site_recurrence_tawila_2026.pdf');
+}
+
+async function rpt5(){
+  var db=getDB(),doc=mkPDF(),AC=[37,99,235];
+  var y=pdfHdr(doc,isAR()?'الحريق الرقمي: تحليل خطاب الكراهية':'Axis 5 — The Digital Fire: Hate Speech Analysis',isAR()?'كيف يضاعف الفضاء الرقمي معاناة الضحايا ويعيق وصول المساعدات؟':'How online discourse multiplies victim suffering and blocks aid',AC);
+  var hd=(typeof HATE_DATA!=='undefined'&&HATE_DATA)?HATE_DATA:[];
+  y=pdfStats(doc,y,[{v:hd.length,l:isAR()?'تعليقات مرصودة':'Comments monitored',c:[96,165,250]},{v:hd.filter(function(h){return h.score>=7;}).length,l:isAR()?'خطر مرتفع (7+/10)':'High-risk (7+/10)',c:[248,113,113]},{v:hd.length?Math.max.apply(null,hd.map(function(h){return h.score;})):0,l:isAR()?'أعلى درجة':'Peak score',c:[248,113,113]},{v:3,l:isAR()?'أنماط رئيسية':'Primary patterns',c:[251,191,36]},{v:5,l:isAR()?'منصات مرصودة':'Platforms',c:[74,222,128]}]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: توزيع أنماط خطاب الكراهية':'Chart: Hate Speech Pattern Distribution',AC);
+  y=pdfImg(doc,await chartB64('doughnut',{labels:isAR()?['الإنكار','نزع الإنسانية','اتهامات الخيانة','التهوين']:['Denial','Dehumanization','Treason','Minimization'],datasets:[{data:[35,25,22,18],backgroundColor:['rgba(220,38,38,.85)','rgba(251,146,60,.8)','rgba(167,139,250,.8)','rgba(96,165,250,.7)'],borderWidth:1,borderColor:'rgba(255,255,255,.12)'}]},{plugins:{legend:{position:'right',labels:{color:'#94a3b8',font:{size:10}}}}},560,240),y,148,64);
+  y=pdfSec(doc,y,isAR()?'الأنماط الثلاثة الرئيسية — التصنيف التقني':'Three Primary Patterns — Technical Classification',[248,113,113]);
+  y=pdfBul(doc,y,isAR()?['الإنكار (درجة 8-10): رفض منهجي للوقائع الموثقة — ادعاء تلفيق الحرائق والصور والأرقام. يُعيق مباشرةً استجابة التمويل الطارئ.','نزع الإنسانية (درجة 7-9): تجريد النازحين من هويتهم الإنسانية — معاملة الضحايا كإحصائيات أو تهديدات. يُضعف التعاطف العام.','اتهامات الخيانة (درجة 6-9): وصف العمال الإنسانيين والصحفيين بالعمالة للخارج. يُشكّل خطراً على المراقبين الميدانيين.']:['DENIAL (Score 8-10): Systematic rejection of documented facts — fires fabricated, photos staged. Directly suppresses emergency funding.','DEHUMANIZATION (Score 7-9): Stripping IDPs of human identity — treating victims as statistics. Erodes public empathy.','TREASON ACCUSATIONS (Score 6-9): Labeling aid workers as foreign agents. Creates danger for field monitors.'],[96,165,250]);
+  if(hd.length>0){y=pdfSec(doc,y,isAR()?'سجل التعليقات المرصودة':'Monitored Comments Log',[248,113,113]);y=pdfTbl(doc,y,isAR()?['التعليق','المنصة','الفئة','الدرجة']:['Comment','Platform','Category','Score'],hd.map(function(h){return[(h.text||'').slice(0,35),h.platform||'—',h.category||'—',h.score];}),[84,28,36,32]);}
+  pdfFtr(doc,1);doc.save('report_5_digital_hate_speech_darfur_2026.pdf');
+}
+
+async function rpt6(){
+  var db=getDB(),doc=mkPDF(),AC=[8,145,178];
+  var y=pdfHdr(doc,isAR()?'المحور القانوني والمنهجي: قوة الأدلة والمساءلة الدولية':'Axis 6 — Legal & Methodological: Evidence & Accountability',isAR()?'التوثيق الثلاثي المصادر في ضوء اتفاقية كامبالا والقانون الدولي الإنساني':'Triple-source verification reaching international legal standards',AC);
+  var sciV=db.filter(function(d){return d.quality==='علمي';}).length,intO=db.filter(function(d){return d.quality==='رسمي دولي';}).length;
+  var tru=db.filter(function(d){return d.quality==='موثوق';}).length,fld=db.filter(function(d){return d.quality==='ميداني';}).length,unv=db.filter(function(d){return d.quality==='غير موثق';}).length;
+  y=pdfStats(doc,y,[{v:db.length,l:isAR()?'إجمالي موثق':'Total documented',c:[74,222,128]},{v:sciV,l:isAR()?'موثق علمياً':'Scientific',c:[96,165,250]},{v:intO,l:isAR()?'رسمي دولي':'Intl official',c:[251,191,36]},{v:tru+fld,l:isAR()?'موثوق + ميداني':'Trusted+field',c:[251,146,60]},{v:unv,l:isAR()?'غير موثق':'Unverified',c:[100,116,139]}]);
+  y=pdfSec(doc,y,isAR()?'رسم بياني: توزيع جودة التوثيق':'Chart: Documentation Quality Distribution',AC);
+  y=pdfImg(doc,await chartB64('bar',{labels:isAR()?['علمي','رسمي دولي','موثوق','ميداني','غير موثق']:['Scientific','Intl Official','Trusted','Field','Unverified'],datasets:[{label:isAR()?'الحوادث':'Incidents',data:[sciV,intO,tru,fld,unv],backgroundColor:['rgba(74,222,128,.85)','rgba(251,191,36,.85)','rgba(96,165,250,.8)','rgba(251,146,60,.8)','rgba(100,116,139,.7)'],borderRadius:3}]}),y,182,68);
+  y=pdfSec(doc,y,isAR()?'منهجية التحقق — الإطار الثلاثي المصادر':'Verification Methodology',[251,191,36]);
+  y=pdfTbl(doc,y,isAR()?['المصدر','الدقة','التكرار','الوصف']:['Source','Resolution','Frequency','Description'],[['NASA VIIRS','375m','12h','Thermal hotspot'],['NASA MODIS','1,000m','24h','Corroboration'],['IOM DTM',isAR()?'محلي':'District','Weekly',isAR()?'نزوح + مآوي':'Displacement+shelters'],['OCHA',isAR()?'إقليمي':'Regional','Biweekly',isAR()?'تأثير إنساني':'Humanitarian impact'],['Field Reports',isAR()?'حادثة':'Incident','Real-time',isAR()?'توثيق ميداني':'Eyewitness'],['Adam Rajal/GCCID',isAR()?'معسكر':'Camp','Real-time',isAR()?'ناطق النازحين':'IDP spokesperson']],[30,22,24,124]);
+  y=pdfSec(doc,y,isAR()?'اتفاقية كامبالا 2009 — المواد المنتهكة':'Kampala Convention 2009 — Violated Articles',[248,113,113]);
+  y=pdfTbl(doc,y,isAR()?['المادة','الالتزام المنتهك']:['Article','Obligation Violated'],[[isAR()?'م. 3':'Art.3',isAR()?'عدم التمييز — استغلال هشاشة النازحين':'Non-discrimination — IDP vulnerability exploited'],[isAR()?'م. 5':'Art.5',isAR()?'منع النزوح — إخفاق في الحماية من الحرائق':'Prevent displacement — failure to protect'],[isAR()?'م. 6':'Art.6',isAR()?'مسؤولية الدولة — '+db.length+' إخفاقاً موثقاً':'State responsibility — '+db.length+' failures'],[isAR()?'م. 9':'Art.9',isAR()?'وصول إنساني غير مقيد — سيارات إطفاء ممنوعة':'Unimpeded access — fire response blocked'],[isAR()?'م. 11':'Art.11',isAR()?'حق السكن — تدمير متكرر بدون استبدال':'Right to housing — repeated destruction']]],[isAR()?24:22,isAR()?166:168]);
+  y=pdfSec(doc,y,isAR()?'الحوادث الموثقة علمياً — المعيار الذهبي':'Triple-Verified Incidents — Gold Standard',[74,222,128]);
+  y=pdfTbl(doc,y,isAR()?['التاريخ','الموقع','المآوي','الوفيات','التوثيق']:['Date','Location','Shelters','Deaths','Verification'],db.filter(function(d){return d.quality==='علمي';}).map(function(d){return[d.date,(d.city||d.location||'').slice(0,30),d.shelters||0,d.deaths||0,isAR()?'ميداني+IOM+ناسا':'Field+IOM+NASA'];}),[35,83,25,23,34]);
+  pdfFtr(doc,1);doc.save('report_6_legal_methodological_darfur_2026.pdf');
+}
+
+// ── DISPATCHER ───────────────────────────────────────────────────
+var _RPT_FNS=[null,rpt1,rpt2,rpt3,rpt4,rpt5,rpt6];
+
+async function generateAxisReport(axis){
+  var btn=document.getElementById('btn-r'+axis),orig=btn?btn.innerHTML:'';
+  if(!window.jspdf){setProgressErr(axis,'jsPDF not loaded — refresh page');return;}
+  if(typeof Chart==='undefined'){setProgressErr(axis,'Chart.js not loaded — refresh page');return;}
+  var db=getDB();if(!db||db.length===0){setProgressErr(axis,'Data loading — wait a moment');return;}
+  if(btn){btn.disabled=true;btn.innerHTML='⏳...';}
+  setProgress(axis,15,'Preparing '+db.length+' incidents...');
+  try{
+    await new Promise(function(r){setTimeout(r,80);});setProgress(axis,45,'Rendering charts...');
+    await new Promise(function(r){setTimeout(r,80);});setProgress(axis,75,'Building PDF...');
+    await _RPT_FNS[axis]();
+    setProgressDone(axis,'✓ PDF saved to Downloads!');
+    if(typeof showToast==='function')showToast('Report '+axis+' saved to Downloads',2500);
+  }catch(err){
+    console.error('[PDF rpt'+axis+']',err);
+    setProgressErr(axis,(err&&err.message)||'Error — open DevTools (F12)');
+  }finally{if(btn){btn.disabled=false;btn.innerHTML=orig;}}
+}
+
+async function generateAllAxisReports(){
+  var btn=document.getElementById('btn-all-reports'),bp=document.getElementById('bundle-progress');
+  if(btn)btn.disabled=true;
+  for(var i=1;i<=6;i++){
+    if(bp)bp.textContent='Generating '+i+'/6...';if(btn)btn.textContent='('+i+'/6)...';
+    await generateAxisReport(i);await new Promise(function(r){setTimeout(r,800);});
+  }
+  if(btn){btn.disabled=false;btn.textContent='⬇️ Download All (6 PDF)';}
+  if(bp)bp.textContent='✅ All 6 done!';
+  if(typeof showToast==='function')showToast('All 6 reports generated!',3500);
+}
+
+function updateReportStats(){
+  var db=getDB();if(!db||!db.length)return;
+  var nd=db.filter(function(d){return d.region==='شمال دارفور';});
+  var e1=document.getElementById('rstat-1');if(e1)e1.textContent=Math.round(nd.length/db.length*100)+'%';
+  var ca=db.filter(function(d){return d.type==='مخيم';}),va=db.filter(function(d){return d.type==='قرية';});
+  var cav=ca.length?Math.round(ca.reduce(function(a,d){return a+(d.shelters||0);},0)/ca.length):0;
+  var vav=va.length?Math.round(va.reduce(function(a,d){return a+(d.shelters||0);},0)/va.length):1;
+  var e3=document.getElementById('rstat-3');if(e3)e3.textContent=(cav/Math.max(vav,1)).toFixed(1)+'x';
+  var tw=db.filter(function(d){return d.city==='طويلة';});
+  var e4=document.getElementById('rstat-4');if(e4)e4.textContent=tw.length+'+';
+  var sv=db.filter(function(d){return d.quality==='علمي';}).length;
+  var e6=document.getElementById('rstat-6');if(e6)e6.textContent=sv>0?'3':'—';
+}
+
+// ── REPORTS PANEL RENDERER ───────────────────────────────────────
+var AXIS_CONFIGS=[null,
+  {icon:'🗺️',color:'linear-gradient(135deg,#4c1d95,#6d28d9,#4338ca)',statVal:'rstat-1',statDefault:'66%',axis:1},
+  {icon:'📅',color:'linear-gradient(135deg,#78350f,#b45309,#d97706)',statVal:'rstat-2',statDefault:'+340%',axis:2},
+  {icon:'🏕️',color:'linear-gradient(135deg,#064e3b,#065f46,#047857)',statVal:'rstat-3',statDefault:'4×',axis:3},
+  {icon:'🔁',color:'linear-gradient(135deg,#7f1d1d,#991b1b,#b91c1c)',statVal:'rstat-4',statDefault:'14+',axis:4},
+  {icon:'💬',color:'linear-gradient(135deg,#1e3a5f,#1d4ed8,#2563eb)',statVal:'rstat-5',statDefault:'3',axis:5},
+  {icon:'⚖️',color:'linear-gradient(135deg,#0c4a6e,#0369a1,#0891b2)',statVal:'rstat-6',statDefault:'3',axis:6}
+];
+
+function renderReportsPanel(){
+  var T=(typeof TRANSLATIONS!=='undefined'&&typeof currentLang!=='undefined')?TRANSLATIONS[currentLang]:null;
+  if(!T)T={tabReports:'📑 التقارير التحليلية',rptPanelTitle:'📑 التقارير التحليلية المتخصصة',rptPanelDesc:'ستة محاور تحليلية.',rptBadgeLive:'✅ بيانات حية',rptBadgeNasa:'🛰️ NASA FIRMS',rptBadgeKampala:'⚖️ كامبالا',rptBadgeDate:'📅 مايو 2026',rptDownloadBtn:'📥 تحميل PDF',rptViewBtn:'👁️ عرض',rptBundleTitle:'📦 حزمة التقارير',rptBundleDesc:'تحميل جميع التقارير',rptBundleBtn:'⬇️ تحميل الكل (6 PDF)',rptNote:'PDF عبر jsPDF.',rptLoadingMsg:'جاري التحميل...',ax1Title:'المحور الجغرافي',ax1Sub:'شمال دارفور',ax1Stat:'من الحوادث',ax1P1:'📍 شمال دارفور',ax1P2:'📍 طويلة، الفاشر، شقرة',ax1P3:'📍 خريطة المآوي',ax1P4:'📍 مقارنة إقليمية',ax2Title:'المحور الزمني',ax2Sub:'يناير–مارس',ax2Stat:'تصاعد 340%',ax2P1:'📅 القفزة الإحصائية',ax2P2:'📅 موسم الجفاف',ax2P3:'📅 منحنى الاتجاه',ax2P4:'📅 الحوادث الكبرى',ax3Title:'بيئة اللجوء',ax3Sub:'مخيمات vs قرى',ax3Stat:'4× أشد تدميراً',ax3P1:'🏕️ هشاشة المأوى',ax3P2:'🏕️ غياب الإطفاء',ax3P3:'🏕️ مقارنة كمية',ax3P4:'🏕️ فشل الحماية',ax4Title:'تكرار المواقع',ax4Sub:'طويلة نموذجاً',ax4Stat:'حريقاً في طويلة',ax4P1:'🔁 التسلسل الزمني',ax4P2:'🔁 لماذا يتكرر؟',ax4P3:'🔁 رسم بياني',ax4P4:'🔁 الأثر النفسي',ax5Title:'الحريق الرقمي',ax5Sub:'خطاب الكراهية',ax5Stat:'أنماط رئيسية',ax5P1:'💬 الإنكار والتخوين',ax5P2:'💬 أثر التمويل',ax5P3:'💬 توزيع الأنماط',ax5P4:'💬 التصنيف التقني',ax6Title:'المحور القانوني',ax6Sub:'الأدلة والمساءلة',ax6Stat:'مستويات توثيق',ax6P1:'⚖️ توثيق ثلاثي',ax6P2:'⚖️ جودة التوثيق',ax6P3:'⚖️ كامبالا 2009',ax6P4:'⚖️ توصيات دولية'};
+
+  var inner=document.getElementById('reports-panel-inner');if(!inner)return;
+  var statKeys=['ax1Stat','ax2Stat','ax3Stat','ax4Stat','ax5Stat','ax6Stat'];
+  var titleKeys=['ax1Title','ax2Title','ax3Title','ax4Title','ax5Title','ax6Title'];
+  var subKeys=['ax1Sub','ax2Sub','ax3Sub','ax4Sub','ax5Sub','ax6Sub'];
+  var pointKeys=[['ax1P1','ax1P2','ax1P3','ax1P4'],['ax2P1','ax2P2','ax2P3','ax2P4'],['ax3P1','ax3P2','ax3P3','ax3P4'],['ax4P1','ax4P2','ax4P3','ax4P4'],['ax5P1','ax5P2','ax5P3','ax5P4'],['ax6P1','ax6P2','ax6P3','ax6P4']];
+
+  var html='<div style="background:linear-gradient(135deg,#0f172a,#1e1040,#0f172a);border:1px solid #3b0764;border-radius:14px;padding:20px 24px;margin-bottom:18px">'
+    +'<div style="font-size:20px;font-weight:900;color:#f87171;margin-bottom:6px">'+(T.rptPanelTitle||'📑 Reports')+'</div>'
+    +'<div style="font-size:12px;color:#94a3b8;line-height:1.9;margin-bottom:12px">'+(T.rptPanelDesc||'')+'</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:8px">'
+    +['rptBadgeLive','rptBadgeNasa','rptBadgeKampala','rptBadgeDate'].map(function(k,i){var cols=['#4ade80','#60a5fa','#fbbf24','#f472b6'],bords=['#14532d','#1e3a5f','#422006','#500724'];return'<div style="background:#0f172a;border-radius:8px;padding:6px 12px;font-size:11px;color:'+cols[i]+';border:1px solid '+bords[i]+';white-space:nowrap">'+(T[k]||k)+'</div>';}).join('')
+    +'</div></div>';
+
+  html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:18px">';
+  for(var i=1;i<=6;i++){
+    var cfg=AXIS_CONFIGS[i];
+    var sv=document.getElementById(cfg.statVal);var statVal=sv?sv.textContent:cfg.statDefault;
+    html+='<div class="report-axis-card">'
+      +'<div class="axis-header" style="background:'+cfg.color+'">'
+      +'<span class="axis-icon">'+cfg.icon+'</span>'
+      +'<div><div class="axis-title">'+(T[titleKeys[i-1]]||'Axis '+i)+'</div><div class="axis-sub">'+(T[subKeys[i-1]]||'')+'</div></div>'
+      +'</div><div class="axis-body">'
+      +'<div class="axis-stat"><span id="'+cfg.statVal+'">'+statVal+'</span> '+(T[statKeys[i-1]]||'')+'</div>'
+      +'<div class="axis-points">';
+    pointKeys[i-1].forEach(function(pk){html+='<div class="ap">'+(T[pk]||pk)+'</div>';});
+    html+='</div><div style="display:flex;gap:8px">'
+      +'<button class="btn-gen-report" style="background:'+cfg.color+';color:#fff" onclick="generateAxisReport('+i+')" id="btn-r'+i+'">'+(T.rptDownloadBtn||'📥 PDF')+'</button>'
+      +'<button class="btn-gen-report" style="background:linear-gradient(135deg,#0f4c81,#1e6fb5);color:#fff;flex:0 0 auto;min-width:auto;padding:11px 14px" onclick="viewAxisReport('+i+')" id="btn-view-r'+i+'">'+(T.rptViewBtn||'👁️')+'</button>'
+      +'</div><div class="report-progress" id="prog-'+i+'"></div>'
+      +'</div></div>';
+  }
+  html+='</div>';
+  html+='<div style="background:linear-gradient(135deg,#0f172a,#1e1a36);border:1px solid #4c1d95;border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">'
+    +'<div><div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:4px">'+(T.rptBundleTitle||'📦 All Reports')+'</div>'
+    +'<div style="font-size:11px;color:#64748b">'+(T.rptBundleDesc||'')+'</div></div>'
+    +'<div style="display:flex;gap:8px;align-items:center"><div id="bundle-progress" style="font-size:11px;color:#64748b;min-width:100px;text-align:center"></div>'
+    +'<button class="btn btn-orange" onclick="generateAllAxisReports()" id="btn-all-reports" style="font-size:12px;padding:10px 18px">'+(T.rptBundleBtn||'⬇️ Download All')+'</button></div></div>';
+  html+='<div style="margin-top:12px;background:#0f172a;border:1px solid #1e3a5f;border-radius:10px;padding:12px 16px;font-size:11px;color:#475569;line-height:1.8">'+(T.rptNote||'')+'</div>';
+  inner.innerHTML=html;
+  updateReportStats();
+}
+
+// ── VIEWER ENGINE ────────────────────────────────────────────────
+var _currentViewerAxis=0;
+
+function getAXIS_META(){
+  var T=(typeof TRANSLATIONS!=='undefined'&&typeof currentLang!=='undefined')?TRANSLATIONS[currentLang]:null;
+  if(!T)T={};
+  return[null,
+    {title:T.ax1Title||'Geographic Axis',sub:T.ax1Sub||'North Darfur as Crisis Core',color:'#7c3aed'},
+    {title:T.ax2Title||'Temporal Axis',sub:T.ax2Sub||'Escalation Dynamics',color:'#d97706'},
+    {title:T.ax3Title||'Refuge Environment',sub:T.ax3Sub||'Camps vs Villages',color:'#059669'},
+    {title:T.ax4Title||'Site Recurrence',sub:T.ax4Sub||'Tawila Case Study',color:'#dc2626'},
+    {title:T.ax5Title||'The Digital Fire',sub:T.ax5Sub||'Hate Speech',color:'#2563eb'},
+    {title:T.ax6Title||'Legal & Methodological',sub:T.ax6Sub||'Evidence & Accountability',color:'#0891b2'}
+  ];
+}
+
+function _vEl(tag,css,html){var e=document.createElement(tag);if(css)e.style.cssText=css;if(html)e.innerHTML=html;return e;}
+function _vSec(txt,col){var d=_vEl('div','font-size:13px;font-weight:800;padding:8px 14px;background:#0f172a;border-radius:8px;border-right:3px solid '+(col||'#3b82f6')+';color:'+(col||'#60a5fa')+';margin:16px 0 10px');d.textContent=txt;return d;}
+function _vPara(txt){var d=_vEl('div','font-size:12px;color:#94a3b8;line-height:1.8;padding:12px 14px;background:#0f172a;border-radius:8px;border:1px solid #1e293b;margin-bottom:12px');d.textContent=txt;return d;}
+function _vStats(stats){var row=_vEl('div','display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px');stats.forEach(function(s){var b=_vEl('div','flex:1;min-width:90px;background:#1e293b;border-radius:10px;padding:12px 8px;text-align:center;border:1px solid #334155');b.innerHTML='<div style="font-size:20px;font-weight:900;color:'+(s.color||'#60a5fa')+'">'+s.v+'</div><div style="font-size:10px;color:#64748b;margin-top:3px;line-height:1.3">'+s.l+'</div>';row.appendChild(b);});return row;}
+function _vTable(headers,rows){var wrap=_vEl('div','overflow-x:auto;margin-bottom:14px');var t=document.createElement('table');t.style.cssText='width:100%;border-collapse:collapse;font-size:11px';var th=document.createElement('thead'),tr=document.createElement('tr');headers.forEach(function(h){var td=document.createElement('th');td.style.cssText='background:#0f172a;color:#60a5fa;padding:7px 8px;text-align:left;border-bottom:1px solid #334155;font-weight:700;white-space:nowrap';td.textContent=h;tr.appendChild(td);});th.appendChild(tr);t.appendChild(th);var tb=document.createElement('tbody');rows.forEach(function(row,ri){var tr2=document.createElement('tr');tr2.style.background=ri%2===0?'rgba(30,41,59,.5)':'transparent';row.forEach(function(cell){var td=document.createElement('td');td.style.cssText='padding:6px 8px;border-bottom:1px solid #1e293b;color:#cbd5e1';td.textContent=String(cell==null?'':cell);tr2.appendChild(td);});tb.appendChild(tr2);});t.appendChild(tb);wrap.appendChild(t);return wrap;}
+function _vBullets(items,col){var wrap=_vEl('div','margin-bottom:14px');items.forEach(function(item){var d=_vEl('div','background:#0f172a;border-radius:8px;border-right:3px solid '+(col||'#334155')+';padding:10px 14px;margin-bottom:6px;font-size:11.5px;color:#94a3b8;line-height:1.7');d.textContent=item;wrap.appendChild(d);});return wrap;}
+function _vChartSafe(type,data,xopts,h){h=h||220;var wrap=_vEl('div','background:#0f172a;border-radius:10px;border:1px solid #1e293b;padding:12px;margin-bottom:14px');wrap.setAttribute('data-chart',type);wrap.setAttribute('data-chart-data',JSON.stringify(data));wrap.setAttribute('data-chart-opts',JSON.stringify(xopts||{}));var cv=document.createElement('canvas');cv.style.cssText='width:100%;height:'+h+'px;display:block';wrap.appendChild(cv);return wrap;}
+function _vMap(hlRegion){
+  var db=getDB();var wrap=_vEl('div','background:#0f172a;border-radius:10px;border:1px solid #1e293b;padding:10px;margin-bottom:14px;overflow:hidden');
+  var cv=document.createElement('canvas');cv.width=700;cv.height=360;cv.style.cssText='width:100%;height:auto;border-radius:6px;display:block';wrap.appendChild(cv);
+  var ctx=cv.getContext('2d');
+  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,700,360);ctx.fillStyle='#1e293b';ctx.fillRect(0,0,700,32);
+  ctx.fillStyle='#f87171';ctx.font='bold 13px Arial';ctx.textAlign='center';ctx.fillText('Darfur Fire Incidents Map — Jan-May 2026',350,22);
+  var R=[{e:'North Darfur',a:'شمال دارفور',x:250,y:46,w:220,h:144,r:220,g:38,b:38},{e:'South Darfur',a:'جنوب دارفور',x:230,y:218,w:194,h:104,r:251,g:146,b:60},{e:'Central Darfur',a:'وسط دارفور',x:114,y:162,w:138,h:96,r:251,g:191,b:36},{e:'East Darfur',a:'شرق دارفور',x:424,y:174,w:132,h:96,r:96,g:165,b:250},{e:'West Darfur',a:'غرب دارفور',x:30,y:120,w:108,h:106,r:74,g:222,b:128}];
+  R.forEach(function(r){var isHL=(r.a===hlRegion),a=isHL?0.75:0.43;ctx.fillStyle='rgba('+r.r+','+r.g+','+r.b+','+a+')';ctx.strokeStyle=isHL?'rgba(248,113,113,.9)':'rgba(148,163,184,.35)';ctx.lineWidth=isHL?2.5:1;ctxRR(ctx,r.x,r.y,r.w,r.h,8);ctx.fill();ctx.stroke();var inc=db.filter(function(d){return d.region===r.a;});var sh=inc.reduce(function(a,d){return a+(d.shelters||0);},0);ctx.fillStyle='#e2e8f0';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.fillText(r.e,r.x+r.w/2,r.y+r.h/2-10);ctx.fillStyle='#fbbf24';ctx.font='bold 17px Arial';ctx.fillText(inc.length+' incidents',r.x+r.w/2,r.y+r.h/2+8);ctx.fillStyle='rgba(148,163,184,.85)';ctx.font='10px Arial';ctx.fillText(sh.toLocaleString()+' shelters',r.x+r.w/2,r.y+r.h/2+22);});
+  ctx.fillStyle='rgba(239,68,68,.92)';ctxRR(ctx,316,88,52,20,10);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 10px Arial';ctx.textAlign='center';ctx.fillText('Tawila',342,101);
+  return wrap;
+}
+function _initViewerCharts(container){
+  if(!container)return;
+  container.querySelectorAll('[data-chart]').forEach(function(wrap){
+    var cv=wrap.querySelector('canvas');if(!cv||cv._chi)return;cv._chi=true;
+    var type=wrap.getAttribute('data-chart');
+    try{var data=JSON.parse(wrap.getAttribute('data-chart-data')||'{}'),opts=JSON.parse(wrap.getAttribute('data-chart-opts')||'{}');
+      var flat=(type==='doughnut'||type==='pie'||type==='polarArea');
+      var co={responsive:true,maintainAspectRatio:false,animation:{duration:400},plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}}};
+      if(!flat)co.scales={x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}},y:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}}};
+      if(opts.indexAxis)co.indexAxis=opts.indexAxis;if(opts.plugins)Object.assign(co.plugins,opts.plugins);
+      new Chart(cv,{type:type,data:data,options:co});
+    }catch(e){console.warn('chart',e);}
+  });
+}
+
+function buildViewerContent(axis){
+  var db=getDB(),frag=document.createDocumentFragment(),ac=getAXIS_META()[axis].color;
+  var ar=isAR();
+  if(axis===1){
+    var nd=db.filter(function(d){return d.region==='شمال دارفور';}),pct=db.length?Math.round(nd.length/db.length*100):0;
+    frag.appendChild(_vStats([{v:nd.length,l:ar?'حوادث شمال دارفور':'N.Darfur incidents',color:'#f87171'},{v:pct+'%',l:ar?'من الإجمالي':'of all',color:'#fbbf24'},{v:nd.reduce(function(a,d){return a+(d.shelters||0);},0).toLocaleString(),l:ar?'مأوى مدمر':'shelters destroyed',color:'#fb923c'},{v:nd.reduce(function(a,d){return a+(d.deaths||0);},0),l:ar?'وفيات':'deaths',color:'#f87171'},{v:db.length,l:ar?'إجمالي موثق':'total documented',color:'#4ade80'}]));
+    frag.appendChild(_vSec(ar?'🗺️ خريطة التوزيع الجغرافي':'🗺️ Geographic Distribution Map',ac));frag.appendChild(_vMap('شمال دارفور'));
+    frag.appendChild(_vSec(ar?'📊 الحوادث والوفيات حسب الولاية':'📊 Incidents & Deaths by Region','#fbbf24'));
+    var regs=['شمال دارفور','جنوب دارفور','وسط دارفور','شرق دارفور','غرب دارفور'];
+    frag.appendChild(_vChartSafe('bar',{labels:ar?['شمال','جنوب','وسط','شرق','غرب']:['N.Darfur','S.Darfur','Central','E.Darfur','W.Darfur'],datasets:[{label:ar?'الحوادث':'Incidents',data:regs.map(function(r){return db.filter(function(d){return d.region===r;}).length;}),backgroundColor:'rgba(220,38,38,.8)',borderWidth:1},{label:ar?'الوفيات×5':'Deaths x5',data:regs.map(function(r){return db.filter(function(d){return d.region===r;}).reduce(function(a,d){return a+(d.deaths||0);},0)*5;}),backgroundColor:'rgba(251,191,36,.7)',borderWidth:1}]}));
+    frag.appendChild(_vSec(ar?'🔍 لماذا يهيمن شمال دارفور؟':'🔍 Why North Darfur Dominates','#4ade80'));
+    frag.appendChild(_vPara(ar?'يضم شمال دارفور أكثر من 2 مليون نازح في مخيمات طويلة (655 ألف) والفاشر وخور عمر. الكثافة الشديدة للمآوي ومواد البناء القابلة للاشتعال وغياب البنية التحتية لمكافحة الحرائق تخلق كارثة هيكلية.':'North Darfur hosts over 2 million IDPs in camps around Tawila (655,000), Al-Fasher (Zamzam, Abu Shouk), and Khor Omar. Extreme density, flammable materials, and zero fire infrastructure create structural catastrophe.'));
+    var tw=db.filter(function(d){return d.city==='طويلة';}),fa=db.filter(function(d){return d.city==='الفاشر';});
+    frag.appendChild(_vSec(ar?'📍 بؤر الخطر — جدول':'📍 Hot Spots — Risk Table','#f87171'));
+    frag.appendChild(_vTable(ar?['الموقع','الحرائق','المآوي','الوفيات','ملاحظة']:['Location','Fires','Shelters','Deaths','Note'],[['Tawila',''+tw.length,''+tw.reduce(function(a,d){return a+(d.shelters||0);},0),''+tw.reduce(function(a,d){return a+(d.deaths||0);},0),ar?'متكرر — 14+ حريق':'Recurrent — 14+ fires'],['Al-Fasher',''+fa.length,''+fa.reduce(function(a,d){return a+(d.shelters||0);},0),''+fa.reduce(function(a,d){return a+(d.deaths||0);},0),ar?'زمزم + أبو شوك':'Zamzam + Abu Shouk'],['Shaqra','1','200','0',ar?'قرية كاملة 2:45 صباحاً':'Full village 2:45AM']]));
+    frag.appendChild(_vSec(ar?'📋 سجل حوادث شمال دارفور':'📋 Full North Darfur Incident Log','#60a5fa'));
+    frag.appendChild(_vTable(ar?['التاريخ','الموقع','المآوي','الوفيات','الجودة']:['Date','Location','Shelters','Deaths','Quality'],nd.slice().sort(function(a,b){return(b.shelters||0)-(a.shelters||0);}).map(function(d){return[d.date,(d.city||d.location||'').slice(0,26),d.shelters||0,d.deaths||0,d.quality];})));
+  }else if(axis===2){
+    var mn=function(n){return db.filter(function(d){return d.date&&d.date.startsWith('2026-0'+n);});};
+    var jan=mn(1),feb=mn(2),mar=mn(3),apr=mn(4);
+    frag.appendChild(_vStats([{v:jan.length,l:ar?'يناير':'January',color:'#60a5fa'},{v:feb.length,l:ar?'فبراير':'February',color:'#fbbf24'},{v:mar.length,l:ar?'مارس ذروة':'March PEAK',color:'#f87171'},{v:apr.length,l:ar?'أبريل':'April',color:'#fb923c'},{v:'+340%',l:ar?'معدل التصاعد':'Jan→Mar surge',color:'#f87171'}]));
+    frag.appendChild(_vSec(ar?'📈 الاتجاه الشهري':'📈 Monthly Escalation',ac));
+    var sh2=function(a){return Math.round(a.reduce(function(x,d){return x+(d.shelters||0);},0)/20);};var de2=function(a){return a.reduce(function(x,d){return x+(d.deaths||0);},0)*8;};
+    frag.appendChild(_vChartSafe('line',{labels:ar?['يناير','فبراير','مارس','أبريل']:['January','February','March','April'],datasets:[{label:ar?'الحوادث':'Incidents',data:[jan.length,feb.length,mar.length,apr.length],borderColor:'#f87171',backgroundColor:'rgba(248,113,113,.15)',tension:.4,fill:true,pointRadius:6,pointBackgroundColor:'#f87171'},{label:ar?'مآوي/20':'Shelters/20',data:[sh2(jan),sh2(feb),sh2(mar),sh2(apr)],borderColor:'#fbbf24',tension:.4,pointRadius:4},{label:ar?'وفيات×8':'Deaths x8',data:[de2(jan),de2(feb),de2(mar),de2(apr)],borderColor:'#dc2626',tension:.4,pointRadius:4,borderDash:[5,3]}]}));
+    frag.appendChild(_vSec(ar?'🔍 ثلاثة عوامل وراء ذروة مارس':'🔍 Three Factors Behind March Spike','#4ade80'));
+    frag.appendChild(_vBullets(ar?['الموسمي: مارس هو ذروة موسم الهبوب — انعدام الأمطار ورطوبة 15% ورياح 60+ كم/ساعة.','العنصر البشري: 8 من 22 حريقاً في مارس وقعت في ساعات الفجر خلال أسبوعين — يتعارض مع الصدفة البحتة.','المنظومي: غياب الإطفاء والإنذار المبكر — حتى الحرائق العرضية تصبح كوارث.']:['SEASONAL: March is the Haboob peak — zero rainfall, humidity below 15%, winds over 60 km/h.','HUMAN ELEMENT: 8 of 22 March fires in pre-dawn hours within 2 weeks — inconsistent with pure accident.','SYSTEMIC: Zero fire brigades, no early warning — accidental fires become mass disasters.'],'#fbbf24'));
+    frag.appendChild(_vSec(ar?'📊 الوتيرة الأسبوعية':'📊 Weekly Frequency','#60a5fa'));
+    var wm2={};db.forEach(function(d){if(!d.date)return;var w='W'+Math.ceil(parseInt(d.date.slice(8,10))/7)+'-'+d.date.slice(5,7);wm2[w]=(wm2[w]||0)+1;});var wk2=Object.keys(wm2).sort();
+    frag.appendChild(_vChartSafe('bar',{labels:wk2,datasets:[{label:ar?'حوادث/أسبوع':'Incidents/week',data:wk2.map(function(k){return wm2[k];}),backgroundColor:wk2.map(function(k){return k.indexOf('-03')>-1?'rgba(220,38,38,.85)':'rgba(96,165,250,.7)';}),borderRadius:3}]}));
+  }else if(axis===3){
+    var camps2=db.filter(function(d){return d.type==='مخيم';}),vills2=db.filter(function(d){return d.type==='قرية';});
+    var cA2=camps2.length?Math.round(camps2.reduce(function(a,d){return a+(d.shelters||0);},0)/camps2.length):0;
+    var vA2=vills2.length?Math.round(vills2.reduce(function(a,d){return a+(d.shelters||0);},0)/vills2.length):0;
+    frag.appendChild(_vStats([{v:camps2.length,l:ar?'حوادث مخيمات':'Camp incidents',color:'#60a5fa'},{v:cA2,l:ar?'متوسط مآوي/حريق':'Avg shelters/fire',color:'#f87171'},{v:vills2.length,l:ar?'حوادث قرى':'Village incidents',color:'#4ade80'},{v:vA2,l:ar?'متوسط مآوي/قرية':'Avg shelters/village',color:'#fbbf24'},{v:(vA2>0?(cA2/vA2).toFixed(1):'N/A')+'x',l:ar?'نسبة التدمير':'Destruction ratio',color:'#f87171'}]));
+    frag.appendChild(_vSec(ar?'📊 مقارنة المخيمات والقرى':'📊 Camp vs Village Comparison',ac));
+    frag.appendChild(_vChartSafe('bar',{labels:ar?['متوسط المآوي','الوفيات×50','% ليلية']:['Avg Shelters','Deaths x50','% Night'],datasets:[{label:ar?'مخيمات':'Camps',data:[cA2,Math.round(camps2.reduce(function(a,d){return a+(d.deaths||0);},0)/Math.max(camps2.length,1)*50),Math.round(camps2.filter(function(d){return d.timing==='فجر'||d.timing==='مساء';}).length/Math.max(camps2.length,1)*100)],backgroundColor:'rgba(96,165,250,.8)'},{label:ar?'قرى':'Villages',data:[vA2,Math.round(vills2.reduce(function(a,d){return a+(d.deaths||0);},0)/Math.max(vills2.length,1)*50),Math.round(vills2.filter(function(d){return d.timing==='فجر'||d.timing==='مساء';}).length/Math.max(vills2.length,1)*100)],backgroundColor:'rgba(74,222,128,.7)'}]}));
+    frag.appendChild(_vSec(ar?'🔥 ستة عوامل هيكلية للهشاشة':'🔥 Six Structural Vulnerability Factors','#f87171'));
+    frag.appendChild(_vBullets(ar?['مواد البناء: قش وبلاستيك — تشتعل في ثوانٍ.','الكثافة: أقل من 1.5م بين المآوي — لا منطقة عازلة.','المياه: شحيحة — الإخماد مستحيل بدون سيارات خارجية.','الطرق: ضيقة وغير معبدة — الطوارئ لا تصل في الوقت المناسب.','الإنارة: منعدمة ليلاً — الحرائق تُكتشف متأخراً.','سيارات الإطفاء: صفر وحدات في جميع المخيمات.']:['Construction: Straw, plastic — ignites within seconds.','Density: Under 1.5m between shelters — no buffer zone.','Water: Scarce — suppression impossible without external trucks.','Roads: Narrow — emergency vehicles cannot reach in time.','Lighting: Absent at night — fires discovered too late.','Fire Brigades: Zero units in any monitored camp.'],'#fb923c'));
+  }else if(axis===4){
+    var taw2=db.filter(function(d){return d.city==='طويلة';}).sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
+    frag.appendChild(_vStats([{v:taw2.length,l:ar?'حرائق طويلة':'Tawila fires',color:'#f87171'},{v:taw2.reduce(function(a,d){return a+(d.shelters||0);},0).toLocaleString(),l:ar?'مأوى مدمر':'shelters destroyed',color:'#fb923c'},{v:taw2.reduce(function(a,d){return a+(d.deaths||0);},0),l:ar?'وفيات':'deaths',color:'#f87171'},{v:'< 3',l:ar?'أسابيع بين الحرائق':'wks between fires',color:'#a78bfa'},{v:'655K',l:ar?'نازح في طويلة':'IDPs in Tawila',color:'#60a5fa'}]));
+    frag.appendChild(_vSec(ar?'📅 تسلسل حرائق طويلة الزمني':'📅 Tawila Fire Timeline',ac));
+    frag.appendChild(_vChartSafe('bar',{labels:taw2.map(function(d){return(d.date||'').slice(5);}),datasets:[{label:ar?'المآوي المدمرة':'Shelters Destroyed',data:taw2.map(function(d){return d.shelters||0;}),backgroundColor:taw2.map(function(d){return(d.shelters||0)>=100?'rgba(220,38,38,.9)':'rgba(251,146,60,.8)';}),borderRadius:3,borderWidth:0}]}));
+    frag.appendChild(_vSec(ar?'📋 سجل حرائق طويلة الكامل':'📋 Tawila Complete Fire Log','#f87171'));
+    frag.appendChild(_vTable(ar?['التاريخ','الموقع','المآوي','الوفيات','الجودة']:['Date','Location','Shelters','Deaths','Quality'],taw2.map(function(d){return[d.date,(d.location||'').slice(0,30),d.shelters||0,d.deaths||0,d.quality];})));
+    frag.appendChild(_vSec(ar?'🔍 لماذا لا يمنع الحريق الأول الثاني؟':'🔍 Why Fire #1 Never Prevents Fire #2','#4ade80'));
+    frag.appendChild(_vBullets(ar?['لا تحقيق بعد الحريق — السبب لم يُحدَّد رسمياً أبداً.','إعادة البناء بنفس المواد في نفس الموقع — التكرار مضمون.','لا فواصل حماية — الحريق الثاني ينتشر بنفس السرعة.','لا أجهزة إنذار — الحرائق تُكتشف متأخراً.','غياب سيارات الإطفاء — كل شيء يحترق قبل الاستجابة.','لا برنامج مأوى آمن — لم تُطبَّق أي إعادة تصميم.']:['No post-fire investigation — cause never formally established.','Rebuild with same materials in same location — recurrence guaranteed.','No firebreaks installed — fire #2 spreads equally fast.','No alarms deployed — fires discovered only when catastrophic.','Zero fire brigade — everything burns before response arrives.','No safe-shelter program — redesign never implemented.'],'#f87171'));
+  }else if(axis===5){
+    var hd2=(typeof HATE_DATA!=='undefined'&&HATE_DATA)?HATE_DATA:[];
+    frag.appendChild(_vStats([{v:hd2.length,l:ar?'تعليقات مرصودة':'Monitored',color:'#60a5fa'},{v:hd2.filter(function(h){return h.score>=7;}).length,l:ar?'خطر مرتفع':'High-risk',color:'#f87171'},{v:hd2.length?Math.max.apply(null,hd2.map(function(h){return h.score;})):0,l:ar?'أعلى درجة':'Peak score',color:'#f87171'},{v:3,l:ar?'أنماط رئيسية':'Patterns',color:'#fbbf24'},{v:5,l:ar?'منصات':'Platforms',color:'#4ade80'}]));
+    frag.appendChild(_vSec(ar?'📊 توزيع أنماط خطاب الكراهية':'📊 Hate Speech Pattern Distribution',ac));
+    frag.appendChild(_vChartSafe('doughnut',{labels:ar?['الإنكار','نزع الإنسانية','التخوين','التهوين']:['Denial','Dehumanization','Treason','Minimization'],datasets:[{data:[35,25,22,18],backgroundColor:['rgba(220,38,38,.85)','rgba(251,146,60,.8)','rgba(167,139,250,.8)','rgba(96,165,250,.7)'],borderWidth:1,borderColor:'rgba(255,255,255,.12)'}]},{plugins:{legend:{position:'right',labels:{color:'#94a3b8',font:{size:10}}}}},200));
+    frag.appendChild(_vSec(ar?'🔍 الأنماط الثلاثة الرئيسية':'🔍 Three Primary Patterns','#f87171'));
+    frag.appendChild(_vBullets(ar?['الإنكار (درجة 8-10): رفض منهجي للوقائع — الحرائق ملفقة والصور مزورة والأرقام مبالغ فيها. يُعيق التمويل الطارئ.','نزع الإنسانية (درجة 7-9): تجريد النازحين من هويتهم — معاملة الضحايا كإحصائيات. يُضعف التعاطف العام.','اتهامات الخيانة (درجة 6-9): وصف المنظمات الإنسانية بالعمالة. يُشكّل خطراً على المراقبين الميدانيين.']:['DENIAL (Score 8-10): Systematic rejection of documented facts — fires fabricated, numbers inflated. Suppresses emergency funding.','DEHUMANIZATION (Score 7-9): Stripping IDPs of human identity — treating victims as statistics. Erodes public empathy.','TREASON ACCUSATIONS (Score 6-9): Labeling aid workers as foreign agents. Creates danger for field monitors.'],'#60a5fa'));
+    if(hd2.length>0){frag.appendChild(_vSec(ar?'📋 سجل التعليقات المرصودة':'📋 Monitored Comments Log','#f87171'));frag.appendChild(_vTable(ar?['التعليق','المنصة','الفئة','الدرجة']:['Comment','Platform','Category','Score'],hd2.map(function(h){return[(h.text||'').slice(0,40),h.platform||'—',h.category||'—',h.score];})));}
+  }else if(axis===6){
+    var sciV2=db.filter(function(d){return d.quality==='علمي';}).length,intO2=db.filter(function(d){return d.quality==='رسمي دولي';}).length;
+    var tru2=db.filter(function(d){return d.quality==='موثوق';}).length,fld2=db.filter(function(d){return d.quality==='ميداني';}).length,unv2=db.filter(function(d){return d.quality==='غير موثق';}).length;
+    frag.appendChild(_vStats([{v:db.length,l:ar?'إجمالي موثق':'Total documented',color:'#4ade80'},{v:sciV2,l:ar?'موثق علمياً':'Scientific',color:'#60a5fa'},{v:intO2,l:ar?'رسمي دولي':'Intl official',color:'#fbbf24'},{v:tru2+fld2,l:ar?'موثوق+ميداني':'Trusted+field',color:'#fb923c'},{v:unv2,l:ar?'غير موثق':'Unverified',color:'#64748b'}]));
+    frag.appendChild(_vSec(ar?'📊 توزيع جودة التوثيق':'📊 Documentation Quality Distribution',ac));
+    frag.appendChild(_vChartSafe('bar',{labels:ar?['علمي','رسمي دولي','موثوق','ميداني','غير موثق']:['Scientific','Intl Official','Trusted','Field','Unverified'],datasets:[{label:ar?'الحوادث':'Incidents',data:[sciV2,intO2,tru2,fld2,unv2],backgroundColor:['rgba(74,222,128,.85)','rgba(251,191,36,.85)','rgba(96,165,250,.8)','rgba(251,146,60,.8)','rgba(100,116,139,.7)'],borderRadius:3}]}));
+    frag.appendChild(_vSec(ar?'🛰️ منهجية التحقق — الإطار الثلاثي':'🛰️ Verification Methodology','#fbbf24'));
+    frag.appendChild(_vTable(ar?['المصدر','الدقة','التكرار','الوصف']:['Source','Resolution','Frequency','Description'],[['NASA VIIRS','375m','12h',ar?'نقاط حرارية':'Thermal hotspot'],['NASA MODIS','1,000m','24h',ar?'تأكيد واسع':'Broader area'],['IOM DTM',ar?'محلي':'District','Weekly',ar?'نزوح+مآوي':'Displacement+shelters'],['OCHA',ar?'إقليمي':'Regional','Biweekly',ar?'تأثير إنساني':'Humanitarian impact'],['Field',ar?'حادثة':'Incident','Real-time',ar?'ميداني':'Eyewitness'],['Adam Rajal',ar?'معسكر':'Camp','Real-time',ar?'ناطق النازحين':'IDP spokesperson']]));
+    frag.appendChild(_vSec(ar?'⚖️ اتفاقية كامبالا 2009 — المواد المنتهكة':'⚖️ Kampala Convention 2009','#f87171'));
+    frag.appendChild(_vTable(ar?['المادة','الالتزام المنتهك']:['Article','Obligation Violated'],[[ar?'م.3':'Art.3',ar?'عدم التمييز — استغلال هشاشة النازحين':'Non-discrimination — IDP vulnerability'],[ar?'م.5':'Art.5',ar?'منع النزوح — إخفاق الحماية':'Prevent displacement — protection failure'],[ar?'م.6':'Art.6',ar?'مسؤولية الدولة — '+db.length+' إخفاق':'State responsibility — '+db.length+' failures'],[ar?'م.9':'Art.9',ar?'وصول إنساني — سيارات الإطفاء ممنوعة':'Unimpeded access — fire response blocked'],[ar?'م.11':'Art.11',ar?'حق السكن — تدمير متكرر':'Right to housing — repeated destruction']]));
+    frag.appendChild(_vSec(ar?'✅ الحوادث الموثقة علمياً':'✅ Triple-Verified Incidents','#4ade80'));
+    frag.appendChild(_vTable(ar?['التاريخ','الموقع','المآوي','الوفيات','التوثيق']:['Date','Location','Shelters','Deaths','Verification'],db.filter(function(d){return d.quality==='علمي';}).map(function(d){return[d.date,(d.city||d.location||'').slice(0,30),d.shelters||0,d.deaths||0,ar?'ميداني+IOM+ناسا':'Field+IOM+NASA'];})));
+  }
+  return frag;
+}
+
+function viewAxisReport(axis){
+  var db=getDB();if(!db||db.length===0){if(typeof showToast==='function')showToast('Data loading — wait a moment');return;}
+  _currentViewerAxis=axis;
+  var meta=getAXIS_META()[axis];
+  var overlay=document.getElementById('report-viewer-overlay');if(!overlay)return;
+  var T=(typeof TRANSLATIONS!=='undefined'&&typeof currentLang!=='undefined')?TRANSLATIONS[currentLang]:null;
+  var titleEl=document.getElementById('rvm-title'),subEl=document.getElementById('rvm-sub'),badge=document.getElementById('rvm-badge');
+  var loading=document.getElementById('rvm-loading'),ltext=document.getElementById('rvm-loading-text'),contentEl=document.getElementById('rvm-content'),progBar=document.getElementById('rvm-prog-bar');
+  if(titleEl)titleEl.textContent=meta.title;if(subEl)subEl.textContent=meta.sub;if(badge)badge.style.background=meta.color;
+  if(ltext)ltext.textContent=(T&&T.rptLoadingMsg)||'Building report...';
+  overlay.style.display='flex';document.body.style.overflow='hidden';
+  if(loading)loading.style.display='block';if(contentEl){contentEl.style.display='none';contentEl.innerHTML='';}if(progBar)progBar.style.width='0%';
+  var pct=0,pI=setInterval(function(){pct=Math.min(pct+10,85);if(progBar)progBar.style.width=pct+'%';},60);
+  setTimeout(function(){
+    try{
+      var frag=buildViewerContent(axis);clearInterval(pI);if(progBar)progBar.style.width='100%';
+      setTimeout(function(){
+        if(loading)loading.style.display='none';
+        if(contentEl){contentEl.appendChild(frag);contentEl.style.display='block';}
+        if(contentEl)_initViewerCharts(contentEl);
+        var ov=document.getElementById('report-viewer-overlay');if(ov)ov.scrollTop=0;
+      },100);
+    }catch(e){clearInterval(pI);console.error('[Viewer]',e);if(loading)loading.innerHTML='<div style="color:#f87171;text-align:center;padding:40px">Error: '+(e.message||'unknown')+'</div>';}
+  },150);
+}
+function closeReportViewer(e){if(e&&e.target&&e.target.id!=='report-viewer-overlay')return;closeReportViewerDirect();}
+function closeReportViewerDirect(){
+  var ov=document.getElementById('report-viewer-overlay');if(ov)ov.style.display='none';
+  document.body.style.overflow='';
+  var ce=document.getElementById('rvm-content');
+  if(ce){ce.querySelectorAll('canvas').forEach(function(cv){var ch=Chart.getChart(cv);if(ch)try{ch.destroy();}catch(e){}});ce.innerHTML='';}
+}
+function downloadCurrentReport(){if(_currentViewerAxis>0)generateAxisReport(_currentViewerAxis);}
+
+// ── INIT ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){renderReportsPanel();updateReportStats();},3000);
+});
+
 
 </script>
 </body>
