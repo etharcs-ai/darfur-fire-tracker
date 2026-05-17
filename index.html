@@ -4201,9 +4201,10 @@ function chartB64(type,data,xopts,w,h){
     var cv=document.createElement('canvas');cv.width=w;cv.height=h;
     cv.style.cssText='position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;';
     document.body.appendChild(cv);
+    var bgCtx=cv.getContext('2d');bgCtx.fillStyle='#ffffff';bgCtx.fillRect(0,0,w,h);
     var flat=(type==='doughnut'||type==='pie'||type==='polarArea');
-    var opts={responsive:false,animation:{duration:0},plugins:{legend:{labels:{color:'#94a3b8',font:{size:11,family:'Arial'}}}}};
-    if(!flat)opts.scales={x:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}},y:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(51,65,85,.5)'},border:{color:'rgba(51,65,85,.5)'}}};
+    var opts={responsive:false,animation:{duration:0},plugins:{legend:{labels:{color:'#334155',font:{size:11,family:'Arial'}}}}};
+    if(!flat)opts.scales={x:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(200,210,220,.5)'},border:{color:'rgba(200,210,220,.5)'}},y:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'rgba(200,210,220,.5)'},border:{color:'rgba(200,210,220,.5)'}}};
     if(xopts&&xopts.indexAxis)opts.indexAxis=xopts.indexAxis;
     if(xopts&&xopts.plugins)Object.assign(opts.plugins,xopts.plugins);
     var ch;try{ch=new Chart(cv,{type:type,data:data,options:opts});}catch(e){try{document.body.removeChild(cv);}catch(x){}ok(null);return;}
@@ -4219,9 +4220,9 @@ function mapB64(hl){
     cv.style.cssText='position:fixed;left:-99999px;top:0;opacity:0;pointer-events:none;';
     document.body.appendChild(cv);
     var ctx=cv.getContext('2d');
-    ctx.fillStyle='#0f172a';ctx.fillRect(0,0,720,370);
-    ctx.fillStyle='#1e293b';ctx.fillRect(0,0,720,32);
-    ctx.fillStyle='#f87171';ctx.font='bold 13px Arial';ctx.textAlign='center';
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,720,370);
+    ctx.fillStyle='#1e40af';ctx.fillRect(0,0,720,32);
+    ctx.fillStyle='#ffffff';ctx.font='bold 13px Arial';ctx.textAlign='center';
     ctx.fillText('Darfur Fire Incidents Map — Jan-May 2026',360,22);
     var R=[{e:'North Darfur',a:'شمال دارفور',x:258,y:48,w:228,h:148,r:220,g:38,b:38},{e:'South Darfur',a:'جنوب دارفور',x:236,y:224,w:200,h:106,r:251,g:146,b:60},{e:'Central Darfur',a:'وسط دارفور',x:118,y:168,w:142,h:98,r:251,g:191,b:36},{e:'East Darfur',a:'شرق دارفور',x:436,y:178,w:136,h:98,r:96,g:165,b:250},{e:'West Darfur',a:'غرب دارفور',x:34,y:124,w:110,h:108,r:74,g:222,b:128}];
     R.forEach(function(r){
@@ -4230,7 +4231,7 @@ function mapB64(hl){
       ctxRR(ctx,r.x,r.y,r.w,r.h,8);ctx.fill();ctx.stroke();
       var inc=db.filter(function(d){return d.region===r.a;});
       var sh=inc.reduce(function(a,d){return a+(d.shelters||0);},0);
-      ctx.fillStyle='#e2e8f0';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.fillText(r.e,r.x+r.w/2,r.y+r.h/2-10);
+      ctx.fillStyle='#1e293b';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.fillText(r.e,r.x+r.w/2,r.y+r.h/2-10);
       ctx.fillStyle='#fbbf24';ctx.font='bold 17px Arial';ctx.fillText(inc.length+' incidents',r.x+r.w/2,r.y+r.h/2+8);
       ctx.fillStyle='rgba(148,163,184,.85)';ctx.font='10px Arial';ctx.fillText(sh.toLocaleString()+' shelters',r.x+r.w/2,r.y+r.h/2+24);
     });
@@ -4241,70 +4242,221 @@ function mapB64(hl){
   });
 }
 
-// ── jsPDF HELPERS ────────────────────────────────────────────────
-function mkPDF(){if(!window.jspdf)throw new Error('jsPDF not loaded');return new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});}
-function pt(doc,txt,x,y,align){try{doc.text(String(txt||''),x,y,align?{align:align}:{});}catch(e){try{doc.text(String(txt||''),x,y);}catch(x){}}}
+// ── jsPDF HELPERS — WHITE BG + ARABIC SUPPORT ──────────────────────
+function mkPDF(){
+  if(!window.jspdf)throw new Error('jsPDF not loaded');
+  return new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+}
+
+// Render text — Arabic gets drawn via canvas to handle RTL/shaping
+function pt(doc,txt,x,y,align,col){
+  if(txt===null||txt===undefined)return;
+  var s=String(txt);
+  if(!s.trim())return;
+  var hasAr=/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/.test(s);
+  if(hasAr){
+    try{
+      var fs=doc.getFontSize()||9;
+      var px=Math.round(fs*4.2);
+      // Measure text width
+      var tmpCv=document.createElement('canvas');
+      var tmpCtx=tmpCv.getContext('2d');
+      tmpCtx.font=px+'px "Tahoma","Segoe UI","Arial Unicode MS",sans-serif';
+      var tw2=Math.min(600,Math.ceil(tmpCtx.measureText(s).width)+20);
+      var W=Math.max(tw2,200),H=px+14;
+      var cv=document.createElement('canvas');cv.width=W;cv.height=H;
+      var ctx=cv.getContext('2d');
+      ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+      ctx.font=px+'px "Tahoma","Segoe UI","Arial Unicode MS",sans-serif';
+      var tc=col?'rgb('+col[0]+','+col[1]+','+col[2]+')':'#1e293b';
+      ctx.fillStyle=tc;
+      ctx.direction='rtl';
+      if(align==='center'){ctx.textAlign='center';ctx.fillText(s,W/2,px+1);}
+      else if(align==='right'){ctx.textAlign='right';ctx.fillText(s,W-4,px+1);}
+      else{ctx.textAlign='right';ctx.fillText(s,W-4,px+1);}
+      var img=cv.toDataURL('image/png');
+      var wmm=W/3.78,hmm=H/3.78;
+      var xp=align==='center'?x-wmm/2:(align==='right'?x-wmm:x);
+      doc.addImage(img,'PNG',xp,y-hmm*0.82,wmm,hmm);
+    }catch(e){try{doc.text(s.replace(/[\u0600-\u06FF]/g,'?'),x,y,align?{align:align}:{});}catch(x2){}}
+  }else{
+    try{
+      if(col)doc.setTextColor(col[0],col[1],col[2]);
+      doc.text(s,x,y,align?{align:align}:{});
+    }catch(e){}
+  }
+}
+
+// Page background — WHITE
+function pdfBg(doc){
+  doc.setFillColor(255,255,255);
+  doc.rect(0,0,210,297,'F');
+}
+
 function pdfHdr(doc,title,sub,ac){
   var W=210;
-  doc.setFillColor(6,13,26);doc.rect(0,0,W,297,'F');
-  doc.setFillColor(12,20,38);doc.rect(0,0,W,43,'F');
-  doc.setFillColor(ac[0],ac[1],ac[2]);doc.rect(0,42,W,2.5,'F');
-  doc.setFillColor(ac[0],ac[1],ac[2]);doc.roundedRect(10,48,190,15,3,3,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(11.5);doc.setFont('helvetica','bold');pt(doc,title,105,57.5,'center');
-  doc.setTextColor(195,210,230);doc.setFontSize(9);doc.setFont('helvetica','normal');pt(doc,sub,105,70,'center');
-  doc.setTextColor(248,113,113);doc.setFontSize(14);doc.setFont('helvetica','bold');pt(doc,'IDPs Fire Tracker',12,15);
-  doc.setTextColor(251,146,60);doc.setFontSize(8);doc.setFont('helvetica','normal');pt(doc,'salaamedia.org | Darfur Fire Documentation',12,22);
-  var db=getDB();doc.setTextColor(100,116,139);doc.setFontSize(7.5);
-  pt(doc,'Incidents: '+db.length+' | May 2026',W-10,13,'right');pt(doc,'IOM DTM + OCHA + NASA FIRMS + Field',W-10,20,'right');
-  doc.setDrawColor(30,41,59);doc.setLineWidth(0.3);doc.line(10,77,200,77);return 82;
+  pdfBg(doc);
+  // Header bar — accent color
+  doc.setFillColor(ac[0],ac[1],ac[2]);
+  doc.rect(0,0,W,36,'F');
+  // White title
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(12);
+  doc.setFont('helvetica','bold');
+  pt(doc,title,105,16,'center',[255,255,255]);
+  // Subtitle
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(255,255,255);
+  pt(doc,sub,105,26,'center',[255,255,255]);
+  // Branding left
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(7);
+  pt(doc,'IDPs Fire Tracker | salaamedia.org',10,12);
+  // Date right
+  var db=getDB();
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(7);
+  pt(doc,'Incidents: '+db.length+' | May 2026',W-10,12,'right');
+  pt(doc,'IOM DTM + OCHA + NASA FIRMS',W-10,20,'right');
+  // Divider
+  doc.setDrawColor(220,220,220);
+  doc.setLineWidth(0.3);
+  doc.line(10,40,200,40);
+  return 48;
 }
+
 function pdfSec(doc,y,txt,c){
-  c=c||[96,165,250];if(y>272){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
-  doc.setFillColor(13,21,37);doc.rect(10,y,190,8,'F');doc.setFillColor(c[0],c[1],c[2]);doc.rect(10,y,3,8,'F');
-  doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(10);doc.setFont('helvetica','bold');pt(doc,txt,16,y+5.6);return y+12;
+  c=c||[30,64,175];
+  if(y>272){doc.addPage();pdfBg(doc);y=14;}
+  // Light accent background
+  doc.setFillColor(c[0],c[1],c[2]);
+  doc.rect(10,y,3,8,'F');
+  doc.setFillColor(248,250,252);
+  doc.rect(13,y,187,8,'F');
+  doc.setTextColor(c[0],c[1],c[2]);
+  doc.setFontSize(10);
+  doc.setFont('helvetica','bold');
+  pt(doc,txt,16,y+5.8,null,c);
+  return y+12;
 }
+
 function pdfPar(doc,y,txt,c){
-  c=c||[208,220,234];doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(9);doc.setFont('helvetica','normal');
-  var lines=doc.splitTextToSize(txt,183);
-  lines.forEach(function(ln){if(y>276){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}pt(doc,ln,13,y);y+=5.4;});
+  c=c||[30,41,59];
+  doc.setTextColor(c[0],c[1],c[2]);
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  var lines=doc.splitTextToSize(String(txt||''),183);
+  lines.forEach(function(ln){
+    if(y>276){doc.addPage();pdfBg(doc);y=14;}
+    pt(doc,ln,13,y,null,c);
+    y+=5.4;
+  });
   return y+2;
 }
+
 function pdfStats(doc,y,stats){
   var bw=Math.floor((190-stats.length*3)/stats.length);
-  stats.forEach(function(s,i){var x=10+i*(bw+3);doc.setFillColor(13,21,37);doc.roundedRect(x,y,bw,18,2,2,'F');var c=s.c||[96,165,250];doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(13);doc.setFont('helvetica','bold');pt(doc,String(s.v),x+bw/2,y+10,'center');doc.setTextColor(100,116,139);doc.setFontSize(7);doc.setFont('helvetica','normal');pt(doc,s.l,x+bw/2,y+16,'center');});
+  stats.forEach(function(s,i){
+    var x=10+i*(bw+3);
+    var c=s.c||[30,64,175];
+    doc.setFillColor(248,250,252);
+    doc.setDrawColor(c[0],c[1],c[2]);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(x,y,bw,18,2,2,'FD');
+    doc.setTextColor(c[0],c[1],c[2]);
+    doc.setFontSize(12);
+    doc.setFont('helvetica','bold');
+    pt(doc,String(s.v||''),x+bw/2,y+9,'center',c);
+    doc.setTextColor(100,116,139);
+    doc.setFontSize(6.5);
+    doc.setFont('helvetica','normal');
+    pt(doc,String(s.l||''),x+bw/2,y+15.5,'center',[100,116,139]);
+  });
   return y+22;
 }
+
 function pdfImg(doc,img,y,w,h){
-  w=w||182;h=h||76;if(y+h>278){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
-  if(img&&img.length>200){try{doc.addImage(img,'PNG',14,y,w,h);}catch(e){doc.setFillColor(18,28,46);doc.rect(14,y,w,h,'F');}}else{doc.setFillColor(18,28,46);doc.rect(14,y,w,h,'F');}
+  w=w||182;h=h||76;
+  if(y+h>278){doc.addPage();pdfBg(doc);y=14;}
+  if(img&&img.length>200){
+    try{
+      doc.setDrawColor(220,220,220);doc.setLineWidth(0.3);
+      doc.rect(14,y,w,h,'S');
+      doc.addImage(img,'PNG',14,y,w,h);
+    }catch(e){
+      doc.setFillColor(248,250,252);doc.rect(14,y,w,h,'F');
+      doc.setTextColor(150,150,150);doc.setFontSize(8);
+      pt(doc,'[Chart/Map]',14+w/2,y+h/2,'center');
+    }
+  }
   return y+h+4;
 }
+
 function pdfTbl(doc,y,hdrs,rows,cw){
-  if(y>265){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
-  doc.setFillColor(9,17,33);doc.rect(10,y,190,7,'F');doc.setTextColor(96,165,250);doc.setFontSize(7.5);doc.setFont('helvetica','bold');
-  var x=10;hdrs.forEach(function(h,i){pt(doc,h,x+1.5,y+5);x+=cw[i];});y+=7;
+  if(y>265){doc.addPage();pdfBg(doc);y=14;}
+  // Header row
+  doc.setFillColor(30,64,175);
+  doc.rect(10,y,190,7,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica','bold');
+  var x=10;
+  hdrs.forEach(function(h,i){pt(doc,String(h),x+1.5,y+5);x+=cw[i];});
+  y+=7;
   rows.forEach(function(row,ri){
-    if(y>271){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
-    doc.setFillColor(ri%2===0?19:15,ri%2===0?30:22,ri%2===0?47:36);doc.rect(10,y,190,6,'F');
-    doc.setTextColor(212,226,240);doc.setFontSize(7);doc.setFont('helvetica','normal');
-    x=10;row.forEach(function(cell,j){var t=String(cell==null?'':cell),mx=Math.max(7,Math.floor(cw[j]/1.85));if(t.length>mx)t=t.slice(0,mx-1)+'..';pt(doc,t,x+1.5,y+4.3);x+=cw[j];});y+=6;
-  });return y+3;
+    if(y>271){doc.addPage();pdfBg(doc);y=14;}
+    doc.setFillColor(ri%2===0?248:255,ri%2===0?250:255,ri%2===0?252:255);
+    doc.rect(10,y,190,6,'F');
+    doc.setDrawColor(226,232,240);doc.setLineWidth(0.2);
+    doc.line(10,y+6,200,y+6);
+    doc.setTextColor(30,41,59);
+    doc.setFontSize(7);
+    doc.setFont('helvetica','normal');
+    x=10;
+    row.forEach(function(cell,j){
+      var t=String(cell==null?'':cell).replace(/<[^>]+>/g,'');
+      var mx=Math.max(7,Math.floor(cw[j]/1.85));
+      if(t.length>mx)t=t.slice(0,mx-1)+'…';
+      pt(doc,t,x+1.5,y+4.3,null,[30,41,59]);x+=cw[j];
+    });
+    y+=6;
+  });
+  return y+3;
 }
+
 function pdfBul(doc,y,items,c){
-  c=c||[208,220,234];
+  c=c||[30,41,59];
   items.forEach(function(item){
-    if(y>271){doc.addPage();doc.setFillColor(6,13,26);doc.rect(0,0,210,297,'F');y=14;}
-    var lines=doc.splitTextToSize(item,179),bh=Math.max(11,lines.length*5+4);
-    doc.setFillColor(13,21,37);doc.rect(10,y,190,bh,'F');doc.setFillColor(c[0],c[1],c[2]);doc.rect(10,y,3,bh,'F');
-    doc.setTextColor(c[0],c[1],c[2]);doc.setFontSize(8.5);doc.setFont('helvetica','normal');
-    lines.forEach(function(ln,li){pt(doc,ln,16,y+5.5+li*4.8);});y+=bh+3;
-  });return y;
+    if(y>271){doc.addPage();pdfBg(doc);y=14;}
+    var lines=doc.splitTextToSize(String(item),179),bh=Math.max(11,lines.length*5+4);
+    doc.setFillColor(248,250,252);
+    doc.rect(10,y,190,bh,'F');
+    doc.setFillColor(c[0],c[1],c[2]);
+    doc.rect(10,y,3,bh,'F');
+    doc.setTextColor(c[0],c[1],c[2]);
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica','normal');
+    lines.forEach(function(ln,li){pt(doc,ln,16,y+5.5+li*4.8,null,c);});
+    y+=bh+3;
+  });
+  return y;
 }
+
 function pdfFtr(doc,n){
-  var H=297,W=210;doc.setFillColor(7,15,29);doc.rect(0,H-11,W,11,'F');doc.setDrawColor(22,36,54);doc.line(0,H-11,W,H-11);
-  doc.setTextColor(60,76,96);doc.setFontSize(6.5);doc.setFont('helvetica','normal');
-  pt(doc,'IDPs Fire Tracker | salaamedia.org | IOM DTM | OCHA | NASA FIRMS | May 2026',W/2,H-5.5,'center');pt(doc,'Page '+(n||1),W-11,H-5.5,'right');
+  var H=297,W=210;
+  doc.setFillColor(248,250,252);
+  doc.rect(0,H-11,W,11,'F');
+  doc.setDrawColor(226,232,240);
+  doc.line(0,H-11,W,H-11);
+  doc.setTextColor(100,116,139);
+  doc.setFontSize(6.5);
+  doc.setFont('helvetica','normal');
+  pt(doc,'IDPs Fire Tracker | salaamedia.org | IOM DTM | OCHA | NASA FIRMS | May 2026',W/2,H-5.5,'center');
+  pt(doc,'Page '+n,W-12,H-5.5,'right');
+  pt(doc,'CONFIDENTIAL — Humanitarian Use Only',12,H-5.5);
 }
+
 function isAR(){return(typeof currentLang!=='undefined'?currentLang:document.documentElement.getAttribute('dir')==='rtl'?'ar':'en')==='ar';}
 
 // ── SIX PDF REPORTS ──────────────────────────────────────────────
