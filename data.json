@@ -1,7 +1,7 @@
 {
   "meta": {
-    "lastUpdated": "2026-05-13",
-    "totalIncidents": 57,
+    "lastUpdated": "2026-05-17",
+    "totalIncidents": 60,
     "source": "IDPs Fire Tracker"
   },
   "incidents": [
@@ -1826,6 +1826,110 @@
       "timing": "فجر",
       "lat": 15.05,
       "lng": 22.49,
+      "isNew": true
+    },
+    {
+      "id": 58,
+      "date": "2026-05-03",
+      "location": "مخيم دبة نايرة الجديدة — طويلة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "وفاة 1، إصابة 1",
+      "shelters": 30,
+      "deaths": 1,
+      "injuries": 1,
+      "women": 1,
+      "men": 0,
+      "children": 0,
+      "source": "دارفور24",
+      "org": "دارفور24 — شهود عيان",
+      "quality": "إعلامي",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://darfur24.com/2026/05/03/%D9%88%D9%81%D8%A7%D8%A9-%D8%A7%D9%85%D8%B1%D8%A3%D8%A9-%D9%85%D8%B3%D9%86%D9%91%D8%A9-%D9%81%D9%8A-%D8%AD%D8%B1%D9%8A%D9%82-%D8%A8%D9%85%D8%AE%D9%8A%D9%85-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D8%A8/",
+          "platform": "news"
+        }
+      ],
+      "note": "وفاة المسنة كلتوم يعقوب عمر (65 سنة) وإصابة شابة في يوم زفافها. الحريق اندلع في حي سلبلابة. النازحون فروا من الفاشر.",
+      "type": "مخيم",
+      "timing": "صباح",
+      "lat": 15.38,
+      "lng": 24.35,
+      "outsideDarfur": false,
+      "satellite": false,
+      "isNew": true
+    },
+    {
+      "id": 59,
+      "date": "2026-05-10",
+      "location": "مخيم مسل — خزان تنجر — طويلة",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "15 منزلاً",
+      "shelters": 15,
+      "deaths": 0,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 0,
+      "source": "دارفور24 / الراكوبة",
+      "org": "شهود عيان — آدم عبد الشافع",
+      "quality": "إعلامي",
+      "links": [
+        {
+          "l": "دارفور24",
+          "u": "https://darfur24.com/2026/05/10/%D8%AD%D8%B1%D9%8A%D9%82-%D9%8A%D9%82%D8%B6%D9%8A-%D8%B9%D9%84%D9%89-%D9%85%D9%86%D8%A7%D8%B2%D9%84-%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86-%D9%81%D9%8A-%D8%B4%D9%85%D8%A7%D9%84-%D8%AF%D8%A7%D8%B1%D9%81/",
+          "platform": "news"
+        },
+        {
+          "l": "الراكوبة",
+          "u": "https://www.alrakoba.net/32162371/",
+          "platform": "news"
+        }
+      ],
+      "note": "الحريق بدأ في الجزء الجنوبي من السوق. الأسر المتضررة تفترش العراء.",
+      "type": "مخيم",
+      "timing": "صباح",
+      "lat": 15.36,
+      "lng": 24.33,
+      "outsideDarfur": false,
+      "satellite": false,
+      "isNew": true
+    },
+    {
+      "id": 60,
+      "date": "2026-05-13",
+      "location": "مخيمات العمدة وروكرو — تقرير الجزيرة الشامل",
+      "region": "شمال دارفور",
+      "city": "طويلة",
+      "state": "شمال دارفور",
+      "losses": "350 مأوى، 10 وفيات منذ فبراير، 1613+ كوخ",
+      "shelters": 350,
+      "deaths": 2,
+      "injuries": 0,
+      "women": 0,
+      "men": 0,
+      "children": 2,
+      "source": "الجزيرة نت",
+      "org": "الجزيرة نت — تحقيق ميداني",
+      "quality": "موثق",
+      "links": [
+        {
+          "l": "الجزيرة نت",
+          "u": "https://www.ajnet.me/politics/2026/4/24/%D9%86%D8%A7%D8%B2%D8%AD%D9%88-%D8%B4%D9%85%D8%A7%D9%84-%D8%AF%D8%A7%D8%B1%D9%81%D9%88%D8%B1-%D9%81%D8%B1%D9%88%D8%A7-%D9%85%D9%86-%D8%A7%D9%84%D8%AD%D8%B1%D8%A8",
+          "platform": "news"
+        }
+      ],
+      "note": "تقرير الجزيرة الشامل: 5 حرائق في مخيم العمدة منذ فبراير أتت على 1613+ كوخاً. 10 وفيات خلال 6 أشهر غالبيتهم أطفال ونساء.",
+      "type": "مخيم",
+      "timing": "غير محدد",
+      "lat": 15.42,
+      "lng": 24.37,
+      "outsideDarfur": false,
+      "satellite": false,
       "isNew": true
     }
   ]
